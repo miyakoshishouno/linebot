@@ -70,41 +70,23 @@ def handle_message(event):
     str_1 = event.message.num
     print(str_1)
     array = []
-    global num
+    # global num
 
-    if num == 0:
-        if push_text == "yes":
-            print(str_1)
-            num = num + 1
-            question = chart.judge(push_text,num)
-            msg = make_button_template(question)
+    # if num == 0:
+    if push_text == "yes":
+        print(str_1)
+        num = num + 1
+        question = chart.judge(push_text,num)
+        msg = make_button_template(question)
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                msg
-            )
+        line_bot_api.reply_message(
+            event.reply_token,
+            msg
+        )
 
-        elif push_text == "no":
-            num = num + 2
-            question = chart.judge(push_text,num)
-            msg = make_button_template(question)
-
-            line_bot_api.reply_message(
-                event.reply_token,
-                msg
-            )
-
-        else:
-            msg = "中断しました"
-            num = 0
-
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg))
-
-    elif push_text == "チャート" and num == 0:
-        num = 1
-        question = "最初の質問" + str(num)
+    elif push_text == "no":
+        num = num + 2
+        question = chart.judge(push_text,num)
         msg = make_button_template(question)
 
         line_bot_api.reply_message(
@@ -113,11 +95,29 @@ def handle_message(event):
         )
 
     else:
-        msg = talkapi(push_text)
+        msg = "中断しました"
+        num = 0
 
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=msg))
+
+    # elif push_text == "チャート" and num == 0:
+    #     num = 1
+    #     question = "最初の質問" + str(num)
+    #     msg = make_button_template(question)
+
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         msg
+    #     )
+
+    # else:
+    #     msg = talkapi(push_text)
+
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text=msg))
 
 
 # Yes/Noチャート(確認テンプレート)
