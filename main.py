@@ -71,7 +71,7 @@ def handle_message(event):
     global num
 
     if num > 0:
-        if push_text == "Yes":
+        if push_text == "yes":
             num = num + 1
             msg = chart.judge(push_text,num)
 
@@ -80,7 +80,7 @@ def handle_message(event):
                 msg
             )
 
-        elif push_text == "No":
+        elif push_text == "no":
             num = num + 2
             msg = chart.judge(push_text,num)
 
@@ -90,8 +90,7 @@ def handle_message(event):
             )
 
         else:
-            # msg = "中断しました"
-            msg = push_text
+            msg = "中断しました"
             num = 0
 
             line_bot_api.reply_message(
@@ -100,7 +99,6 @@ def handle_message(event):
 
     elif push_text == "チャート" and num == 0:
         num = 1
-        # msg = chart.judge(push_text,num)
         question = "最初の質問" + str(num)
         msg = make_button_template(question)
 
