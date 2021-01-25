@@ -7,7 +7,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,MessageAction
 )
 import os
 import requests
@@ -108,11 +108,11 @@ def make_button_template():
         template=ConfirmTemplate(
             text="どこに表示されるかな？",
             actions=[
-                URIAction(
+                MessageAction(
                     label = "Yes",
                     text  = "yes"
                 ),
-                URIAction(
+                MessageAction(
                     label = "No",
                     text  = "No"
                 )
