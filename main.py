@@ -68,8 +68,17 @@ num = 0
 def handle_message(event):
     push_text = event.message.text
     array = []
+    global num
 
-    if num > 0:
+    if push_text == "チャート":
+        num = 1
+        msg = chart.judge(push_text,num)
+
+    else:
+        msg = talkapi(push_text)
+
+
+    if push_text != "チャート" and num > 0:
         if push_text == "Yes":
             num = num + 1
             msg = chart.judge(push_text,num)
@@ -82,17 +91,20 @@ def handle_message(event):
             msg = "中断しました"
             num = 0
 
-    
-    if push_text == "チャート":
-        global num
-        num = 1
-        msg = chart.judge(push_text,num)
-
-    else:
-        msg = talkapi(push_text)
-
-
 
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=msg))
+
+
+
+# case “confirm”: {
+#     ConfirmTemplate confirmTemplate = new ConfirmTemplate(
+#         “Do it?”,
+#         new MessageAction(“Yes”, “Yes!“),
+#         new MessageAction(“No”, “No!“)
+#     );
+#     TemplateMessage templateMessage = new TemplateMessage(“Confirm alt text”, confirmTemplate);
+#     this.reply(replyToken, templateMessage);
+#     break;
+# }
