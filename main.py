@@ -68,7 +68,7 @@ def handle_message(event):
     push_text = event.message.text
     array = []
     if push_text == "チャート":
-        num = 0
+        num = array[0]
         array.append(num + 1)
         msg = chart.judge(push_text,array)
     else:
