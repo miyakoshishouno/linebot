@@ -7,7 +7,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ButtonsTemplate
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ButtonsTemplate,URIAction
 )
 import os
 import requests
@@ -70,12 +70,13 @@ def handle_message(event):
     array = []
     global num
 
-    # if push_text == "チャート":
-    #     num = 1
-    #     msg = chart.judge(push_text,num)
+    if push_text == "チャート":
+        num = 1
+        # msg = chart.judge(push_text,num)
+        msg = make_button_template()
 
-    # else:
-    #     msg = talkapi(push_text)
+    else:
+        msg = talkapi(push_text)
 
 
     # if push_text != "チャート" and num > 0:
@@ -91,43 +92,27 @@ def handle_message(event):
     #         msg = "中断しました"
     #         num = 0
 
-    msg = make_button_template()
+    
+
+
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=msg))
 
-
-
-# if push_text != "チャート": {
-#     ConfirmTemplate confirmTemplate = new ConfirmTemplate(
-#         “Do it?”,
-#         new MessageAction(“Yes”, “Yes!“),
-#         new MessageAction(“No”, “No!“)
-#     );
-#     TemplateMessage templateMessage = new TemplateMessage(“Confirm alt text”, confirmTemplate);
-#     this.reply(replyToken, templateMessage);
-#     break;
-# }
-
 def make_button_template():
     message_template = TemplateSendMessage(
-        type = "template",
-        altText =  "this is a confirm template",
-        template = {
-            type = "confirm",
-            text = "Are you sure?",
-            actions = [
-                {
-                    type = "message",
-                    label = "Yes",
-                    text = "yes"
-                },
-                {
-                    type = "message",
-                    label = "No",
-                    text = "no"
-                }
+        alt_text="にゃーん",
+        template=ButtonsTemplate(
+            text="どこに表示されるかな？",
+            title="タイトルですよ",
+            image_size="cover",
+            thumbnail_image_url="https://example.com/gazou.jpg",
+            actions=[
+                URIAction(
+                    uri="https://example.com",
+                    label="URIアクションのLABEL"
+                )
             ]
-        }
+        )
     )
     return message_template
