@@ -11,6 +11,7 @@ from linebot.models import (
 )
 import os
 import requests
+import chart
 
 app = Flask(__name__)
 
@@ -65,9 +66,11 @@ def talkapi(text):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     push_text = event.message.text
-    print(push_text)
-    if push_text == "こんにちは":
-        msg = "ok"
+    num = 0
+    if push_text == "チャート" | num != 0:
+        num += 1
+        chart.judge(push_text,num)
+        msg = chart.judge(push_text,num)
     else:
         msg = talkapi(push_text)
 
