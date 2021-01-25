@@ -10,7 +10,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
-import requests
+# import requests
 
 app = Flask(__name__)
 
@@ -18,7 +18,7 @@ app = Flask(__name__)
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 # 
-TALKAPI_KEY = os.environ['DZZImPKmttYrT5T6eOlkIaCITKlaCoq1']
+# TALKAPI_KEY = os.environ['DZZImPKmttYrT5T6eOlkIaCITKlaCoq1']
 # 
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
