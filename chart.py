@@ -15,7 +15,7 @@ def judge(val,num):
 
     if val == "Yes":
         result = val + str(num)
-    elif vall == "No":
+    elif val == "No":
         result = val + str(num)
 
     return result
