@@ -70,10 +70,38 @@ def handle_message(event):
     array = []
     global num
 
-    if push_text == "チャート":
+    if num > 1:
+        if push_text == "Yes":
+            num = num + 1
+            msg = chart.judge(push_text,num)
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
+
+        elif push_text == "No":
+            num = num + 2
+            msg = chart.judge(push_text,num)
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
+
+        else:
+            msg = "中断しました"
+            num = 0
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
+
+
+    elif push_text == "チャート"　and num = 0:
         num = 1
         # msg = chart.judge(push_text,num)
-        msg = make_button_template()
+        question = "最初の質問"
+        msg = make_button_template(question)
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -83,30 +111,17 @@ def handle_message(event):
     else:
         msg = talkapi(push_text)
 
-
-    # if push_text != "チャート" and num > 0:
-    #     if push_text == "Yes":
-    #         num = num + 1
-    #         msg = chart.judge(push_text,num)
-
-    #     elif push_text == "No":
-    #         num = num + 2
-    #         msg = chart.judge(push_text,num)
-
-    #     else:
-    #         msg = "中断しました"
-    #         num = 0
-
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=msg))
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg))
 
 
-def make_button_template():
+# Yes/Noチャート(確認テンプレート)
+def make_button_template(question):
     message_template = TemplateSendMessage(
-        alt_text="にゃーん",
+        alt_text="",
         template=ConfirmTemplate(
-            text="どこに表示されるかな？",
+            text=question,
             actions=[
                 MessageAction(
                     label = "Yes",
