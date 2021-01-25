@@ -68,10 +68,22 @@ num = 0
 def handle_message(event):
     push_text = event.message.text
     array = []
+    global num
     if push_text == "チャート":
-        global num
-        num = num + 1
+        num = 1
         msg = chart.judge(push_text,num)
+    if num > 1:
+        if push_text = "Yes":
+            num = num + 1
+            msg = chart.judge(push_text,num)
+
+        elif push_text == "No":
+            num = num + 2
+            msg = chart.judge(push_text,num)
+
+        else:
+            msg = "中断しました"
+            num = 0
     else:
         msg = talkapi(push_text)
 
