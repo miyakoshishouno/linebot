@@ -62,14 +62,15 @@ def talkapi(text):
    return msg
 
 
+num = 0
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     push_text = event.message.text
     array = []
-    num = 0
     if push_text == "チャート":
-        global num +1
+        global num
+        num = num + 1
         msg = chart.judge(push_text,num)
     else:
         msg = talkapi(push_text)
