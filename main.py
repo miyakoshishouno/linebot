@@ -73,7 +73,7 @@ def handle_message(event):
         num = 1
         msg = chart.judge(push_text,num)
     if num > 1:
-        if push_text = "Yes":
+        if push_text == "Yes":
             num = num + 1
             msg = chart.judge(push_text,num)
 
