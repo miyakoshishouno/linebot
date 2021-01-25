@@ -64,13 +64,13 @@ def talkapi(text):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-   push_text = event.message.text
-   print(push_text)
-   if push_text == "こんにちは":
-       msg = "ok"
+    push_text = event.message.text
+    print(push_text)
+    if push_text == "こんにちは":
+        msg = "ok"
     else:
         msg = talkapi(push_text)
 
-   line_bot_api.reply_message(
-       event.reply_token,
-       TextSendMessage(text=msg))
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=msg))
