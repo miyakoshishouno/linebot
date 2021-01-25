@@ -69,7 +69,7 @@ def handle_message(event):
     array = []
     if push_text == "チャート":
         num = 0
-        array[0].append(num + 1)
+        array[].append(num + 1)
         msg = chart.judge(push_text,array)
     else:
         msg = talkapi(push_text)
