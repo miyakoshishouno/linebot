@@ -66,7 +66,7 @@ def talkapi(text):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     push_text = event.message.text
-    num = 0
+    
     if push_text == "チャート" or num != 0:
         num += 1
         msg = chart.judge(push_text,num)
