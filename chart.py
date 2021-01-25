@@ -1,3 +1,3 @@
-def judge(text,num):
-    str_1 = "chart.pyにきたよ"
-    return　str_1
+def judge(val,num):
+    a = "chart.pyにきたよ"
+    return a
