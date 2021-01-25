@@ -1,3 +1,3 @@
 def judge(val,num):
-    a = "chart.pyにきたよ"
+    a = "chart.pyにきたよ" + num
     return a

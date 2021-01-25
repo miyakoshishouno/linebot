@@ -67,12 +67,12 @@ def talkapi(text):
 def handle_message(event):
     push_text = event.message.text
     num = 0
-    if push_text == "チャート" | num != 0:
-        num += 1
-        chart.judge(push_text,num)
-        msg = chart.judge(push_text,num)
-    else:
-        msg = talkapi(push_text)
+    # if push_text == "チャート" | num != 0:
+    num += 1
+    chart.judge(push_text,num)
+    msg = chart.judge(push_text,num)
+    # else:
+    #     msg = talkapi(push_text)
 
     line_bot_api.reply_message(
         event.reply_token,
