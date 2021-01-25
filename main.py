@@ -70,7 +70,7 @@ def handle_message(event):
     array = []
     global num
 
-    if num > 0:
+    if num == 0:
         if push_text == "yes":
             num = num + 1
             question = chart.judge(push_text,num)
