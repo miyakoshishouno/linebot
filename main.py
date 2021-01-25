@@ -67,10 +67,6 @@ num = 0
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print(event)
-    push_text = event.message.text
-    print(push_text)
-    str_1 = event.message.num
-    print(str_1)
     array = []
     # global num
 
@@ -132,13 +128,11 @@ def make_button_template(question):
             actions=[
                 MessageAction(
                     label = "Yes",
-                    text  = "yes",
-                    num = 1
+                    text  = "yes"
                 ),
                 MessageAction(
                     label = "No",
-                    text  = "No",
-                    num = 2
+                    text  = "No"
                 )
             ]
         )
