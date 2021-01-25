@@ -17,6 +17,9 @@ app = Flask(__name__)
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
+# 
+TALKAPI_KEY = os.environ['DZZImPKmttYrT5T6eOlkIaCITKlaCoq1']
+# 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
@@ -38,14 +41,38 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#     line_bot_api.reply_message(
+#         event.reply_token,
+#         TextSendMessage(text=event.message.text))
 
 
 if __name__ == "__main__":
 #    app.run()
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
+
+# 
+def talkapi(text):
+   url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
+   req = requests.post(url, {'apikey':TALKAPI_KEY,'query':text}, timeout=5)
+   data = req.json()
+
+   if data['status'] != 0:
+      return data['message']
+
+   msg = data['results'][0]['reply']
+   return msg
+# 
+
+# 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+   push_text = event.message.text
+   msg = talkapi(push_text)
+   line_bot_api.reply_message(
+       event.reply_token,
+       TextSendMessage(text=msg))
+    #    
