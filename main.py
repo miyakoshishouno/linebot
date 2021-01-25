@@ -107,13 +107,17 @@ def make_button_template():
         alt_text="にゃーん",
         template=ButtonsTemplate(
             text="どこに表示されるかな？",
-            title="タイトルですよ",
-            image_size="cover",
-            thumbnail_image_url="https://example.com/gazou.jpg",
+            # title="タイトルですよ",
+            # image_size="cover",
+            # thumbnail_image_url="https://example.com/gazou.jpg",
             actions=[
                 URIAction(
-                    uri="https://example.com",
-                    label="URIアクションのLABEL"
+                    label = "Yes",
+                    text  = "yes"
+                ),
+                URIAction(
+                    label = "No",
+                    text  = "No"
                 )
             ]
         )
