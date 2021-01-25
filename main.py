@@ -67,6 +67,7 @@ num = 0
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     push_text = event.message.text
+    print(push_text)
     str_1 = event.message.num
     print(str_1)
     array = []
