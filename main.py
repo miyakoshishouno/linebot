@@ -72,6 +72,7 @@ def handle_message(event):
 
     if num > 0:
         if push_text == "yes":
+            global num
             num = num + 1
             question = chart.judge(push_text,num)
             msg = make_button_template(question)
@@ -82,6 +83,7 @@ def handle_message(event):
             )
 
         elif push_text == "no":
+            global num
             num = num + 2
             question = chart.judge(push_text,num)
             msg = make_button_template(question)
@@ -93,6 +95,7 @@ def handle_message(event):
 
         else:
             msg = "中断しました"
+            global num
             num = 0
 
             line_bot_api.reply_message(
