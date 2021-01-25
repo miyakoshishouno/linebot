@@ -68,7 +68,6 @@ num = 0
 def handle_message(event):
     push_text = event.message.text
     array = []
-    global num
 
     if num > 0:
         if push_text == "Yes":
@@ -82,9 +81,10 @@ def handle_message(event):
         else:
             msg = "中断しました"
             num = 0
-            
+
     
     if push_text == "チャート":
+        global num
         num = 1
         msg = chart.judge(push_text,num)
 
