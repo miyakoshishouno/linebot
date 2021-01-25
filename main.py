@@ -73,7 +73,8 @@ def handle_message(event):
     if num > 0:
         if push_text == "yes":
             num = num + 1
-            msg = chart.judge(push_text,num)
+            question = chart.judge(push_text,num)
+            msg = make_button_template(question)
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -82,7 +83,8 @@ def handle_message(event):
 
         elif push_text == "no":
             num = num + 2
-            msg = chart.judge(push_text,num)
+            question = chart.judge(push_text,num)
+            msg = make_button_template(question)
 
             line_bot_api.reply_message(
                 event.reply_token,
