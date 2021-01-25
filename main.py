@@ -68,12 +68,13 @@ num = 0
 def handle_message(event):
     print(event)
     array = []
-    # global num
+    global num
+    print("72行目"+str(num))
 
     # if num == 0:
     if push_text == "yes":
-        print(push_text)
-        # num = num + 1
+        print(num)
+        num = num + 1
         question = chart.judge(push_text,num)
         msg = make_button_template(question)
 
