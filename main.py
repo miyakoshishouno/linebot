@@ -42,39 +42,39 @@ def callback():
     return 'OK'
 
 
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     line_bot_api.reply_message(
-#         event.reply_token,
-#         TextSendMessage(text=event.message.text))
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text))
 
 
 if __name__ == "__main__":
-#    app.run()
-    # port = int(os.getenv("PORT", 5000))
-    port = int(os.getenv("PORT"))
+   app.run()
+    port = int(os.getenv("PORT", 5000))
+    # port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)
 
 
 # 
-def talkapi(text):
-   url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
-   req = requests.post(url, {'apikey':TALKAPI_KEY,'query':text}, timeout=5)
-   data = req.json()
+# def talkapi(text):
+#    url = 'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk'
+#    req = requests.post(url, {'apikey':TALKAPI_KEY,'query':text}, timeout=5)
+#    data = req.json()
 
-   if data['status'] != 0:
-      return data['message']
+#    if data['status'] != 0:
+#       return data['message']
 
-   msg = data['results'][0]['reply']
-   return msg
+#    msg = data['results'][0]['reply']
+#    return msg
 # 
 
 # 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-   push_text = event.message.text
-   msg = talkapi(push_text)
-   line_bot_api.reply_message(
-       event.reply_token,
-       TextSendMessage(text=msg))
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_message(event):
+#    push_text = event.message.text
+#    msg = talkapi(push_text)
+#    line_bot_api.reply_message(
+#        event.reply_token,
+#        TextSendMessage(text=msg))
 #    
