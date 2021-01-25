@@ -69,15 +69,8 @@ def handle_message(event):
     push_text = event.message.text
     array = []
     global num
-    if push_text == "チャート":
-        num = 1
-        msg = chart.judge(push_text,num)
 
-    else:
-        msg = talkapi(push_text)
-
-
-    if num > 1:
+    if num > 0:
         if push_text == "Yes":
             num = num + 1
             msg = chart.judge(push_text,num)
@@ -90,6 +83,15 @@ def handle_message(event):
             msg = "中断しました"
             num = 0
             
+    
+    if push_text == "チャート":
+        num = 1
+        msg = chart.judge(push_text,num)
+
+    else:
+        msg = talkapi(push_text)
+
+
 
     line_bot_api.reply_message(
         event.reply_token,
