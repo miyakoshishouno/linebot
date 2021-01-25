@@ -75,6 +75,11 @@ def handle_message(event):
         # msg = chart.judge(push_text,num)
         msg = make_button_template()
 
+        line_bot_api.reply_message(
+            event.reply_token,
+            messages
+        )
+
     else:
         msg = talkapi(push_text)
 
@@ -92,12 +97,10 @@ def handle_message(event):
     #         msg = "中断しました"
     #         num = 0
 
-    
-
-
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=msg))
+        
 
 def make_button_template():
     message_template = TemplateSendMessage(
