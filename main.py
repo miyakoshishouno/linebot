@@ -7,7 +7,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ButtonsTemplate
 )
 import os
 import requests
@@ -70,35 +70,35 @@ def handle_message(event):
     array = []
     global num
 
-    if push_text == "チャート":
-        num = 1
-        msg = chart.judge(push_text,num)
+    # if push_text == "チャート":
+    #     num = 1
+    #     msg = chart.judge(push_text,num)
 
-    else:
-        msg = talkapi(push_text)
-
-
-    if push_text != "チャート" and num > 0:
-        if push_text == "Yes":
-            num = num + 1
-            msg = chart.judge(push_text,num)
-
-        elif push_text == "No":
-            num = num + 2
-            msg = chart.judge(push_text,num)
-
-        else:
-            msg = "中断しました"
-            num = 0
+    # else:
+    #     msg = talkapi(push_text)
 
 
+    # if push_text != "チャート" and num > 0:
+    #     if push_text == "Yes":
+    #         num = num + 1
+    #         msg = chart.judge(push_text,num)
+
+    #     elif push_text == "No":
+    #         num = num + 2
+    #         msg = chart.judge(push_text,num)
+
+    #     else:
+    #         msg = "中断しました"
+    #         num = 0
+
+    msg = make_button_template()
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=msg))
 
 
 
-# case “confirm”: {
+# if push_text != "チャート": {
 #     ConfirmTemplate confirmTemplate = new ConfirmTemplate(
 #         “Do it?”,
 #         new MessageAction(“Yes”, “Yes!“),
@@ -108,3 +108,26 @@ def handle_message(event):
 #     this.reply(replyToken, templateMessage);
 #     break;
 # }
+
+def make_button_template():
+    message_template = TemplateSendMessage(
+        type = "template",
+        altText =  "this is a confirm template",
+        template = {
+            type = "confirm",
+            text = "Are you sure?",
+            actions = [
+                {
+                    type = "message",
+                    label = "Yes",
+                    text = "yes"
+                },
+                {
+                    type = "message",
+                    label = "No",
+                    text = "no"
+                }
+            ]
+        }
+    )
+    return message_template
