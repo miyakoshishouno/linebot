@@ -92,12 +92,13 @@ def handle_message(event):
         else:
             msg = "中断しました"
             num = 0
+
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=msg))
 
 
-    elif push_text == "チャート"　and num = 0:
+    elif push_text == "チャート" and num = 0:
         num = 1
         # msg = chart.judge(push_text,num)
         question = "最初の質問"
