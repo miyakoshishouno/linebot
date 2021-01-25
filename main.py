@@ -119,7 +119,7 @@ def handle_message(event):
 # Yes/Noチャート(確認テンプレート)
 def make_button_template(question):
     message_template = TemplateSendMessage(
-        alt_text="",
+        alt_text="a",
         template=ConfirmTemplate(
             text=question,
             actions=[
