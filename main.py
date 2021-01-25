@@ -75,7 +75,7 @@ def handle_message(event):
     # if num == 0:
     if push_text == "yes":
         num = num + 1
-         print(num)
+        print(num)
         question = chart.judge(push_text,num)
         msg = make_button_template(question)
 
