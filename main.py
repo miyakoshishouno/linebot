@@ -183,10 +183,6 @@ def make_button_template(question):
                 MessageAction(
                     label = "予約状況確認",
                     text  = "No"
-                ),
-                MessageAction(
-                    label = "予約状況確認",
-                    text  = "No"
                 )
             ]
         )
