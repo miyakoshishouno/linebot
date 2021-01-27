@@ -7,7 +7,9 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,MessageAction,DatetimePickerAction,PostbackEvent
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,\
+        MessageAction,DatetimePickerAction,PostbackEvent,ButtonsTemplate
+
 )
 
 import psycopg2
@@ -233,28 +235,44 @@ def make_button_template3(label):
     get_date = str(get_day.hour + 9).zfill(2) + ":00"
     print(get_date)
 
+    # message_template = TemplateSendMessage(
+    #     alt_text="a",
+    #     template=ConfirmTemplate(
+    #         text=label,
+    #         actions=[
+    #             DatetimePickerAction(
+    #                 type = "datetimepicker",
+    #                 label = "Select date",
+    #                 data = "storeId=12345",
+    #                 mode = "time-hour",
+    #                 initial = get_date,
+    #                 max = "20:00",
+    #                 min = "10:00"
+    #             ),
+    #             MessageAction(
+    #                 label = "予約状況確認",
+    #                 text  = "show_yoyaku"
+    #             )
+    #         ]
+    #     )
     message_template = TemplateSendMessage(
         alt_text="a",
-        template=ConfirmTemplate(
-            text=label,
+        template=ButtonsTemplate(
+            text=question,
             actions=[
-                DatetimePickerAction(
-                    type = "datetimepicker",
-                    label = "Select date",
-                    data = "storeId=12345",
-                    mode = "time-hour",
-                    initial = get_date,
-                    max = "20:00",
-                    min = "10:00"
+                PostbackTemplateAction(
+                    label = "1月",
+                    data = "itemid=001"
                 ),
-                MessageAction(
-                    label = "予約状況確認",
-                    text  = "show_yoyaku"
-                )
+                PostbackTemplateAction(
+                   label = "2月",
+                    data = "itemid=002"
+                ),
             ]
         )
     )
     return message_template
+
 
 @handler.add(PostbackEvent)
 def on_postback(event):
@@ -268,3 +286,9 @@ def on_postback(event):
             event.reply_token,
             msg
         )
+
+    if event.postback.data == "itemid=001":
+        print("ここ１")
+
+    elif event.postback.data == "itemid=002":
+        print("ここ２")
