@@ -125,7 +125,7 @@ def handle_message(event):
         )
 
     elif push_text == "create_yoyaku":
-        label = 日付を選択してください。
+        label = "日付を選択してください。"
         msg  = make_button_template2(label)
         line_bot_api.reply_message(
             event.reply_token,
