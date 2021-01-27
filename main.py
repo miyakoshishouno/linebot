@@ -319,12 +319,11 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            velif_yoyaku(event.postback.data)
+            velif_yoyaku(yoyaku_day,event.postback.data)
 
 
 
-def velif_yoyaku(time):
-    global yoyaku_day
+def velif_yoyaku(yoyaku_day,time):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
     print("予約データ",yoyaku_date)
     if get_response_message(yoyaku_date):
