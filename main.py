@@ -163,7 +163,7 @@ def get_response_message(mes_from):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("SELECT * FROM yoyaku_table")
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT max(id)+1 FROM  yoyaku_table), yoyaku_ymd, note)", ('foo',))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT max(id)+1 FROM  yoyaku_table), {yoyaku_ymd}, {note})", ('foo',))
             conn.commit()
             # rows = cur.fetchall()
             # return rows
