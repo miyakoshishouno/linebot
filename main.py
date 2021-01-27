@@ -15,6 +15,7 @@ from psycopg2.extras import DictCursor
 import os
 import requests
 import chart
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -197,6 +198,10 @@ def make_button_template(question):
 
 # 日付ボタン
 def make_button_template2(label):
+    # 現在日時の取得
+    get_day = datetime.now()
+    get_date = get_day.year() + "-" + get_day.month() + 1 + "-" + get_day.day()
+    print(get_date)
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ConfirmTemplate(
