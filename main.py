@@ -133,6 +133,23 @@ def handle_message(event):
             msg
         )
 
+    elif push_text == "show_yoyaku":
+        rows = get_response_message()
+
+        if len(rows)==0:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text='現在予約はありません。'))
+        else:
+            r = rows[0]
+            reply_message = f'予約状況{r[1]}\n'\
+                f'備考 {r[2]}\n'
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=reply_message))
+
+
     else:
         msg = talkapi(push_text)
 
@@ -141,30 +158,22 @@ def handle_message(event):
             TextSendMessage(text=msg))
 
 
-    # rows = get_response_message(event.message.text)
-
-    # if len(rows)==0:
-    #     line_bot_api.reply_message(
-    #         event.reply_token,
-    #         TextSendMessage(text='no_data'))
-    # else:
-    #     r = rows[0]
-    #     reply_message = f'予約状況{r[1]}\n'\
-    #         f'備考 {r[2]}\n'
-
-    #     line_bot_api.reply_message(
-    #         event.reply_token,
-    #         TextSendMessage(text=reply_message))
 
 
 
 def get_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
+# 予約一覧表示処理
+def get_response_message():
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT * FROM yoyaku_table")
+            rows = cur.fetchall()
+            return rows
 
-def get_response_message(yoyaku_data):
-    # yoyaku_ymd = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
-    # yoyaku_ymd = '2020/10/01 20:00:00'
+# 新規登録処理
+def add_response_message(yoyaku_data):
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -326,10 +335,8 @@ def on_postback(event):
 def velif_yoyaku(yoyaku_day,time):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
     print("予約データ",yoyaku_date)
-    if get_response_message(yoyaku_date):
-        msg = time + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=msg))
-    else:
-        print("失敗")
+    add_response_message(yoyaku_date)
+    msg = yoyaku_date[:-3] + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=msg))
