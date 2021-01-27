@@ -202,13 +202,13 @@ def make_button_template2(label):
             text=label,
             actions=[
                 DatetimePickerAction(
-                    type = "datetimepicker",
+                    type = "date",
                     label = "Select date",
                     data = "storeId=12345",
                     mode = "datetime",
-                    initial = "2017-12-25t00:00",
-                    max = "2088-01-24t23:59",
-                    min = "2017-12-25t00:00"
+                    initial = "2017-12-25",
+                    max = "2088-01-24",
+                    min = "2017-12-25"
                 ),
                 MessageAction(
                     label = "予約状況確認",
