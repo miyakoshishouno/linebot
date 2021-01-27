@@ -225,6 +225,6 @@ def on_postback(event):
     print(event)
     if isinstance(event, PostbackEvent):
         event.postback.params['date']
-        print("ここ",event.postback.params['date'].[2])
+        print("ここ",(event.postback.params['date'])[2])
 
         # 日付取得できた
