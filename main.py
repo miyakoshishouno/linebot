@@ -70,8 +70,6 @@ def talkapi(text):
 
 # グローバル変数(会話のやりとりの保存)
 num = 0
-yoyaku_year = ""
-yoyaku_month = ""
 yoyaku_day = ""
 yoyaku_time = ""
 note = ""
@@ -164,14 +162,14 @@ def get_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
 
-def get_response_message(mes_from):
-    yoyaku_ymd = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
-    yoyaku_ymd = '2020/10/01 20:00:00'
+def get_response_message(yoyaku_data):
+    # yoyaku_ymd = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
+    # yoyaku_ymd = '2020/10/01 20:00:00'
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("SELECT * FROM yoyaku_table")
-            cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table),%s,%s)",(yoyaku_ymd, note))
+            cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table),%s,%s)",(yoyaku_data, note))
             conn.commit()
             # rows = cur.fetchall()
             # return rows
@@ -261,13 +259,45 @@ def make_button_template3(label):
             text=label,
             actions=[
                 PostbackTemplateAction(
-                    label = "1月",
+                    label = "10:00",
+                    data = "itemid=000"
+                ),
+                PostbackTemplateAction(
+                   label = "11:00",
                     data = "itemid=001"
                 ),
                 PostbackTemplateAction(
-                   label = "2月",
+                   label = "12:00",
                     data = "itemid=002"
                 ),
+                PostbackTemplateAction(
+                   label = "13:00",
+                    data = "itemid=003"
+                ),
+                PostbackTemplateAction(
+                   label = "14:00",
+                    data = "itemid=004"
+                ),
+                PostbackTemplateAction(
+                   label = "15:00",
+                    data = "itemid=005"
+                ),
+                PostbackTemplateAction(
+                   label = "16:00",
+                    data = "itemid=006"
+                ),
+                PostbackTemplateAction(
+                   label = "17:00",
+                    data = "itemid=007"
+                ),
+                PostbackTemplateAction(
+                   label = "18:00",
+                    data = "itemid=008"
+                ),
+                PostbackTemplateAction(
+                   label = "19:00",
+                    data = "itemid=009"
+                )
             ]
         )
     )
@@ -278,7 +308,9 @@ def make_button_template3(label):
 def on_postback(event):
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
-            event.postback.params['date']
+            global yoyaku_day
+
+            yoyaku_day = event.postback.params['date']
             label = ((event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
                 + "ですね。\n　希望する時間帯を選択してください。")
             msg  = make_button_template3(label)
@@ -287,8 +319,19 @@ def on_postback(event):
                 msg
             )
 
-        elif event.postback.data == "itemid=001":
-            print("ここ１")
+        elif event.postback.data is not None:
+            velif_yoyaku(event.postback.label)
 
-        elif event.postback.data == "itemid=002":
-            print("ここ２")
+
+
+def velif_yoyaku(time):
+    global yoyaku_day
+    yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
+    print("予約データ",yoyaku_date)
+    if get_response_message(yoyaku_date):
+        msg = time + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg))
+    else:
+        print("失敗")
