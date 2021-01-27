@@ -230,7 +230,7 @@ def make_button_template2(label):
 def make_button_template3(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_date = str(get_day.day + 9).zfill(2)
+    get_date = str(get_day.hour + 9).zfill(2)
     print(get_date)
 
     message_template = TemplateSendMessage(
