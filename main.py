@@ -258,7 +258,7 @@ def make_button_template3(label):
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ButtonsTemplate(
-            text=question,
+            text=label,
             actions=[
                 PostbackTemplateAction(
                     label = "1月",
