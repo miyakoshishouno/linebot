@@ -278,17 +278,17 @@ def make_button_template3(label):
 def on_postback(event):
     print(event)
     if isinstance(event, PostbackEvent):
-        event.postback.params['date']
-        label = ((event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
-             + "ですね。\n　希望する時間帯を選択してください。")
-        msg  = make_button_template3(label)
-        line_bot_api.reply_message(
-            event.reply_token,
-            msg
-        )
+        if event.postback.params['date']:
+            label = ((event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
+                + "ですね。\n　希望する時間帯を選択してください。")
+            msg  = make_button_template3(label)
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
 
-    if event.postback.data == "itemid=001":
-        print("ここ１")
+        elif event.postback.data == "itemid=001":
+            print("ここ１")
 
-    elif event.postback.data == "itemid=002":
-        print("ここ２")
+        elif event.postback.data == "itemid=002":
+            print("ここ２")
