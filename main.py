@@ -252,8 +252,8 @@ def make_button_template3(label):
 @handler.add(PostbackEvent)
 def on_postback(event):
     if isinstance(event, PostbackEvent):
+        global yoyaku_day
         if event.postback.params is not None:
-            global yoyaku_day
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n　希望する時間帯を選択してください。")
             msg  = make_button_template3(label)
@@ -263,7 +263,6 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            global yoyaku_day
             yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
             print("予約日",yoyaku_date)
             add_response_message(yoyaku_date)
