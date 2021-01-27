@@ -202,7 +202,7 @@ def make_button_template2(label):
             text=label,
             actions=[
                 DatetimePickerAction(
-                    type = "date",
+                    type = "datetime",
                     label = "Select date",
                     data = "storeId=12345",
                     mode = "date",
