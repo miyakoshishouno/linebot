@@ -115,11 +115,6 @@ def handle_message(event):
     #             event.reply_token,
     #             TextSendMessage(text=msg))
 
-        # 日付取得
-    if isinstance(PostbackEvent):
-        event.postback.params['date']
-        print("ここ",event.postback.params['date'])
-
 
     elif push_text in "予約":
         question = "予約しますか？"
@@ -225,3 +220,9 @@ def make_button_template2(label):
     )
     return message_template
 
+@handler.add(PostbackEvent)
+def on_postback(event):
+    print(event)
+    if isinstance(event, PostbackEvent):
+    event.postback.params['date']
+    print("ここ",event.postback.params['date'])
