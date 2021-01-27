@@ -205,7 +205,7 @@ def make_button_template2(label):
                     type = "date",
                     label = "Select date",
                     data = "storeId=12345",
-                    mode = "datetime",
+                    mode = "date",
                     initial = "2017-12-25",
                     max = "2088-01-24",
                     min = "2017-12-25"
