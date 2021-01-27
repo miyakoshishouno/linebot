@@ -7,7 +7,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,MessageAction
+    MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,MessageAction,DatetimePickerAction
 )
 
 import psycopg2
@@ -76,9 +76,7 @@ note = ""
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    print(event.message.text)
-    # print(event)
-    # push_text = event.message.text
+    push_text = event.message.text
     # print(event)
     # array = []
     # global num
@@ -118,37 +116,38 @@ def handle_message(event):
     #             TextSendMessage(text=msg))
 
 
-    # elif push_text in "予約":
-    #     num = 1
-    #     question = "予約しますか？"
-    #     msg = make_button_template(question)
+    elif push_text in "予約":
+        num = 1
+        question = "予約しますか？"
+        msg = make_button_template(question)
 
-    #     line_bot_api.reply_message(
-    #         event.reply_token,
-    #         msg
-    #     )
-
-    # else:
-    #     msg = talkapi(push_text)
-
-    #     line_bot_api.reply_message(
-    #         event.reply_token,
-    #         TextSendMessage(text=msg))
-
-    rows = get_response_message(event.message.text)
-
-    if len(rows)==0:
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='no_data'))
+            msg
+        )
+
     else:
-        r = rows[0]
-        reply_message = f'予約状況{r[1]}\n'\
-            f'備考 {r[2]}\n'
+        msg = talkapi(push_text)
 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=reply_message))
+            TextSendMessage(text=msg))
+
+
+    # rows = get_response_message(event.message.text)
+
+    # if len(rows)==0:
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text='no_data'))
+    # else:
+    #     r = rows[0]
+    #     reply_message = f'予約状況{r[1]}\n'\
+    #         f'備考 {r[2]}\n'
+
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text=reply_message))
 
 
 
@@ -178,11 +177,15 @@ def make_button_template(question):
             text=question,
             actions=[
                 MessageAction(
-                    label = "Yes",
+                    label = "予約する",
                     text  = "Yes"
                 ),
                 MessageAction(
-                    label = "No",
+                    label = "予約状況確認",
+                    text  = "No"
+                ),
+                MessageAction(
+                    label = "予約状況確認",
                     text  = "No"
                 )
             ]
