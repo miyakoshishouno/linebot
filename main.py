@@ -143,11 +143,11 @@ def handle_message(event):
         else:
             for i in range(len(rows)):
                 r = rows[i]
-                reply_message = '予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
+                reply_message.append('予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n')
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=reply_message))
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=reply_message))
 
 
     else:
