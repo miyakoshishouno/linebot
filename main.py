@@ -67,6 +67,11 @@ def talkapi(text):
 
 # グローバル変数(会話のやりとりの保存)
 num = 0
+yoyaku_year = ""
+yoyaku_month = ""
+yoyaku_day = ""
+yoyaku_time = ""
+note = ""
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -152,9 +157,13 @@ def get_connection():
 
 
 def get_response_message(mes_from):
+    yoyaku_date = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
+    yoyaku_date = '2020/10/01 20:00:00'
+    note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table")
+            # cur.execute("SELECT * FROM yoyaku_table")
+            cur.execute("INSERT INTO 'yoyaku_table' VALUES((SELECT max(id)+1 FROM  yoyaku_table), '{yoyaku_date}', '{note}')
             rows = cur.fetchall()
             return rows
 
