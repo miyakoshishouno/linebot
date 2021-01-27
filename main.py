@@ -270,12 +270,4 @@ def on_postback(event):
 
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=msg))
-
-# 
-def velif_yoyaku(yoyaku_day,time):
-    yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
-    add_response_message(yoyaku_date)
-    result = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
-    return result
-    
+                TextSendMessage(text=msg))    
