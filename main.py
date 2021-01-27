@@ -226,11 +226,45 @@ def make_button_template2(label):
     )
     return message_template
 
+# 時刻
+def make_button_template3(label):
+    # 現在日時の取得
+    get_day = datetime.datetime.now()
+    get_date = str(get_day.day + 9).zfill(2)
+    print(get_date)
+
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ConfirmTemplate(
+            text=label,
+            actions=[
+                DatetimePickerAction(
+                    type = "datetimepicker",
+                    label = "Select date",
+                    data = "storeId=12345",
+                    mode = "time-hour",
+                    initial = get_date,
+                    max = "20:00",
+                    min = "10:00"
+                ),
+                MessageAction(
+                    label = "予約状況確認",
+                    text  = "show_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
 @handler.add(PostbackEvent)
 def on_postback(event):
     print(event)
     if isinstance(event, PostbackEvent):
         event.postback.params['date']
-        print("ここ",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
-
-        # 日付取得できた
+        label = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
+             + "ですね。\n　希望する時間帯を選択してください。")
+        msg  = make_button_template3(label)
+        line_bot_api.reply_message(
+            event.reply_token,
+            msg
+        )
