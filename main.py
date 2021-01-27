@@ -200,7 +200,7 @@ def make_button_template(question):
 def make_button_template2(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_date = str(get_day.year) + "-" + str(get_day.month) + "-" + str(get_day.day)
+    get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
     print(get_date)
 
     message_template = TemplateSendMessage(
@@ -215,7 +215,7 @@ def make_button_template2(label):
                     mode = "date",
                     initial = get_date,
                     max = "2088-01-24",
-                    min = "2017-12-25"
+                    min = get_date
                 ),
                 MessageAction(
                     label = "予約状況確認",
