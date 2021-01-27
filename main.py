@@ -254,7 +254,7 @@ def on_postback(event):
     global yoyaku_day
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
-            yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+            yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n　希望する時間帯を選択してください。")
             msg  = make_button_template3(label)
             line_bot_api.reply_message(
@@ -264,6 +264,7 @@ def on_postback(event):
 
         elif event.postback.data is not None:
             yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+            print("予約日",yoyaku_date)
             add_response_message(yoyaku_date)
             msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
