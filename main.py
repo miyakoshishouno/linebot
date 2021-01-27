@@ -117,10 +117,16 @@ def handle_message(event):
 
 
     if push_text in "予約":
-        num = 1
         question = "予約しますか？"
         msg = make_button_template(question)
+        line_bot_api.reply_message(
+            event.reply_token,
+            msg
+        )
 
+    elif push_text == "create_yoyaku":
+        label = 日付を選択してください。
+        msg  = make_button_template2(label)
         line_bot_api.reply_message(
             event.reply_token,
             msg
@@ -178,11 +184,35 @@ def make_button_template(question):
             actions=[
                 MessageAction(
                     label = "予約する",
-                    text  = "Yes"
+                    text  = "create_yoyaku"
                 ),
                 MessageAction(
                     label = "予約状況確認",
-                    text  = "No"
+                    text  = "show_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
+    def make_button_template2(label):
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ConfirmTemplate(
+            text=label,
+            actions=[
+                DatetimePickerAction(
+                    type = "datetimepicker",
+                    label = "Select date",
+                    data = "storeId=12345",
+                    mode = "datetime",
+                    initial = "2017-12-25t00:00",
+                    max = "2088-01-24t23:59",
+                    min = "2017-12-25t00:00"
+                ),
+                MessageAction(
+                    label = "予約状況確認",
+                    text  = "show_yoyaku"
                 )
             ]
         )
