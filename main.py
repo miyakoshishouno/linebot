@@ -160,7 +160,7 @@ def handle_message(event):
 
 
 
-
+# db接続
 def get_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
@@ -328,7 +328,10 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            velif_yoyaku(yoyaku_day,event.postback.data)
+            msg = velif_yoyaku(yoyaku_day,event.postback.data)
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
 
 
 
@@ -336,7 +339,6 @@ def velif_yoyaku(yoyaku_day,time,event):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
     print("予約データ",yoyaku_date)
     add_response_message(yoyaku_date)
-    msg = yoyaku_date[:-3] + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=msg))
+    result = yoyaku_date[:-3] + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
+    return result
+    
