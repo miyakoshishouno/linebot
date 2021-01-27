@@ -142,7 +142,7 @@ def handle_message(event):
                 TextSendMessage(text='現在予約はありません。'))
         else:
             r = rows[0]
-            reply_message = f'予約状況 :{(r[1])[:-3].replase('-','/')}\n'\
+            reply_message = f'予約状況 :{r[1]}[:-3].replase('-','/')}\n'\
                 f'備考 :{r[2]}\n'
 
             line_bot_api.reply_message(
