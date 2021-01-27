@@ -157,13 +157,13 @@ def get_connection():
 
 
 def get_response_message(mes_from):
-    yoyaku_date = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
-    yoyaku_date = '2020/10/01 20:00:00'
+    yoyaku_ymd = yoyaku_year + '/' + yoyaku_month + '/' + yoyaku_day + ' ' + yoyaku_time
+    yoyaku_ymd = '2020/10/01 20:00:00'
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("SELECT * FROM yoyaku_table")
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT max(id)+1 FROM  yoyaku_table), yoyaku_date, note)", ('foo',))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT max(id)+1 FROM  yoyaku_table), yoyaku_ymd, note)", ('foo',))
             conn.commit()
             # rows = cur.fetchall()
             # return rows
