@@ -218,3 +218,8 @@ def make_button_template2(label):
         )
     )
     return message_template
+
+# 日付取得
+if isinstance(event, PostbackEvent):
+    event.postback.params['date']
+    print("ここ",event.postback.params['date'])
