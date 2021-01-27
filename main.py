@@ -49,7 +49,6 @@ def callback():
     return 'OK'
 
 
-
 if __name__ == "__main__":
     app.run()
     port = int(os.getenv("PORT"))
@@ -76,46 +75,9 @@ note = ""
 
 
 @handler.add(MessageEvent, message=TextMessage)
+# テキスト別に条件分岐
 def handle_message(event):
     push_text = event.message.text
-    # print(event)
-    # array = []
-    # global num
-    # print("72行目"+str(num))
-    # # 回数取得できた
-
-    # if num > 0:
-    #     if push_text == "Yes":
-    #         num = num + 1
-    #         print(num)
-    #         # question = chart.judge(push_text,num)
-    #         question = "最初の質問" + str(num)
-    #         msg = make_button_template(question)
-
-    #         line_bot_api.reply_message(
-    #             event.reply_token,
-    #             msg
-    #         )
-
-    #     elif push_text == "No":
-    #         # num = num + 2
-    #         question = "最初の質問" + str(num)
-    #         # question = chart.judge(push_text,num)
-    #         msg = make_button_template(question)
-
-    #         line_bot_api.reply_message(
-    #             event.reply_token,
-    #             msg
-    #         )
-
-    #     else:
-    #         msg = "中断しました"
-    #         num = 0
-
-    #         line_bot_api.reply_message(
-    #             event.reply_token,
-    #             TextSendMessage(text=msg))
-
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -150,7 +112,6 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=reply_message))
 
-
     else:
         msg = talkapi(push_text)
 
@@ -159,11 +120,10 @@ def handle_message(event):
             TextSendMessage(text=msg))
 
 
-
-
 # db接続
 def get_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
+
 
 # 予約一覧表示処理
 def get_response_message():
@@ -173,17 +133,14 @@ def get_response_message():
             rows = cur.fetchall()
             return rows
 
+
 # 新規登録処理
 def add_response_message(yoyaku_data):
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            # cur.execute("SELECT * FROM yoyaku_table")
             cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table),%s,%s)",(yoyaku_data, note))
             conn.commit()
-            # rows = cur.fetchall()
-            # return rows
-
 
 
 # Yes/Noチャート(確認テンプレート)
@@ -211,7 +168,6 @@ def make_button_template2(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
-    print(get_date)
 
     message_template = TemplateSendMessage(
         alt_text="a",
@@ -241,28 +197,7 @@ def make_button_template3(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_date = str(get_day.hour + 9).zfill(2) + ":00"
-    print(get_date)
 
-    # message_template = TemplateSendMessage(
-    #     alt_text="a",
-    #     template=ConfirmTemplate(
-    #         text=label,
-    #         actions=[
-    #             DatetimePickerAction(
-    #                 type = "datetimepicker",
-    #                 label = "Select date",
-    #                 data = "storeId=12345",
-    #                 mode = "time-hour",
-    #                 initial = get_date,
-    #                 max = "20:00",
-    #                 min = "10:00"
-    #             ),
-    #             MessageAction(
-    #                 label = "予約状況確認",
-    #                 text  = "show_yoyaku"
-    #             )
-    #         ]
-    #     )
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ButtonsTemplate(
@@ -329,16 +264,17 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            msg = velif_yoyaku(yoyaku_day,event.postback.data)
+            yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+            add_response_message(yoyaku_date)
+            msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=msg))
 
-
-
+# 
 def velif_yoyaku(yoyaku_day,time):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
-    print("予約データ",yoyaku_date)
     add_response_message(yoyaku_date)
     result = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
     return result
