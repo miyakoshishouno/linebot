@@ -335,7 +335,7 @@ def on_postback(event):
 
 
 
-def velif_yoyaku(yoyaku_day,time,event):
+def velif_yoyaku(yoyaku_day,time):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
     print("予約データ",yoyaku_date)
     add_response_message(yoyaku_date)
