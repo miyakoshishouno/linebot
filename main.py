@@ -195,6 +195,7 @@ def make_button_template(question):
     )
     return message_template
 
+# 日付ボタン
 def make_button_template2(label):
     message_template = TemplateSendMessage(
         alt_text="a",
@@ -220,6 +221,6 @@ def make_button_template2(label):
     return message_template
 
 # 日付取得
-if isinstance(event, PostbackEvent):
-    event.postback.params['date']
-    print("ここ",event.postback.params['date'])
+    if isinstance(PostbackEvent):
+        event.postback.params['date']
+        print("ここ",event.postback.params['date'])
