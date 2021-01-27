@@ -261,7 +261,7 @@ def on_postback(event):
     print(event)
     if isinstance(event, PostbackEvent):
         event.postback.params['date']
-        label = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
+        label = ((event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
              + "ですね。\n　希望する時間帯を選択してください。")
         msg  = make_button_template3(label)
         line_bot_api.reply_message(
