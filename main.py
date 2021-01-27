@@ -141,6 +141,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text='現在予約はありません。'))
         else:
+            reply_message = ""
             for i in range(len(rows)):
                 r = rows[i]
                 reply_message += '予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
