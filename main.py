@@ -260,15 +260,15 @@ def make_button_template3(label):
             actions=[
                 PostbackTemplateAction(
                     label = "10:00",
-                    data = "itemid=000"
+                    data = "10:00"
                 ),
                 PostbackTemplateAction(
                    label = "11:00",
-                    data = "itemid=001"
+                    data = "11:00"
                 ),
                 PostbackTemplateAction(
                    label = "12:00",
-                    data = "itemid=002"
+                    data = "12:00"
                 )
                 # PostbackTemplateAction(
                 #    label = "13:00",
@@ -320,7 +320,7 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            velif_yoyaku(event.postback.label)
+            velif_yoyaku(event.postback.data)
 
 
 
