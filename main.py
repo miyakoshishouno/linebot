@@ -277,7 +277,8 @@ def make_button_template3(label):
 @handler.add(PostbackEvent)
 def on_postback(event):
     if isinstance(event, PostbackEvent):
-        if event.postback.params['date'] is not None:
+        if event.postback.params is not None:
+            event.postback.params['date']
             label = ((event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:] \
                 + "ですね。\n　希望する時間帯を選択してください。")
             msg  = make_button_template3(label)
