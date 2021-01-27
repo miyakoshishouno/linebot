@@ -200,8 +200,9 @@ def make_button_template(question):
 def make_button_template2(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_date = [get_day.year, get_day.month, get_day.day, get_day.hour]
+    get_date = str(get_day.year) + "-" + str(get_day.month) + "-" + str(get_day.day)
     print(get_date)
+
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ConfirmTemplate(
@@ -212,7 +213,7 @@ def make_button_template2(label):
                     label = "Select date",
                     data = "storeId=12345",
                     mode = "date",
-                    initial = "2017-12-25",
+                    initial = get_date,
                     max = "2088-01-24",
                     min = "2017-12-25"
                 ),
