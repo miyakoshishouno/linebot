@@ -269,35 +269,35 @@ def make_button_template3(label):
                 PostbackTemplateAction(
                    label = "12:00",
                     data = "itemid=002"
-                ),
-                PostbackTemplateAction(
-                   label = "13:00",
-                    data = "itemid=003"
-                ),
-                PostbackTemplateAction(
-                   label = "14:00",
-                    data = "itemid=004"
-                ),
-                PostbackTemplateAction(
-                   label = "15:00",
-                    data = "itemid=005"
-                ),
-                PostbackTemplateAction(
-                   label = "16:00",
-                    data = "itemid=006"
-                ),
-                PostbackTemplateAction(
-                   label = "17:00",
-                    data = "itemid=007"
-                ),
-                PostbackTemplateAction(
-                   label = "18:00",
-                    data = "itemid=008"
-                ),
-                PostbackTemplateAction(
-                   label = "19:00",
-                    data = "itemid=009"
                 )
+                # PostbackTemplateAction(
+                #    label = "13:00",
+                #     data = "itemid=003"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "14:00",
+                #     data = "itemid=004"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "15:00",
+                #     data = "itemid=005"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "16:00",
+                #     data = "itemid=006"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "17:00",
+                #     data = "itemid=007"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "18:00",
+                #     data = "itemid=008"
+                # ),
+                # PostbackTemplateAction(
+                #    label = "19:00",
+                #     data = "itemid=009"
+                # )
             ]
         )
     )
