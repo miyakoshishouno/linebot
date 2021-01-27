@@ -195,7 +195,7 @@ def make_button_template(question):
     )
     return message_template
 
-    def make_button_template2(label):
+def make_button_template2(label):
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ConfirmTemplate(
