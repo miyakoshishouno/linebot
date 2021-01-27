@@ -116,7 +116,7 @@ def handle_message(event):
     #             TextSendMessage(text=msg))
 
 
-    elif push_text in "予約":
+    if push_text in "予約":
         question = "予約しますか？"
         msg = make_button_template(question)
         line_bot_api.reply_message(
