@@ -200,7 +200,7 @@ def make_button_template(question):
 def make_button_template2(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_date = get_day.year + "-" + get_day.month + "-" + get_day.day + get_day.hour
+    get_date = [get_day.year, get_day.month, get_day.day, get_day.hour]
     print(get_date)
     message_template = TemplateSendMessage(
         alt_text="a",
