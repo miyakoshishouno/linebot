@@ -142,8 +142,8 @@ def handle_message(event):
                 TextSendMessage(text='現在予約はありません。'))
         else:
             r = rows[0]
-            reply_message = f'予約状況{r[1]}\n'\
-                f'備考 {r[2]}\n'
+            reply_message = f'予約状況 :{(r[1])[:-3].replase('-','/')}\n'\
+                f'備考 :{r[2]}\n'
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -339,6 +339,6 @@ def velif_yoyaku(yoyaku_day,time):
     yoyaku_date = str(yoyaku_day) + " " + str(time) + ":00"
     print("予約データ",yoyaku_date)
     add_response_message(yoyaku_date)
-    result = yoyaku_date[:-3] + "で予約を完了しました。\n　予約状況は、予約一覧から確認できます。"
+    result = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
     return result
     
