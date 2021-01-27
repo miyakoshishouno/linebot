@@ -115,8 +115,13 @@ def handle_message(event):
     #             event.reply_token,
     #             TextSendMessage(text=msg))
 
+        # 日付取得
+    if isinstance(PostbackEvent):
+        event.postback.params['date']
+        print("ここ",event.postback.params['date'])
 
-    if push_text in "予約":
+
+    elif push_text in "予約":
         question = "予約しますか？"
         msg = make_button_template(question)
         line_bot_api.reply_message(
@@ -220,7 +225,3 @@ def make_button_template2(label):
     )
     return message_template
 
-# 日付取得
-    if isinstance(PostbackEvent):
-        event.postback.params['date']
-        print("ここ",event.postback.params['date'])
