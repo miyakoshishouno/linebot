@@ -275,10 +275,10 @@ def on_postback(event):
 
 # 
         elif event.postback.data is not None:
-            if event.postback.data = 'menu_yoyaku':
+            if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
         
-            elif event.postback.data = 'show_yoyaku':
+            elif event.postback.data == 'show_yoyaku':
                 print("一覧表示処理")
                 label = "日付を選択してください。"
                 msg  = button_show_or_del(label)
@@ -305,7 +305,7 @@ def on_postback(event):
                         TextSendMessage(text=reply_message))
 
 
-            elif event.postback.data = 'del_yoyaku':
+            elif event.postback.data == 'del_yoyaku':
                 print("削除処理")
 # 
 
