@@ -81,9 +81,15 @@ user_id = ""
 # テキスト別に条件分岐
 def handle_message(event):
     global user_id
-    user_id = line_bot_api.get_profile(event.source.user_id)
+    profile = line_bot_api.get_profile(event.source.user_id)
+    user_id = profile.user_id[:5]
     print("ユーザID",user_id)
     push_text = event.message.text
+    # ユーザ情報取得
+    row = get_user_id(user_id)
+
+    if len(row) == 0:
+        add_user_id(user_id)
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -106,6 +112,26 @@ def handle_message(event):
 def get_connection():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
+
+
+# ユーザID一覧取得処理
+def get_user_id(user_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT * FROM user_table WHERE user_id = (%s)",(user_id,))
+            rows = cur.fetchall()
+            return rows
+
+
+
+# ユーザID登録処理
+def add_user_id(user_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("INSERT INTO user_table VALUES((select max(id)+1 from  user_table),%s)",(user_id,))
+            conn.commit()
+
+    
 
 # 予約一覧表示処理
 def get_response_message():
