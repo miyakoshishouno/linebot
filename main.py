@@ -193,6 +193,7 @@ def make_button_template2(label):
     )
     return message_template
 
+
 # 時刻
 def make_button_template3(label):
     # 現在日時の取得
@@ -249,8 +250,9 @@ def on_postback(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(quick_reply=msg)
+            )
 
-        elif event.postback.data is not None:
+        elif event.postback.params is not None:
             yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
             print("予約日",yoyaku_date)
             add_response_message(yoyaku_date)
@@ -258,6 +260,5 @@ def on_postback(event):
 
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=msg))  
-            # if event.postback.data == "異性に質問してみる":
-            #     print("ここです")
+                TextSendMessage(text=msg)
+            )
