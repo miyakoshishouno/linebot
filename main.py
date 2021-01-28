@@ -204,7 +204,7 @@ def make_button_template3():
     print("時間",get_date)
     # 時間によってボタンの数を変更
     global yoyaku_day
-    items = []
+    item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
 
     #当日の場合
