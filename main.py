@@ -197,12 +197,13 @@ def make_button_template2(label):
 def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_now = get_day.year + get_day.month + get_day.day
+    get_now = str(get_day.year) +'/' +  str(get_day.month) + '/' + str(get_day.day)
     print("今日",get_now)
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
-    print("グローバル変数",get_date)
+    print("時間",get_date)
     # 時間によってボタンの数を変更
     global yoyaku_day
+    print("グローバル変数",yoyaku_day)
     # if yoyaku_day == get_day
     # そのあと削除処理
 
