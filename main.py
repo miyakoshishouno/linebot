@@ -129,7 +129,7 @@ def get_user_id(user_id):
 def add_user_id(user_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO user_table VALUES((select COALESCE(max(id),0)+1 from user_table),%s)",(user_id,))
+            cur.execute("INSERT INTO user_table VALUES((select (COALESCE(max(id),0)+1) from user_table),%s)",(str(user_id),))
             conn.commit()
 
     
@@ -139,7 +139,7 @@ def get_response_message():
     global user_id
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(user_id,))
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(str(user_id),))
             rows = cur.fetchall()
             return rows
 
@@ -148,7 +148,7 @@ def get_response_message():
 # 新規登録処理
 def add_response_message(yoyaku_data):
     # row = max_uer_id()
-    print("キー：",row[0])
+    # print("キー：",row[0])
     global user_id
     note = "ok"
     with get_connection() as conn:
@@ -173,7 +173,7 @@ def add_response_message(yoyaku_data):
 def del_response_message(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s) AND user_id = (%s)",(yoyaku_id,user_id))
+            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s) AND user_id = (%s)",(yoyaku_id,str(user_id)))
             conn.commit()
 
 
