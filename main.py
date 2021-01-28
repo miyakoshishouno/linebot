@@ -88,30 +88,30 @@ def handle_message(event):
             msg
         )
 
-    elif push_text == "create_yoyaku":
-        label = "日付を選択してください。"
-        msg  = make_button_template2(label)
-        line_bot_api.reply_message(
-            event.reply_token,
-            msg
-        )
+    # elif push_text == "create_yoyaku":
+        # label = "日付を選択してください。"
+        # msg  = make_button_template2(label)
+        # line_bot_api.reply_message(
+        #     event.reply_token,
+        #     msg
+        # )
 
-    elif push_text == "show_yoyaku":
-        rows = get_response_message()
+    # elif push_text == "show_yoyaku":
+    #     rows = get_response_message()
 
-        if len(rows)==0:
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text='現在予約はありません。'))
-        else:
-            reply_message = ""
-            for i in range(len(rows)):
-                r = rows[i]
-                reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
+        # if len(rows)==0:
+        #     line_bot_api.reply_message(
+        #         event.reply_token,
+        #         TextSendMessage(text='現在予約はありません。'))
+        # else:
+        #     reply_message = ""
+        #     for i in range(len(rows)):
+        #         r = rows[i]
+        #         reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=reply_message))
+        #     line_bot_api.reply_message(
+        #         event.reply_token,
+        #         TextSendMessage(text=reply_message))
 
     else:
         msg = talkapi(push_text)
@@ -151,13 +151,13 @@ def make_button_template(question):
         template=ConfirmTemplate(
             text=question,
             actions=[
-                MessageAction(
+                PostbackAction(
                     label = "予約する",
-                    text  = "create_yoyaku"
+                    data  = "create_yoyaku"
                 ),
                 PostbackAction(
                     label = "予約状況確認",
-                    data  = "show_yoyaku"
+                    data  = "menu_yoyaku"
                 )
             ]
         )
@@ -277,17 +277,24 @@ def on_postback(event):
         elif event.postback.data is not None:
             if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
-        
-            elif event.postback.data == 'show_yoyaku':
-                print("一覧表示処理")
-                label = "日付を選択してください。"
-                msg  = button_show_or_del(label)
+                label = "どちらか選択してください。"
+                msg = button_show_or_del(label)
                 line_bot_api.reply_message(
                     event.reply_token,
                     msg
                 )
 
+            elif event.postback.data == 'create_yoyaku':
+                print("予約処理")
+                label = "日付を選択してください。"
+                msg  = make_button_template2(label)
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
 
+            elif event.postback.data == 'show_yoyaku':
+                print("一覧表示処理")
                 rows = get_response_message()
 
                 if len(rows)==0:
