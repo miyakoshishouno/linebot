@@ -283,7 +283,31 @@ def on_postback(event):
             msg  = make_button_template3(label)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(quick_reply=msg)
+                TextSendMessage(
+                    text='メニュー',
+                    quick_reply=QuickReply(
+                        items=[
+                            QuickReplyButton(
+                                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
+                            ),
+                            QuickReplyButton(
+                            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
+                            ),
+                            QuickReplyButton(
+                                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
+                            ),
+                            QuickReplyButton(
+                                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
+                            ),
+                            QuickReplyButton(
+                            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
+                            ),
+                            QuickReplyButton(
+                                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
+                            )
+                        ]
+                    )
+                )
             )
 
         elif event.postback.data is not None:
