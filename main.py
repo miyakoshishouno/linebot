@@ -91,7 +91,6 @@ def handle_message(event):
         row = get_user_id(profile.user_id[:5])
 
     user_id = row[0][0]
-    print(user_id)
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -145,13 +144,16 @@ def get_response_message():
             return rows
 
 
+
 # 新規登録処理
 def add_response_message(yoyaku_data):
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table WHRE user_id = (%s)),%s,%s,%s)",(user_id, yoyaku_data, note, user_id))
+            cur.execute("INSERT INTO yoyaku_table VALUES((select COALESCE(max(id),0)+1 from  yoyaku_table WHRE user_id = (%s)),%s,%s,%s)",(user_id, yoyaku_data, note, user_id))
             conn.commit()
+
+
 
 # 削除処理
 def del_response_message(yoyaku_id):
@@ -182,6 +184,8 @@ def make_button_template(question):
     )
     return message_template
 
+
+
 # 予約確認/予約削除ボタン
 def button_show_or_del(label):
 
@@ -202,6 +206,7 @@ def button_show_or_del(label):
         )
     )
     return message_template
+
 
 
 # 日付ボタン
