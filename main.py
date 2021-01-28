@@ -197,12 +197,18 @@ def make_button_template2(label):
 def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
+    get_now = get_day.year + get_day.month + get_day.day
+    print("今日",get_now)
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
-    print(get_date)
+    print("グローバル変数",get_date)
+    # 時間によってボタンの数を変更
+    global yoyaku_day
+    # if yoyaku_day == get_day
+    # そのあと削除処理
 
     quick_reply=QuickReply(
         items=[
-            # if get_date < time(10,00,00):
+            # if time(get_date) < time(10,00,00):
             QuickReplyButton(
                 action=PostbackAction(label="10:00~", data="10:00")
             ),
