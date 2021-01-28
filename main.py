@@ -198,6 +198,7 @@ def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
+    print(get_date)
 
     quick_reply=QuickReply(
         items=[
