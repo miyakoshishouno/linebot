@@ -107,7 +107,7 @@ def get_connection():
 def get_response_message():
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table LIMIT 5 ORDER BY id DESC")
+            cur.execute("SELECT * FROM yoyaku_table ORDER BY id DESC  LIMIT 5")
             rows = cur.fetchall()
             return rows
 
