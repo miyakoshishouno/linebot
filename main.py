@@ -148,15 +148,14 @@ def get_response_message():
 # 新規登録処理
 def add_response_message(yoyaku_data):
     row = max_uer_id()
-    print("キー：",row[0][0])
     global user_id
+    print("ユーザID",user_id)
     get_id = row[0][0]
-    print(get_id)
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0))+1 FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(get_id), yoyaku_data, note,str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0))+1 FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(get_id), yoyaku_data, note, str(user_id)))
             conn.commit()
 
 
