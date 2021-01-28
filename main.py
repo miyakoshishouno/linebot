@@ -215,8 +215,8 @@ def make_button_template3():
 
     else:
         for i in range(len(time_list)):
-                item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+            item_list.append(QuickReplyButton(\
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
         print(item_list)
 
     quick_reply=QuickReply(items = item_list)
@@ -228,18 +228,14 @@ def make_button_template3():
 def button_del_kakunin():
     rows = get_response_message()
     item_list = []
-    if len(rows)==0:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='現在予約はありません。'))
-    else:
+    if len(rows)!=0:
         for i in range(len(rows)):
             r = rows[i]
             item_list.append(QuickReplyButton(\
-            action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "id_" + str(r[0])))
+                action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "id_" + str(r[0]))))
 
-        quick_reply=QuickReply(items = item_list)
-        return quick_reply
+    quick_reply=QuickReply(items = item_list)
+    return quick_reply
 
 
 
@@ -301,10 +297,16 @@ def on_postback(event):
                 print("削除処理確認")
                 label = "削除する項目を選択してください。"
                 msg = button_del_kakunin()
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=label,quick_reply=msg)
-                )
+                if len(msg) != 0:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=label,quick_reply=msg)
+                    )
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text='現在予約はありません。'))
+
 
             
             elif event.postback.data.startswith('id_'):
