@@ -19,6 +19,7 @@ import os
 import requests
 import chart
 import datetime
+from datetime import time
 
 app = Flask(__name__)
 
