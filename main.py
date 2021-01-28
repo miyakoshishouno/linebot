@@ -329,8 +329,7 @@ def on_postback(event):
                         msg
                     )
 
-
-                else：
+                else:
                     yoyaku_id = event.postback.data[3:]
                     del_response_message(yoyaku_id)
                     msg = "削除が完了しました。"
