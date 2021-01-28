@@ -82,14 +82,16 @@ user_id = ""
 def handle_message(event):
     global user_id
     profile = line_bot_api.get_profile(event.source.user_id)
-    user_id = profile.user_id[:5]
-    print("ユーザID",user_id)
     push_text = event.message.text
     # ユーザ情報取得
-    row = get_user_id(user_id)
+    row = get_user_id(profile.user_id[:5])
 
     if len(row) == 0:
-        add_user_id(user_id)
+        add_user_id(profile.user_id[:5])
+        get_user_id(profile.user_id[:5])
+
+    user_id = row[0]
+    print(user_id)
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -128,7 +130,7 @@ def get_user_id(user_id):
 def add_user_id(user_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO user_table VALUES((select max(id)+1 from  user_table),%s)",(user_id,))
+            cur.execute("INSERT INTO user_table VALUES((select COALESCE(max(id),0)+1 from user_table),%s)",(user_id,))
             conn.commit()
 
     
