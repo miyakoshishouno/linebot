@@ -9,7 +9,7 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,\
         MessageAction,DatetimePickerAction,PostbackEvent,ButtonsTemplate,PostbackTemplateAction,\
-            QuickReply, QuickReplyButton
+            QuickReply, QuickReplyButton,PostbackAction
 
 )
 
@@ -259,6 +259,15 @@ def make_button_template3(label):
             QuickReplyButton(
                 action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
             ),
+            QuickReplyButton(
+                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
+            ),
+            QuickReplyButton(
+            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
+            ),
+            QuickReplyButton(
+                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
+            )
         ]
     )
     return message_template
@@ -285,4 +294,7 @@ def on_postback(event):
 
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=msg))    
+                TextSendMessage(text=msg))  
+
+        elif event.postback.data = "異性に質問してみる":
+            print("ここ")
