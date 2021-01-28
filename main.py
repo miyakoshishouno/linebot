@@ -295,10 +295,10 @@ def on_postback(event):
                         event.reply_token,
                         TextSendMessage(text='現在予約はありません。'))
                 else:
-                    reply_message = ""
+                    reply_message = '現在の予約状況は以下になります。\n'
                     for i in range(len(rows)):
                         r = rows[i]
-                        reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
+                        reply_message += '\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
 
                     line_bot_api.reply_message(
                         event.reply_token,
@@ -319,7 +319,7 @@ def on_postback(event):
                         event.reply_token,
                         TextSendMessage(text='現在予約はありません。'))
             
-            
+
             elif event.postback.data.startswith('id_'):
                 print(event.postback.data)
                 yoyaku_id = event.postback.data[3:]
