@@ -148,9 +148,9 @@ def get_response_message():
 # 新規登録処理
 def add_response_message(yoyaku_data):
     row = max_uer_id()
-    print("キー：",row[0])
+    print("キー：",row[0][0])
     global user_id
-    get_id = row[0]
+    get_id = row[0][0]
     print(get_id)
     note = "ok"
     with get_connection() as conn:
