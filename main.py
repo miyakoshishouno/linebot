@@ -149,23 +149,20 @@ def get_response_message():
 def add_response_message(yoyaku_data):
     global user_id
     note = "ok"
-    num = max_uer_id()
-    print("ここ",num)
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            # cur.execute("SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHRE user_id = (%s)",user_id)
-            cur.execute("INSERT INTO yoyaku_table VALUES(%s,%s,%s,%s)",(num, yoyaku_data, note, user_id))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHERE user_id = (%s),%s,%s,%s)",(user_id, yoyaku_data, note, user_id))
             conn.commit()
 
 
 
-def max_uer_id():
-    global user_id
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHRE user_id = (%s)",(user_id,))
-            rows = cur.fetchall()
-            return rows
+# def max_uer_id():
+#     global user_id
+#     with get_connection() as conn:
+#         with conn.cursor(cursor_factory=DictCursor) as cur:
+#             cur.execute("SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHERE user_id = (%s)",(user_id,))
+#             rows = cur.fetchall()
+#             return rows
 
 
 
