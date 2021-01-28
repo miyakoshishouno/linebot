@@ -331,7 +331,8 @@ def on_postback(event):
 
                 else:
                     print(event.postback.data)
-                    yoyaku_id = event.postback.data[3:]
+                    yoyaku_id = int(event.postback.data[3:])
+                    print(yoyaku_id)
                     del_response_message(yoyaku_id)
                     msg = "削除が完了しました。"
                     line_bot_api.reply_message(
