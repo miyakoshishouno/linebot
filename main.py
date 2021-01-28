@@ -314,7 +314,8 @@ def on_postback(event):
 
             
             elif event.postback.data.startswith('id_'):
-                print("ここで削除処理")
+                print(event.postback.data)
+                print(event.postback.data[3:])
 
 
             else:
