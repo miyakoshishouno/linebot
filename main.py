@@ -90,7 +90,7 @@ def handle_message(event):
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
 
-    user_id = row[0][1]
+    user_id = row[0][0]
     print(user_id)
 
     if push_text in "予約":
@@ -120,7 +120,7 @@ def get_connection():
 def get_user_id(user_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM user_table WHERE user_id = (%s)",(user_id,))
+            cur.execute("SELECT id FROM user_table WHERE user_id = (%s)",(user_id,))
             rows = cur.fetchall()
             return rows
 
