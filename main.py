@@ -197,50 +197,67 @@ def make_button_template2(label):
 def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_now = str(get_day.year) +'/' +  str(get_day.month) + '/' + str(get_day.day)
+    get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
     print("今日",get_now)
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
     print("時間",get_date)
     # 時間によってボタンの数を変更
     global yoyaku_day
-    print("グローバル変数",yoyaku_day)
-    # if yoyaku_day == get_day
-    # そのあと削除処理
+    items = []
+    time_list = [10,11,12,13,14,15,16,17,18,19]
 
-    quick_reply=QuickReply(
-        items=[
-            # if time(get_date) < time(10,00,00):
-            QuickReplyButton(
-                action=PostbackAction(label="10:00~", data="10:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="11:00~", data="11:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="12:00~", data="12:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="13:00~", data="13:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="14:00~", data="14:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="15:00~", data="15:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="16:00~", data="16:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="17:00~", data="17:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="18:00~", data="18:00")
-            ),
-            QuickReplyButton(
-                action=PostbackAction(label="19:00~", data="19:00")
-            )
-        ]
+    #当日の場合
+    if yoyaku_day == get_now:
+        for i in range(len(time_list)):
+            if time(get_date) < time(time_list[i],00,00):
+                item_list.append(QuickReplyButton(\
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+        print(item_list)
+
+    else:
+        for i in range(len(time_list)):
+            time(time_list[i],00,00):
+                item_list.append(QuickReplyButton(\
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+        print(item_list)
+
+
+
+    quick_reply=QuickReply(\
+        items = item_list
+        # items=[
+        #     # if time(get_date) < time(10,00,00):
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="10:00~", data="10:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="11:00~", data="11:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="12:00~", data="12:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="13:00~", data="13:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="14:00~", data="14:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="15:00~", data="15:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="16:00~", data="16:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="17:00~", data="17:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="18:00~", data="18:00")
+        #     ),
+        #     QuickReplyButton(
+        #         action=PostbackAction(label="19:00~", data="19:00")
+        #     )
+        # ]
     )
     return quick_reply
 
