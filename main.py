@@ -202,10 +202,10 @@ def make_button_template3():
 
     quick_reply=QuickReply(
         items=[
-            if get_date < time(10,00,00):
-                QuickReplyButton(
-                    action=PostbackAction(label="10:00~", data="10:00")
-                ),
+            # if get_date < time(10,00,00):
+            QuickReplyButton(
+                action=PostbackAction(label="10:00~", data="10:00")
+            ),
             QuickReplyButton(
                 action=PostbackAction(label="11:00~", data="11:00")
             ),
