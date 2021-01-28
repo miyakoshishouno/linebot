@@ -287,15 +287,13 @@ def on_postback(event):
             )
 
         elif event.postback.data is not None:
-            if event.postback.data = "異性に質問してみる":
-                print("ここ")
+            # yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+            # print("予約日",yoyaku_date)
+            # add_response_message(yoyaku_date)
+            # msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
-            else:
-                yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
-                print("予約日",yoyaku_date)
-                add_response_message(yoyaku_date)
-                msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
-
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=msg))  
+            # line_bot_api.reply_message(
+            #     event.reply_token,
+            #     TextSendMessage(text=msg))  
+            if event.postback.data == "異性に質問してみる":
+                print("ここです")
