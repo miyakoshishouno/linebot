@@ -120,6 +120,14 @@ def add_response_message(yoyaku_data):
             cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table),%s,%s)",(yoyaku_data, note))
             conn.commit()
 
+# 削除処理
+def del_response_message(yoyaku_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s)",(yoyaku_id))
+            conn.commit()
+
+
 
 # 予約ボタン
 def make_button_template(question):
@@ -310,12 +318,17 @@ def on_postback(event):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text='現在予約はありません。'))
-
-
+            
             
             elif event.postback.data.startswith('id_'):
                 print(event.postback.data)
-                print(event.postback.data[3:])
+                yoyaku_id = event.postback.data[3:]
+                del_response_message(yoyaku_id)
+                msg = "削除が完了しました。"
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=msg)
+                )
 
 
             else:
