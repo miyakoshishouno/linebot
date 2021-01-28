@@ -74,11 +74,15 @@ num = 0
 yoyaku_day = ""
 yoyaku_time = ""
 note = ""
+user_id = ""
 
 
 @handler.add(MessageEvent, message=TextMessage)
 # テキスト別に条件分岐
 def handle_message(event):
+    global user_id
+    user_id = line_bot_api.get_profile(event.source.user_id)
+    print("ユーザID",user_id)
     push_text = event.message.text
 
     if push_text in "予約":
@@ -105,9 +109,10 @@ def get_connection():
 
 # 予約一覧表示処理
 def get_response_message():
+    global user_id
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table ORDER BY id DESC  LIMIT 5")
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(user_id,))
             rows = cur.fetchall()
             return rows
 
@@ -117,14 +122,14 @@ def add_response_message(yoyaku_data):
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table),%s,%s)",(yoyaku_data, note))
+            cur.execute("INSERT INTO yoyaku_table VALUES((select max(id)+1 from  yoyaku_table WHRE user_id = (%s)),%s,%s,%s)",(user_id, yoyaku_data, note, user_id))
             conn.commit()
 
 # 削除処理
 def del_response_message(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s)",(yoyaku_id,))
+            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s) AND user_id = (%s)",(yoyaku_id,user_id))
             conn.commit()
 
 
