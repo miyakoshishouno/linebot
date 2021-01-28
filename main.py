@@ -150,6 +150,7 @@ def add_response_message(yoyaku_data):
     row = max_uer_id()
     global user_id
     print("ユーザID",user_id)
+    print(yoyaku_data)
     get_id = row[0][0]
     note = "ok"
     with get_connection() as conn:
