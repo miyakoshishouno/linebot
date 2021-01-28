@@ -88,37 +88,13 @@ def handle_message(event):
             msg
         )
 
-    # elif push_text == "create_yoyaku":
-        # label = "日付を選択してください。"
-        # msg  = make_button_template2(label)
-        # line_bot_api.reply_message(
-        #     event.reply_token,
-        #     msg
-        # )
-
-    # elif push_text == "show_yoyaku":
-    #     rows = get_response_message()
-
-        # if len(rows)==0:
-        #     line_bot_api.reply_message(
-        #         event.reply_token,
-        #         TextSendMessage(text='現在予約はありません。'))
-        # else:
-        #     reply_message = ""
-        #     for i in range(len(rows)):
-        #         r = rows[i]
-        #         reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
-
-        #     line_bot_api.reply_message(
-        #         event.reply_token,
-        #         TextSendMessage(text=reply_message))
-
     else:
         msg = talkapi(push_text)
 
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=msg))
+
 
 
 # db接続
@@ -216,17 +192,19 @@ def make_button_template2(label):
     return message_template
 
 
-# 時刻
+
+# 時刻選択ボタン
 def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
-    get_date = str(get_day.hour + 9).zfill(2) + ":00"
+    get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
 
     quick_reply=QuickReply(
         items=[
-            QuickReplyButton(
-                action=PostbackAction(label="10:00~", data="10:00")
-            ),
+            if get_date < time(10,00,00):
+                QuickReplyButton(
+                    action=PostbackAction(label="10:00~", data="10:00")
+                ),
             QuickReplyButton(
                 action=PostbackAction(label="11:00~", data="11:00")
             ),
@@ -273,7 +251,7 @@ def on_postback(event):
                 TextSendMessage(text=label,quick_reply=msg)
             )
 
-# 
+
         elif event.postback.data is not None:
             if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
@@ -284,6 +262,7 @@ def on_postback(event):
                     msg
                 )
 
+
             elif event.postback.data == 'create_yoyaku':
                 print("予約処理")
                 label = "日付を選択してください。"
@@ -292,6 +271,7 @@ def on_postback(event):
                     event.reply_token,
                     msg
                 )
+
 
             elif event.postback.data == 'show_yoyaku':
                 print("一覧表示処理")
@@ -314,7 +294,7 @@ def on_postback(event):
 
             elif event.postback.data == 'del_yoyaku':
                 print("削除処理")
-# 
+
 
             else:
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
