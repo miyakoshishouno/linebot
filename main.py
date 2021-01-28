@@ -248,8 +248,7 @@ def on_postback(event):
             label = (yoyaku_day + "ですね。\n　希望する時間帯を選択してください。")
             msg  = make_button_template3(label)
             line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(quick_reply=msg)
+                event.reply_token,msg
             )
 
         elif event.postback.params is not None:
