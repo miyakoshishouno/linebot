@@ -177,7 +177,7 @@ def make_button_template2(label):
             actions=[
                 DatetimePickerAction(
                     type = "datetimepicker",
-                    label = "Select date",
+                    label = "日付選択",
                     data = "storeId=12345",
                     mode = "date",
                     initial = get_date,
@@ -244,14 +244,14 @@ def on_postback(event):
         global yoyaku_day
         if event.postback.params is not None:
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
-            label = (yoyaku_day + "ですね。\n　希望する時間帯を選択してください。")
+            label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
             msg  = make_button_template3()
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=label,quick_reply=msg)
             )
 
-        elif event.postback.params is not None:
+        elif event.postback.data is not None:
             yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
             print("予約日",yoyaku_date)
             add_response_message(yoyaku_date)
