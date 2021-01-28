@@ -295,7 +295,7 @@ def on_postback(event):
                         event.reply_token,
                         TextSendMessage(text='現在予約はありません。'))
                 else:
-                    reply_message = '現在の予約状況は以下になります。\n'
+                    reply_message = '現在の予約状況は以下になります。(最新5件を表示)'
                     for i in range(len(rows)):
                         r = rows[i]
                         reply_message += '\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
@@ -307,7 +307,7 @@ def on_postback(event):
 
             elif event.postback.data == 'del_yoyaku':
                 print("削除処理確認")
-                label = "削除する項目を選択してください。"
+                label = "削除する項目を選択してください。(最新5件を表示)"
                 msg = button_del_kakunin()
                 if len(msg.items) != 0:
                     line_bot_api.reply_message(
@@ -321,14 +321,23 @@ def on_postback(event):
             
 
             elif event.postback.data.startswith('id_'):
-                print(event.postback.data)
-                yoyaku_id = event.postback.data[3:]
-                del_response_message(yoyaku_id)
-                msg = "削除が完了しました。"
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=msg)
-                )
+                if event.postback.data[3:] == "cancel":
+                    label = "どちらか選択してください。"
+                    msg = button_show_or_del(label)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        msg
+                    )
+
+
+                else：
+                    yoyaku_id = event.postback.data[3:]
+                    del_response_message(yoyaku_id)
+                    msg = "削除が完了しました。"
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
 
 
             else:
