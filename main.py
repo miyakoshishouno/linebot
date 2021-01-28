@@ -288,7 +288,7 @@ def on_postback(event):
 
         elif event.postback.data is not None:
             if event.postback.data = "異性に質問してみる":
-            print("ここ")
+                print("ここ")
 
             else:
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
