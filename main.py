@@ -234,6 +234,10 @@ def button_del_kakunin():
             item_list.append(QuickReplyButton(\
                 action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "id_" + str(r[0]))))
 
+        item_list.append(QuickReplyButton(\
+            action=PostbackAction(label= "戻る", data= "id_cancel")))
+
+
     quick_reply=QuickReply(items = item_list)
     return quick_reply
 
