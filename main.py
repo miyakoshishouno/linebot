@@ -90,7 +90,7 @@ def handle_message(event):
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
 
-    user_id = row[0]
+    user_id = row[0][1]
     print(user_id)
 
     if push_text in "予約":
