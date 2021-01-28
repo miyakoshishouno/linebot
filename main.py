@@ -270,7 +270,7 @@ def make_button_template3(label):
             )
         ]
     )
-    return message_template
+    return quick_reply
 
 
 @handler.add(PostbackEvent)
