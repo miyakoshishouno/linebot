@@ -163,7 +163,7 @@ def max_uer_id():
     global user_id
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHRE user_id = (%s)",(user_id,)
+            cur.execute("SELECT COALESCE(max(id),0)+1 FROM yoyaku_table WHRE user_id = (%s)",(user_id,))
             rows = cur.fetchall()
             return rows
 
