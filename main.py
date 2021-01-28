@@ -275,7 +275,7 @@ def on_postback(event):
 
 # 
         elif event.postback.data is not None:
-            if event.postback.data  = 'menu_yoyaku':
+            if event.postback.data = 'menu_yoyaku':
                 print("menu処理")
         
             elif event.postback.data = 'show_yoyaku':
