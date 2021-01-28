@@ -297,8 +297,7 @@ def on_postback(event):
                 print("削除処理確認")
                 label = "削除する項目を選択してください。"
                 msg = button_del_kakunin()
-                print(msg)
-                if len(msg) != 0:
+                if len(msg.items) != 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=label,quick_reply=msg)
