@@ -283,7 +283,7 @@ def on_postback(event):
             msg  = make_button_template3(label)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(msg)
+                TextSendMessage(quick_reply=msg)
             )
 
         elif event.postback.data is not None:
