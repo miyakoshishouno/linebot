@@ -210,7 +210,7 @@ def make_button_template3():
     #当日の場合
     if yoyaku_day == get_now:
         for i in range(len(time_list)):
-            if time(get_date) < time(time_list[i],00,00):
+            if time(get_date) < time(int(time_list[i]),00,00):
                 item_list.append(QuickReplyButton(\
                     action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
         print(item_list)
