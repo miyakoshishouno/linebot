@@ -85,12 +85,12 @@ def handle_message(event):
     push_text = event.message.text
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
+    user_id = row[0][0]
 
     if len(row) == 0:
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
-
-    user_id = row[0][0]
+        user_id = row[0][0]
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -156,7 +156,7 @@ def add_response_message(yoyaku_data):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT setval('id_CODE_SEQ',(COALESCE(max(id),0))+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note, str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT setval('id_CODE_SEQ',(COALESCE(max(id),1)))+1 FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note, str(user_id)))
             conn.commit()
 
 
