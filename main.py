@@ -228,7 +228,7 @@ def make_button_template3():
 def button_del_kakunin():
     rows = get_response_message()
     item_list = []
-    if len(rows)!=0:
+    if len(rows):
         for i in range(len(rows)):
             r = rows[i]
             item_list.append(QuickReplyButton(\
@@ -297,6 +297,7 @@ def on_postback(event):
                 print("削除処理確認")
                 label = "削除する項目を選択してください。"
                 msg = button_del_kakunin()
+                print(msg)
                 if len(msg) != 0:
                     line_bot_api.reply_message(
                         event.reply_token,
