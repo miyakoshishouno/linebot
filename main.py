@@ -107,7 +107,7 @@ def handle_message(event):
             reply_message = ""
             for i in range(len(rows)):
                 r = rows[i]
-                reply_message += '予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
+                reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -144,7 +144,7 @@ def add_response_message(yoyaku_data):
             conn.commit()
 
 
-# Yes/Noチャート(確認テンプレート)
+# 予約ボタン
 def make_button_template(question):
     message_template = TemplateSendMessage(
         alt_text="a",
@@ -155,14 +155,36 @@ def make_button_template(question):
                     label = "予約する",
                     text  = "create_yoyaku"
                 ),
-                MessageAction(
+                PostbackAction(
                     label = "予約状況確認",
-                    text  = "show_yoyaku"
+                    data  = "show_yoyaku"
                 )
             ]
         )
     )
     return message_template
+
+# 予約確認/予約削除ボタン
+def button_show_or_del(label):
+
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ConfirmTemplate(
+            text=label,
+            actions=[
+                PostbackAction(
+                    label = "予約一覧",
+                    data  = "show_yoyaku"
+                ),
+                PostbackAction(
+                    label = "予約削除",
+                    data  = "del_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
 
 # 日付ボタン
 def make_button_template2(label):
@@ -184,9 +206,9 @@ def make_button_template2(label):
                     max = "2088-01-24",
                     min = get_date
                 ),
-                MessageAction(
+                PostbackAction(
                     label = "予約状況確認",
-                    text  = "show_yoyaku"
+                    data  = "menu_yoyaku"
                 )
             ]
         )
@@ -251,13 +273,49 @@ def on_postback(event):
                 TextSendMessage(text=label,quick_reply=msg)
             )
 
+# 
         elif event.postback.data is not None:
-            yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
-            print("予約日",yoyaku_date)
-            add_response_message(yoyaku_date)
-            msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+            if event.postback.data  = 'menu_yoyaku':
+                print("menu処理")
+        
+            elif event.postback.data = 'show_yoyaku':
+                print("一覧表示処理")
+                label = "日付を選択してください。"
+                msg  = button_show_or_del(label)
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=msg)
-            )
+
+                rows = get_response_message()
+
+                if len(rows)==0:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text='現在予約はありません。'))
+                else:
+                    reply_message = ""
+                    for i in range(len(rows)):
+                        r = rows[i]
+                        reply_message += '現在の予約状況は以下になります。\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2] + '\n'
+
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=reply_message))
+
+
+            elif event.postback.data = 'del_yoyaku':
+                print("削除処理")
+# 
+
+            else:
+                yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+                print("予約日",yoyaku_date)
+                add_response_message(yoyaku_date)
+                msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=msg)
+                )
