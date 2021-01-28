@@ -199,78 +199,43 @@ def make_button_template3(label):
     get_day = datetime.datetime.now()
     get_date = str(get_day.hour + 9).zfill(2) + ":00"
 
-    # message_template = TemplateSendMessage(
-    #     alt_text="a",
-    #     template=ButtonsTemplate(
-    #         text=label,
-    #         actions=[
-    #             PostbackTemplateAction(
-    #                 label = "10:00",
-    #                 data = "10:00"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "11:00",
-    #                 data = "11:00"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "12:00",
-    #                 data = "12:00"
-    #             )
-    #             PostbackTemplateAction(
-    #                label = "13:00",
-    #                 data = "itemid=003"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "14:00",
-    #                 data = "itemid=004"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "15:00",
-    #                 data = "itemid=005"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "16:00",
-    #                 data = "itemid=006"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "17:00",
-    #                 data = "itemid=007"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "18:00",
-    #                 data = "itemid=008"
-    #             ),
-    #             PostbackTemplateAction(
-    #                label = "19:00",
-    #                 data = "itemid=009"
-    #             )
-    #         ]
-    #     )
-    # )
-
     quick_reply=QuickReply(
+        text=label,
         items=[
             QuickReplyButton(
-                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
+                action=PostbackAction(label="10:00~", data="10:00")
             ),
             QuickReplyButton(
-            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
+                action=PostbackAction(label="11:00~", data="11:00")
             ),
             QuickReplyButton(
-                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
+                action=PostbackAction(label="12:00~", data="12:00")
             ),
             QuickReplyButton(
-                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
+                action=PostbackAction(label="13:00~", data="13:00")
             ),
             QuickReplyButton(
-            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
+                action=PostbackAction(label="14:00~", data="14:00")
             ),
             QuickReplyButton(
-                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
+                action=PostbackAction(label="15:00~", data="15:00")
+            ),
+            QuickReplyButton(
+                action=PostbackAction(label="16:00~", data="16:00")
+            ),
+            QuickReplyButton(
+                action=PostbackAction(label="17:00~", data="17:00")
+            ),
+            QuickReplyButton(
+                action=PostbackAction(label="18:00~", data="18:00")
+            ),
+            QuickReplyButton(
+                action=PostbackAction(label="19:00~", data="19:00")
             )
         ]
     )
     return quick_reply
+
 
 
 @handler.add(PostbackEvent)
@@ -283,32 +248,7 @@ def on_postback(event):
             msg  = make_button_template3(label)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(
-                    text='メニュー',
-                    quick_reply=QuickReply(
-                        items=[
-                            QuickReplyButton(
-                                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
-                            ),
-                            QuickReplyButton(
-                            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
-                            ),
-                            QuickReplyButton(
-                                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
-                            ),
-                            QuickReplyButton(
-                                action=PostbackAction(label="自分への回答を確認する", data="回答を確認する")
-                            ),
-                            QuickReplyButton(
-                            action=PostbackAction(label="誰かの質問に答える", data="誰かの質問に答える")
-                            ),
-                            QuickReplyButton(
-                                action=PostbackAction(label="質問を変更する", data="異性に質問してみる")
-                            )
-                        ]
-                    )
-                )
-            )
+                TextSendMessage(quick_reply=msg)
 
         elif event.postback.data is not None:
             # yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
