@@ -236,7 +236,7 @@ def button_del_kakunin():
         for i in range(len(rows)):
             r = rows[i]
             item_list.append(QuickReplyButton(\
-            action=PostbackAction(label= str(r[1]).replace('-','/'))[:-3], data= "id_" + str(r[0])))
+            action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "id_" + str(r[0])))
 
     quick_reply=QuickReply(items = item_list)
     return quick_reply
