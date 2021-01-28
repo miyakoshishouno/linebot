@@ -156,7 +156,7 @@ def add_response_message(yoyaku_data):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT setval('id_CODE_SEQ',(COALESCE(max(id),1)))+1 FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note, str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),1))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
             conn.commit()
 
 
