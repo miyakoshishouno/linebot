@@ -195,13 +195,12 @@ def make_button_template2(label):
 
 
 # 時刻
-def make_button_template3(label):
+def make_button_template3():
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_date = str(get_day.hour + 9).zfill(2) + ":00"
 
     quick_reply=QuickReply(
-        text=label,
         items=[
             QuickReplyButton(
                 action=PostbackAction(label="10:00~", data="10:00")
@@ -246,9 +245,10 @@ def on_postback(event):
         if event.postback.params is not None:
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n　希望する時間帯を選択してください。")
-            msg  = make_button_template3(label)
+            msg  = make_button_template3()
             line_bot_api.reply_message(
-                event.reply_token,msg
+                event.reply_token,
+                TextSendMessage(text=label,quick_reply=msg)
             )
 
         elif event.postback.params is not None:
