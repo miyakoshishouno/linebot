@@ -88,7 +88,7 @@ def handle_message(event):
 
     if len(row) == 0:
         add_user_id(profile.user_id[:5])
-        get_user_id(profile.user_id[:5])
+        row = get_user_id(profile.user_id[:5])
 
     user_id = row[0]
     print(user_id)
