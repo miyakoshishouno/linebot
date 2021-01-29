@@ -156,7 +156,6 @@ def add_response_message(yoyaku_data):
     global select_user_id
     print("ユーザID",select_user_id)
     print(yoyaku_data)
-    # get_id = row[0][0]
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -326,6 +325,7 @@ def on_postback(event):
 
         if event.postback.data is not None:
             if event.postback.data == 'select_day_yoyaku':
+                print("ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 print("げっと",get_day)
                 yoyaku_day = get_day
@@ -351,6 +351,7 @@ def on_postback(event):
 
             elif event.postback.data == 'create_yoyaku':
                 print("予約処理")
+                print("ユーザID",select_user_id)
                 label = "日付を選択してください。"
                 msg  = make_button_template2(label)
                 line_bot_api.reply_message(
@@ -361,6 +362,7 @@ def on_postback(event):
 
             elif event.postback.data == 'show_yoyaku':
                 print("一覧表示処理")
+                print("ユーザID",select_user_id)
                 rows = get_response_message()
 
                 if len(rows)==0:
@@ -417,7 +419,6 @@ def on_postback(event):
                 print("日",yoyaku_day)
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
-                print("ユーザID3",select_user_id)
                 add_response_message(yoyaku_date)
                 msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
