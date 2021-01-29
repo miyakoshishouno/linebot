@@ -145,7 +145,7 @@ def get_response_message():
     global select_user_id
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(str(select_user_id),))
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY yoyaku_date DESC  LIMIT 5",(str(select_user_id),))
             rows = cur.fetchall()
             return rows
 
