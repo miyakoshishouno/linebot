@@ -86,11 +86,12 @@ def handle_message(event):
     push_text = event.message.text
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
-    user_id = row[0][0]
 
     if len(row) == 0:
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
+        user_id = row[0][0]
+    else:
         user_id = row[0][0]
 
     print("ユーザID",user_id)
