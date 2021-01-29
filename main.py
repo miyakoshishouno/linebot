@@ -32,11 +32,6 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-# グローバル変数(会話のやりとりの保存)
-yoyaku_day = ""
-note = ""
-select_user_id = ""
-
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -56,6 +51,13 @@ def callback():
     return 'OK'
 
 if __name__ == "__main__":
+
+# グローバル変数(会話のやりとりの保存)
+yoyaku_day = ""
+note = ""
+select_user_id = ""
+
+
     app.run()
     port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)
@@ -293,7 +295,6 @@ def make_button_template3():
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
                     action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
-        print(item_list)
 
     else:
         for i in range(len(time_list)):
@@ -424,9 +425,8 @@ def on_postback(event):
                     )
 
                 else:
-                    print(event.postback.data)
+                    print("ユーザID",select_user_id)
                     yoyaku_id = event.postback.data[3:]
-                    print(type(yoyaku_id))
                     del_response_message(yoyaku_id)
                     msg = "削除が完了しました。"
                     line_bot_api.reply_message(
