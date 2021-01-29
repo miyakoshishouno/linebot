@@ -32,6 +32,12 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+# グローバル変数(会話のやりとりの保存)
+yoyaku_day = ""
+note = ""
+select_user_id = ""
+
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -51,12 +57,6 @@ def callback():
     return 'OK'
 
 if __name__ == "__main__":
-
-    # グローバル変数(会話のやりとりの保存)
-    yoyaku_day = ""
-    note = ""
-    select_user_id = ""
-
     app.run()
     port = int(os.getenv("PORT"))
     app.run(host="0.0.0.0", port=port)
@@ -326,7 +326,6 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
-    global yoyaku_day,select_user_id
     # global select_user_id
     if isinstance(event, PostbackEvent):
         # if event.postback.params is not None:
