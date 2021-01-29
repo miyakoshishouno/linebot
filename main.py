@@ -327,7 +327,7 @@ def on_postback(event):
             if event.postback.data == 'select_day_yoyaku':
                 print("日付取得処理")
                 print("ユーザID",select_user_id)
-                print(event)
+                print(event.postback)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 print("げっと",get_day)
                 yoyaku_day = get_day
