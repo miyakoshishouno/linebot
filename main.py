@@ -229,7 +229,7 @@ def button_show_or_del(label):
 
 
 
-# 予約確認/予約削除ボタン
+# 各項目ボタン
 def button_show(label):
     message_template = TemplateSendMessage(
         alt_text="a",
@@ -239,6 +239,10 @@ def button_show(label):
                 PostbackAction(
                     label = "予約一覧",
                     data  = "show_yoyaku"
+                ),
+                PostbackAction(
+                    label = "予約削除",
+                    data  = "del_yoyaku"
                 )
             ]
         )
