@@ -324,6 +324,7 @@ def on_postback(event):
 
         if event.postback.data is not None:
             if event.postback.data == 'select_day_yoyaku':
+                print("日付取得処理")
                 print("ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 print("げっと",get_day)
@@ -335,7 +336,6 @@ def on_postback(event):
                     event.reply_token,
                     TextSendMessage(text=label,quick_reply=msg)
                 )
-
 
 
             if event.postback.data == 'menu_yoyaku':
