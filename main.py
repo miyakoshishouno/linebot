@@ -309,8 +309,8 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
+    global yoyaku_day
     if isinstance(event, PostbackEvent):
-        global yoyaku_day
         if event.postback.params is not None:
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
@@ -322,7 +322,7 @@ def on_postback(event):
             )
 
 
-        if event.postback.data is not None:
+        elif event.postback.data is not None:
             if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
                 label = "どちらか選択してください。"
