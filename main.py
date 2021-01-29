@@ -29,15 +29,11 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 TALKAPI_KEY = os.environ['YOUR_API']
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-
 # グローバル変数(会話のやりとりの保存)
-num = 0
 yoyaku_day = ""
-yoyaku_time = ""
 note = ""
 select_user_id = ""
 
@@ -58,7 +54,6 @@ def callback():
         abort(400)
 
     return 'OK'
-
 
 if __name__ == "__main__":
     app.run()
@@ -248,7 +243,7 @@ def make_button_template2(label):
                 DatetimePickerAction(
                     type = "datetimepicker",
                     label = "日付選択",
-                    data = "storeId=12345",
+                    data = "select_day_yoyaku",
                     mode = "date",
                     initial = get_date,
                     max = "2088-01-24",
@@ -316,20 +311,34 @@ def button_del_kakunin():
 def on_postback(event):
     global yoyaku_day
     if isinstance(event, PostbackEvent):
-        if event.postback.params is not None:
-            get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
-            print("げっと",get_day)
-            yoyaku_day = get_day
-            print(yoyaku_day)
-            label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
-            msg  = make_button_template3()
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=label,quick_reply=msg)
-            )
+        # if event.postback.params is not None:
+        #     get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+        #     print("げっと",get_day)
+        #     yoyaku_day = get_day
+        #     print(yoyaku_day)
+        #     label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
+        #     msg  = make_button_template3()
+        #     line_bot_api.reply_message(
+        #         event.reply_token,
+        #         TextSendMessage(text=label,quick_reply=msg)
+        #     )
 
 
-        elif event.postback.data is not None:
+        if event.postback.data is not None:
+            if event.postback.data == 'select_day_yoyaku':
+                get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+                print("げっと",get_day)
+                yoyaku_day = get_day
+                print(yoyaku_day)
+                label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
+                msg  = make_button_template3()
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label,quick_reply=msg)
+                )
+
+
+
             if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
                 label = "どちらか選択してください。"
