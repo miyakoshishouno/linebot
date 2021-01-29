@@ -85,18 +85,18 @@ def handle_message(event):
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
 
+    global select_user_id
     if len(row) == 0:
         print("ないよ0")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
-        global select_user_id
         select_user_id = row[0][0]
     else:
         print("あるよ1")
-        global select_user_id
         select_user_id = row[0][0]
 
     print("ユーザID",select_user_id)
+
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -221,6 +221,24 @@ def button_show_or_del(label):
                 PostbackAction(
                     label = "予約削除",
                     data  = "del_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
+
+
+# 予約確認/予約削除ボタン
+def button_show(label):
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ButtonsTemplate(
+            text=label,
+            actions=[
+                PostbackAction(
+                    label = "予約一覧",
+                    data  = "show_yoyaku"
                 )
             ]
         )
@@ -422,9 +440,10 @@ def on_postback(event):
                 yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_data)
                 add_response_message(select_user_id,yoyaku_data)
-                msg = yoyaku_data[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = yoyaku_data[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+                msg = button_show(label)
 
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text=msg)
+                    msg
                 )
