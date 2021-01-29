@@ -52,7 +52,7 @@ def callback():
 
 if __name__ == "__main__":
 
-# グローバル変数(会話のやりとりの保存)
+    # グローバル変数(会話のやりとりの保存)
     yoyaku_day = ""
     note = ""
     select_user_id = ""
@@ -326,6 +326,7 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
+    global yoyaku_day,select_user_id
     # global select_user_id
     if isinstance(event, PostbackEvent):
         # if event.postback.params is not None:
