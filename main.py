@@ -83,15 +83,18 @@ def handle_message(event):
     profile = line_bot_api.get_profile(event.source.user_id)
     print("ひとつめ",profile.user_id[:5])
     push_text = event.message.text
-    # ユーザ情報取得
-    row = get_user_id(profile.user_id[:5])
     global select_user_id
 
+    # ユーザ情報取得
+    row = get_user_id(profile.user_id[:5])
+
     if len(row) == 0:
+        print("ないよ0")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
         select_user_id = row[0][0]
     else:
+        print("あるよ1")
         select_user_id = row[0][0]
 
     print("ユーザID",select_user_id)
