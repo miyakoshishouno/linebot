@@ -153,17 +153,17 @@ def get_response_message():
 
 
 # 新規登録処理
-def add_response_message(user_id,yoyaku_data):
+def add_response_message(yoyaku_data):
     # row = max_uer_id()
     # global select_user_id
-    print("ユーザID",user_id)
+    print("ユーザID",select_user_id)
     print(yoyaku_data)
     # get_id = row[0][0]
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),0))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),0))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(select_user_id)))
             conn.commit()
 
 
@@ -311,10 +311,9 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
-    global yoyaku_day
-    global select_user_id
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
+            global yoyaku_day
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
@@ -405,7 +404,7 @@ def on_postback(event):
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
                 print("ユーザID3",select_user_id)
-                add_response_message(select_user_id,yoyaku_date)
+                add_response_message(yoyaku_date)
                 msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
                 line_bot_api.reply_message(
