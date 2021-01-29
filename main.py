@@ -160,19 +160,8 @@ def add_response_message(user_id,yoyaku_data):
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
             cur.execute("INSERT INTO yoyaku_table VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
             conn.commit()
-
-
-
-# def max_uer_id():
-#     global user_id
-#     with get_connection() as conn:
-#         with conn.cursor(cursor_factory=DictCursor) as cur:
-#             cur.execute("SELECT setval('id_CODE_SEQ',(COALESCE(max(id),0))+1) FROM yoyaku_table WHERE user_id = (%s)",(str(user_id),))
-#             rows = cur.fetchall()
-#             return rows
 
 
 
@@ -254,8 +243,14 @@ def button_show(label):
 # 日付ボタン
 def make_button_template2(label):
     # 現在日時の取得
-    get_day = datetime.datetime.now()
-    get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+    # get_day = datetime.datetime.now()
+    get_day = datetime.datetime(2021,3,3,19:00:00)
+    
+    if get_day.hour > 18:
+        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
+    else:
+        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+
 
     message_template = TemplateSendMessage(
         alt_text="a",
