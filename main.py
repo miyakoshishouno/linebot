@@ -338,7 +338,7 @@ def on_postback(event):
                 )
 
 
-            if event.postback.data == 'menu_yoyaku':
+            elif event.postback.data == 'menu_yoyaku':
                 print("menu処理")
                 label = "どちらか選択してください。"
                 msg = button_show_or_del(label)
