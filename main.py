@@ -417,8 +417,8 @@ def on_postback(event):
                     )
 
             else:
-                global yoyaku_day
                 print("日",yoyaku_day)
+                global yoyaku_day
                 yoyaku_day = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_day)
                 add_response_message(select_user_id,yoyaku_day)
