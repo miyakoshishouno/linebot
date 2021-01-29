@@ -323,6 +323,7 @@ def on_postback(event):
 
 
         elif event.postback.data is not None:
+            global yoyaku_day
             if event.postback.data == 'menu_yoyaku':
                 print("menu処理")
                 label = "どちらか選択してください。"
@@ -398,7 +399,6 @@ def on_postback(event):
                     )
 
             else:
-                global yoyaku_day
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
                 add_response_message(yoyaku_date)
