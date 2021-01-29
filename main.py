@@ -419,7 +419,7 @@ def on_postback(event):
                 print("日",yoyaku_day)
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
-                add_response_message(user_id,yoyaku_date)
+                add_response_message(select_user_id,yoyaku_date)
                 msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
                 line_bot_api.reply_message(
