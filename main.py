@@ -314,7 +314,7 @@ def on_postback(event):
     global yoyaku_day
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
-            get_day = event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+            get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
             print("げっと",get_day)
             yoyaku_day = get_day
             print(yoyaku_day)
