@@ -245,7 +245,8 @@ def make_button_template2(label):
                     mode = "date",
                     initial = get_date,
                     max = "2088-01-24",
-                    min = get_date
+                    min = get_date,
+                    text = "ああ"
                 ),
                 PostbackAction(
                     label = "予約状況確認",
