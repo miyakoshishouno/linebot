@@ -143,9 +143,10 @@ def add_user_id(user_id):
 # 予約一覧表示処理
 def get_response_message():
     global select_user_id
+    get_day = datetime.datetime.now() 
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY yoyaku_date DESC  LIMIT 5",(str(select_user_id),))
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_date > (%s) ORDER BY yoyaku_date DESC  LIMIT 5",(str(select_user_id),get_day))
             rows = cur.fetchall()
             return rows
 
