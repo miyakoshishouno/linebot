@@ -87,12 +87,12 @@ def handle_message(event):
 
     global select_user_id
     if len(row) == 0:
-        print("ないよ0")
+        print("ないよ")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
         select_user_id = row[0][0]
     else:
-        print("あるよ1")
+        print("あるよ")
         select_user_id = row[0][0]
 
     print("ユーザID",select_user_id)
@@ -142,7 +142,7 @@ def add_user_id(user_id):
 
 # 予約一覧表示処理
 def get_response_message():
-    global select_user_id
+    # global select_user_id
     get_day = datetime.datetime.now() 
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -326,7 +326,7 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
-    global select_user_id
+    # global select_user_id
     if isinstance(event, PostbackEvent):
         # if event.postback.params is not None:
         #     get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
@@ -438,6 +438,7 @@ def on_postback(event):
                 print("日",yoyaku_day)
                 yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_data)
+                print("ユーザID",select_user_id)
                 add_response_message(select_user_id,yoyaku_data)
                 label = yoyaku_data[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_show(label)
