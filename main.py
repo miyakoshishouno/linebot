@@ -155,7 +155,7 @@ def get_response_message():
 # 新規登録処理
 def add_response_message(yoyaku_data):
     # row = max_uer_id()
-    # global select_user_id
+    global select_user_id
     print("ユーザID",select_user_id)
     print(yoyaku_data)
     # get_id = row[0][0]
@@ -311,9 +311,9 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
+    global yoyaku_day
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
-            global yoyaku_day
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
