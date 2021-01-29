@@ -266,7 +266,6 @@ def make_button_template3():
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
     # 時間によってボタンの数を変更
-    global yoyaku_day
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
 
@@ -309,10 +308,10 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
-    global yoyaku_day
     global select_user_id
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
+            global yoyaku_day
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
