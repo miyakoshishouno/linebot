@@ -80,18 +80,19 @@ user_id = ""
 @handler.add(MessageEvent, message=TextMessage)
 # テキスト別に条件分岐
 def handle_message(event):
-    global user_id
     profile = line_bot_api.get_profile(event.source.user_id)
-    print("ひとつめ",profile)
+    print("ひとつめ",profile.user_id[:5])
     push_text = event.message.text
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
 
     if len(row) == 0:
+        global user_id
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
         user_id = row[0][0]
     else:
+        global user_id
         user_id = row[0][0]
 
     print("ユーザID",user_id)
