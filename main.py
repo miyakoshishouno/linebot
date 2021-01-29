@@ -74,7 +74,7 @@ num = 0
 yoyaku_day = ""
 yoyaku_time = ""
 note = ""
-user_id = ""
+select_user_id = ""
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -85,17 +85,16 @@ def handle_message(event):
     push_text = event.message.text
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
+    global select_user_id
 
     if len(row) == 0:
-        global user_id
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
-        user_id = row[0][0]
+        select_user_id = row[0][0]
     else:
-        global user_id
-        user_id = row[0][0]
+        select_user_id = row[0][0]
 
-    print("ユーザID",user_id)
+    print("ユーザID",select_user_id)
 
     if push_text in "予約":
         question = "予約しますか？"
@@ -141,10 +140,10 @@ def add_user_id(user_id):
 
 # 予約一覧表示処理
 def get_response_message():
-    global user_id
+    global select_user_id
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(str(user_id),))
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY id DESC  LIMIT 5",(str(select_user_id),))
             rows = cur.fetchall()
             return rows
 
@@ -153,15 +152,15 @@ def get_response_message():
 # 新規登録処理
 def add_response_message(yoyaku_data):
     # row = max_uer_id()
-    global user_id
-    print("ユーザID",user_id)
+    global select_user_id
+    print("ユーザID",select_user_id)
     print(yoyaku_data)
     # get_id = row[0][0]
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),0))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),0))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(select_user_id)))
             conn.commit()
 
 
@@ -180,7 +179,7 @@ def add_response_message(yoyaku_data):
 def del_response_message(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s) AND user_id = (%s)",(yoyaku_id,str(user_id)))
+            cur.execute("DELETE FROM yoyaku_table WHERE id = (%s) AND user_id = (%s)",(yoyaku_id,str(select_user_id)))
             conn.commit()
 
 
