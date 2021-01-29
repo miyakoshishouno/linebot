@@ -53,10 +53,9 @@ def callback():
 if __name__ == "__main__":
 
 # グローバル変数(会話のやりとりの保存)
-yoyaku_day = ""
-note = ""
-select_user_id = ""
-
+    yoyaku_day = ""
+    note = ""
+    select_user_id = ""
 
     app.run()
     port = int(os.getenv("PORT"))
