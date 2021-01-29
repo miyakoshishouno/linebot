@@ -98,7 +98,7 @@ def handle_message(event):
     print("ユーザID",select_user_id)
 
 
-    if push_text in "予約":
+    if "予約" in push_text:
         question = "予約しますか？"
         msg = make_button_template(question)
         line_bot_api.reply_message(
@@ -243,8 +243,7 @@ def button_show(label):
 # 日付ボタン
 def make_button_template2(label):
     # 現在日時の取得
-    # get_day = datetime.datetime.now()
-    get_day = datetime.datetime(2021,1,29,18,00,00,0000)
+    get_day = datetime.datetime.now()
     
     if get_day.hour > 18:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
