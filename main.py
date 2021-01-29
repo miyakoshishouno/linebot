@@ -151,27 +151,27 @@ def get_response_message():
 
 # 新規登録処理
 def add_response_message(yoyaku_data):
-    row = max_uer_id()
+    # row = max_uer_id()
     global user_id
     print("ユーザID",user_id)
     print(yoyaku_data)
-    get_id = row[0][0]
+    # get_id = row[0][0]
     note = "ok"
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             # cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (COALESCE(MAX(id),0)+1) FROM yoyaku_table WHERE user_id = %s),%s,%s,%s)",(str(user_id), yoyaku_data, note,str(user_id)))
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),1))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
+            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT (setval('id_CODE_SEQ',(COALESCE(max(id),0))))+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
             conn.commit()
 
 
 
-def max_uer_id():
-    global user_id
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT setval('id_CODE_SEQ',(COALESCE(max(id),0))+1) FROM yoyaku_table WHERE user_id = (%s)",(str(user_id),))
-            rows = cur.fetchall()
-            return rows
+# def max_uer_id():
+#     global user_id
+#     with get_connection() as conn:
+#         with conn.cursor(cursor_factory=DictCursor) as cur:
+#             cur.execute("SELECT setval('id_CODE_SEQ',(COALESCE(max(id),0))+1) FROM yoyaku_table WHERE user_id = (%s)",(str(user_id),))
+#             rows = cur.fetchall()
+#             return rows
 
 
 
@@ -208,7 +208,6 @@ def make_button_template(question):
 
 # 予約確認/予約削除ボタン
 def button_show_or_del(label):
-
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ConfirmTemplate(
@@ -303,7 +302,6 @@ def button_del_kakunin():
         item_list.append(QuickReplyButton(\
             action=PostbackAction(label= "戻る", data= "id_cancel")))
 
-
     quick_reply=QuickReply(items = item_list)
     return quick_reply
 
@@ -312,8 +310,9 @@ def button_del_kakunin():
 @handler.add(PostbackEvent)
 def on_postback(event):
     if isinstance(event, PostbackEvent):
-        global yoyaku_day
         if event.postback.params is not None:
+            print("げっと",event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
+            global yoyaku_day
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
             msg  = make_button_template3()
