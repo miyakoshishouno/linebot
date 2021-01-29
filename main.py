@@ -150,9 +150,9 @@ def get_response_message():
 
 
 # 新規登録処理
-def add_response_message(yoyaku_data):
+def add_response_message(select_user_id,yoyaku_data):
     # row = max_uer_id()
-    global select_user_id
+    # global select_user_id
     print("ユーザID",select_user_id)
     print(yoyaku_data)
     # get_id = row[0][0]
@@ -310,6 +310,7 @@ def button_del_kakunin():
 @handler.add(PostbackEvent)
 def on_postback(event):
     global yoyaku_day
+    global select_user_id
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
@@ -401,7 +402,7 @@ def on_postback(event):
                 print("日",yoyaku_day)
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
-                add_response_message(yoyaku_date)
+                add_response_message(select_user_id,yoyaku_date)
                 msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
                 line_bot_api.reply_message(
