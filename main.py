@@ -33,6 +33,15 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+
+# グローバル変数(会話のやりとりの保存)
+num = 0
+yoyaku_day = ""
+yoyaku_time = ""
+note = ""
+select_user_id = ""
+
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -69,12 +78,6 @@ def talkapi(text):
    msg = data['results'][0]['reply']
    return msg
 
-# グローバル変数(会話のやりとりの保存)
-num = 0
-yoyaku_day = ""
-yoyaku_time = ""
-note = ""
-select_user_id = ""
 
 
 @handler.add(MessageEvent, message=TextMessage)
