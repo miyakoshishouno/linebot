@@ -329,6 +329,7 @@ def on_postback(event):
                 print("ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 print("げっと",get_day)
+                global yoyaku_day
                 yoyaku_day = get_day
                 print(yoyaku_day)
                 label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
