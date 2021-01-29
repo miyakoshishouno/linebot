@@ -84,16 +84,17 @@ def handle_message(event):
 
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
+    global select_user_id
 
     if len(row) == 0:
         print("ないよ0")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
+        select_user_id = row[0][0]
     else:
         print("あるよ1")
+        select_user_id = row[0][0]
 
-    global select_user_id
-    select_user_id = row[0][0]
     print("ユーザID",select_user_id)
 
     if push_text in "予約":
@@ -325,8 +326,6 @@ def on_postback(event):
 
         if event.postback.data is not None:
             if event.postback.data == 'select_day_yoyaku':
-                user_id = select_user_id
-                select_user_id = user_id
                 print("日付取得処理")
                 print("ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
@@ -352,8 +351,6 @@ def on_postback(event):
 
 
             elif event.postback.data == 'create_yoyaku':
-                user_id = select_user_id
-                select_user_id = user_id
                 print("予約処理")
                 print("ユーザID",select_user_id)
                 label = "日付を選択してください。"
@@ -420,8 +417,6 @@ def on_postback(event):
                     )
 
             else:
-                user_id = select_user_id
-                select_user_id = user_id
                 print("日",yoyaku_day)
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
