@@ -84,15 +84,16 @@ def handle_message(event):
 
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
-    global select_user_id
 
     if len(row) == 0:
         print("ないよ0")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
+        global select_user_id
         select_user_id = row[0][0]
     else:
         print("あるよ1")
+        global select_user_id
         select_user_id = row[0][0]
 
     print("ユーザID",select_user_id)
