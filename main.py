@@ -244,7 +244,7 @@ def button_show(label):
 def make_button_template2(label):
     # 現在日時の取得
     # get_day = datetime.datetime.now()
-    get_day = datetime.datetime(2021,1,29,19,00,00,0000)
+    get_day = datetime.datetime(2021,1,29,18,00,00,0000)
     
     if get_day.hour > 18:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
