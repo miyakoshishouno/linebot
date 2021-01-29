@@ -82,6 +82,7 @@ user_id = ""
 def handle_message(event):
     global user_id
     profile = line_bot_api.get_profile(event.source.user_id)
+    print("ひとつめ",profile)
     push_text = event.message.text
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
@@ -91,6 +92,8 @@ def handle_message(event):
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
         user_id = row[0][0]
+
+    print("ユーザID",user_id)
 
     if push_text in "予約":
         question = "予約しますか？"
