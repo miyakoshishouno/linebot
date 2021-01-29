@@ -308,6 +308,7 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
+    global select_user_id
     if isinstance(event, PostbackEvent):
         # if event.postback.params is not None:
         #     get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
