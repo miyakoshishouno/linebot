@@ -311,10 +311,10 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
+    global yoyaku_day
     global select_user_id
     if isinstance(event, PostbackEvent):
         if event.postback.params is not None:
-            global yoyaku_day
             print("げっと",(event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:])
             yoyaku_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]   
             label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
@@ -404,6 +404,7 @@ def on_postback(event):
                 print("日",yoyaku_day)
                 yoyaku_date = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
                 print("予約日",yoyaku_date)
+                print("ユーザID3",select_user_id)
                 add_response_message(select_user_id,yoyaku_date)
                 msg = yoyaku_date[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
 
