@@ -96,8 +96,6 @@ def handle_message(event):
         print("あるよ")
         user_id = row[0][0]
 
-    # print("ユーザID",select_user_id)
-
 # 今のフェーズを見る
 # 備考なら文字列を登録
 
@@ -510,7 +508,7 @@ def on_postback(event):
                     TextSendMessage(text=label,quick_reply=msg)
                 )
 
-            elif event.postback.data = 'add_note':
+            elif event.postback.data == 'add_note':
                 print("備考追加処理")
                 update_yoyaku_phase(test_id)
                 label = "備考を入力してください。"
