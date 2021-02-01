@@ -112,7 +112,7 @@ def handle_message(event):
             )
 
 
-    elif "予約" in push_text:
+    if "予約" in push_text:
         question = "予約しますか？"
         msg = button_yoyaku(question)
         line_bot_api.reply_message(
