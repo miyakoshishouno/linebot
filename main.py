@@ -204,7 +204,7 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
      with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 2\
-                where id = (%s) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id))))
+                where user_id = (%s) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id))))
             conn.commit()
 
 
@@ -212,7 +212,7 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
 def select_day(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE id = (%s) AND yoyaku_phase = 2",(str(test_id),))
+            cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_phase = 2",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
@@ -222,7 +222,7 @@ def add_yoyaku_time(yoyaku_day,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 3\
-                where id = %s AND yoyaku_phase = 2"\
+                where user_id = %s AND yoyaku_phase = 2"\
                     ,(yoyaku_day,str(test_id)))
             conn.commit()
 
@@ -233,7 +233,7 @@ def update_yoyaku_phase(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_phase = 4 WHERE id = (%s)\
-                AND yoyaku_phase = 3",(str(test_id),))
+                AND yoyaku_phase = 3",(yoyaku_id,))
             conn.commit()
 
 
@@ -252,7 +252,7 @@ def select_phase(test_id):
 def add_yoyaku_note(push_text,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE id = (%s)\
+            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE user_id = (%s)\
                 AND yoyaku_phase = 4",(push_text,str(test_id)))
             conn.commit()
 
@@ -548,6 +548,7 @@ def on_postback(event):
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
                 add_day = get_day + " " + "00:00:00"
                 add_yoyaku_ymd(add_day,test_id)
+                print(test_id)
 
                 msg  = button_yoyaku_time(get_day)
                 line_bot_api.reply_message(
