@@ -489,7 +489,8 @@ def on_postback(event):
                 # print(select_yoyaku_day)
                 # label = (select_yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
-                add_yoyaku_ymd(get_day,test_id)
+                add_day = get_day + " " + "00:00:00"
+                add_yoyaku_ymd(add_day,test_id)
 
                 msg  = button_yoyaku_time(get_day)
                 line_bot_api.reply_message(
