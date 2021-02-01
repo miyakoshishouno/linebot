@@ -293,12 +293,12 @@ def make_button_template3():
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00",text= "ああ")))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00",text= "ああ")))
         print(item_list)
 
     quick_reply=QuickReply(items = item_list)
@@ -369,8 +369,8 @@ def on_postback(event):
 
 
             elif event.postback.data == 'create_yoyaku':
-                print("予約処理")
-                print("ユーザID",select_user_id)
+                print("予約選択処理")
+                print("予約選択処理.ユーザID",select_user_id)
                 label = "日付を選択してください。"
                 msg  = make_button_template2(label)
                 line_bot_api.reply_message(
@@ -381,7 +381,7 @@ def on_postback(event):
 
             elif event.postback.data == 'show_yoyaku':
                 print("一覧表示処理")
-                print("ユーザID",select_user_id)
+                print("一覧表示処理.ユーザID",select_user_id)
                 rows = get_response_message()
 
                 if len(rows)==0:
@@ -424,7 +424,7 @@ def on_postback(event):
                     )
 
                 else:
-                    print("ユーザID",select_user_id)
+                    print("削除処理.ユーザID",select_user_id)
                     yoyaku_id = event.postback.data[3:]
                     del_response_message(yoyaku_id)
                     msg = "削除が完了しました。"
@@ -434,10 +434,12 @@ def on_postback(event):
                     )
 
             else:
+                print("予約追加処理")
                 print("日",yoyaku_day)
                 yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+                print(event.postback.text)
                 print("予約日",yoyaku_data)
-                print("ユーザID",select_user_id)
+                print("予約追加処理.ユーザID",select_user_id)
                 add_response_message(select_user_id,yoyaku_data)
                 label = yoyaku_data[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_show(label)
