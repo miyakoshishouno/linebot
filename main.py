@@ -86,17 +86,17 @@ def handle_message(event):
     # ユーザ情報取得
     row = get_user_id(profile.user_id[:5])
 
-    global select_user_id
+    # global select_user_id
     if len(row) == 0:
         print("ないよ")
         add_user_id(profile.user_id[:5])
-        row = get_user_id(profile.user_id[:5])
-        select_user_id = row[0][0]
-    else:
-        print("あるよ")
-        select_user_id = row[0][0]
+    #     row = get_user_id(profile.user_id[:5])
+    #     select_user_id = row[0][0]
+    # else:
+    #     print("あるよ")
+    #     select_user_id = row[0][0]
 
-    print("ユーザID",select_user_id)
+    # print("ユーザID",select_user_id)
 
 # 今のフェーズを見る
 # 備考なら文字列を登録
@@ -144,28 +144,27 @@ def add_user_id(user_id):
     
 
 # 予約一覧表示処理
-def get_response_message():
-    # global select_user_id
+def get_response_message(user_id):
     get_day = datetime.datetime.now() 
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_date > (%s) ORDER BY yoyaku_date DESC  LIMIT 5",(str(select_user_id),get_day))
+            cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) ORDER BY yoyaku_date DESC  LIMIT 5",(str(user_id),))
             rows = cur.fetchall()
             return rows
 
 
 
 # 新規登録処理
-def add_response_message(user_id,yoyaku_data):
-    # row = max_uer_id()
-    # global select_user_id
-    print("ユーザID",user_id)
-    print(yoyaku_data)
-    note = "ok"
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO yoyaku_table VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
-            conn.commit()
+# def add_response_message(user_id,yoyaku_data):
+#     # row = max_uer_id()
+#     # global select_user_id
+#     print("ユーザID",user_id)
+#     print(yoyaku_data)
+#     note = "ok"
+#     with get_connection() as conn:
+#         with conn.cursor(cursor_factory=DictCursor) as cur:
+#             cur.execute("INSERT INTO yoyaku_table VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
+#             conn.commit()
 
 
 
@@ -394,18 +393,15 @@ def button_del_kakunin():
 
 @handler.add(PostbackEvent)
 def on_postback(event):
-    # global select_user_id
     profile = line_bot_api.get_profile(event.source.user_id)
     row = get_user_id(profile.user_id[:5])
     test_id = row[0][0]
-    print(test_id)
+    print("ユーザId",test_id)
     if isinstance(event, PostbackEvent):
         # 日付選択押下時
         if event.postback.data is not None:
             if event.postback.data == 'create_yoyaku':
                 print("予約選択処理")
-                print("予約選択処理.ユーザID",select_user_id)
-                column_insert(test_id)
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
                 line_bot_api.reply_message(
@@ -426,8 +422,7 @@ def on_postback(event):
 
             elif event.postback.data == 'show_yoyaku':
                 print("一覧表示処理")
-                print("一覧表示処理.ユーザID",select_user_id)
-                rows = get_response_message()
+                rows = get_response_message(test_id)
 
                 if len(rows)==0:
                     line_bot_api.reply_message(
@@ -469,9 +464,7 @@ def on_postback(event):
                     )
 
                 else:
-                    print("削除処理.ユーザID",select_user_id)
                     yoyaku_id = event.postback.data[3:]
-                    # del_response_message(yoyaku_id)
                     del_response_message(yoyaku_id,test_id)
                     msg = "削除が完了しました。"
                     line_bot_api.reply_message(
@@ -482,16 +475,9 @@ def on_postback(event):
 
             elif event.postback.data == 'select_day_yoyaku':
                 print("日付取得処理")
-                print("日付取得処理.ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
-                print("げっと",get_day)
-                # global select_yoyaku_day
-                # select_yoyaku_day = get_day
-                # print(select_yoyaku_day)
-                # label = (select_yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
                 add_day = get_day + " " + "00:00:00"
-                print(add_day)
                 add_yoyaku_ymd(add_day,test_id)
 
                 msg  = button_yoyaku_time(get_day)
@@ -503,13 +489,7 @@ def on_postback(event):
 
             else:
                 print("予約追加処理")
-                print("日",select_yoyaku_day)
-                # yoyaku_data = str(select_yoyaku_day) + " " + str(event.postback.data) + ":00"
                 yoyaku_data = str(event.postback.data) + ":00"
-                print("予約日",yoyaku_data)
-                print("予約追加処理.ユーザID",select_user_id)
-                # add_response_message(select_user_id,yoyaku_data)
-                # add_response_message(test_id,yoyaku_data)
                 row = select_day(test_id)
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,test_id)
