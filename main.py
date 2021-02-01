@@ -212,9 +212,10 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
 def select_day(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_phase = 2",(str(test_id),))
+            cur.execute("SELECT id,yoyaku_date FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_phase = 2",(str(test_id),))
             rows = cur.fetchone()
             return rows
+
 
 
 # 時刻追加
@@ -585,17 +586,12 @@ def on_postback(event):
                 )
 
 
-            # elif event.postback.data  == 'change_yoyaku_date':
-
-
-            # elif event.postback.data  == 'change_yoyaku_none':
-
-
             else:
                 print("予約追加処理")
                 yoyaku_data = str(event.postback.data) + ":00"
                 row = select_day(test_id)
-                yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
+                print(row)
+                yoyaku_day = str(row[1]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,test_id)
                 label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_show(label)
