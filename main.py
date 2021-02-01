@@ -194,7 +194,7 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
      with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 2\
-                where id = (select max(id) from yoyaku_table where user_id = (%s)) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id)))
+                where id = (select max(id) from yoyaku_table where user_id = (%s)) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id))))
             conn.commit()
 
 
