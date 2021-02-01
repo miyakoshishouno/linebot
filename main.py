@@ -292,6 +292,10 @@ def button_show(label):
             text=label,
             actions=[
                 PostbackAction(
+                    label = "続けて備考を追加する",
+                    data  = "add_note"
+                ),
+                PostbackAction(
                     label = "予約一覧",
                     data  = "show_yoyaku"
                 ),
