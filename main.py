@@ -202,7 +202,7 @@ def add_yoyaku_ymd():
 # 日付取得
 def select_day():
     with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:\
+        with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(test_id,))
             rows = cur.fetchone()
             return rows
