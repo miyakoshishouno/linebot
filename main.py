@@ -344,7 +344,7 @@ def on_postback(event):
         if event.postback.data is not None:
             if event.postback.data == 'select_day_yoyaku':
                 print("日付取得処理")
-                print("ユーザID",select_user_id)
+                print("日付取得処理.ユーザID",select_user_id)
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 print("げっと",get_day)
                 global yoyaku_day
@@ -437,7 +437,8 @@ def on_postback(event):
                 print("予約追加処理")
                 print("日",yoyaku_day)
                 yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
-                print(event.postback.daydata)
+                print(event)
+                print(event.postback)
                 print("予約日",yoyaku_data)
                 print("予約追加処理.ユーザID",select_user_id)
                 add_response_message(select_user_id,yoyaku_data)
