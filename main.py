@@ -374,8 +374,8 @@ def button_yoyaku_time(select_day):
 
 
 # 削除確認ボタン
-def button_del_kakunin():
-    rows = get_response_message()
+def button_del_kakunin(user_id):
+    rows = get_response_message(user_id)
     item_list = []
     if len(rows):
         for i in range(len(rows)):
@@ -443,7 +443,7 @@ def on_postback(event):
             elif event.postback.data == 'del_yoyaku':
                 print("削除処理確認")
                 label = "削除する項目を選択してください。(最新5件を表示)"
-                msg = button_del_kakunin()
+                msg = button_del_kakunin(test_id)
                 if len(msg.items) != 0:
                     line_bot_api.reply_message(
                         event.reply_token,
