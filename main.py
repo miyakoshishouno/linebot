@@ -181,11 +181,11 @@ def del_response_message(yoyaku_id,test_id):
 
 # ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 # 空insert→段階update
-def column_insert():
+def column_insert(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("INSERT INTO yoyaku_table (id,user_id,yoyaku_phase)\
-                 VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,1)",(str(user_id),))
+                 VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,1)",(str(test_id),))
             conn.commit()
 
 
@@ -489,7 +489,6 @@ def on_postback(event):
                 # print(select_yoyaku_day)
                 # label = (select_yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
-                # フェーズ
                 add_yoyaku_ymd(get_day,test_id)
 
                 msg  = button_yoyaku_time(get_day)
