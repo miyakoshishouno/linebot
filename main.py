@@ -293,12 +293,12 @@ def make_button_template3():
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00",text= "ああ")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00", daydata= "ああ")))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00",text= "ああ")))
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00", daydata= "ああ")))
         print(item_list)
 
     quick_reply=QuickReply(items = item_list)
