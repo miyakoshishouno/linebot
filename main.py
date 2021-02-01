@@ -221,7 +221,7 @@ def add_yoyaku_time(yoyaku_day,test_id):
 # フェーズ取得
 def select_phase():
     with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:\
+        with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("SELECT yoyaku_phase FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(select_user_id,))
             rows = cur.fetchone()
             return rows
