@@ -432,6 +432,7 @@ def on_postback(event):
                     reply_message = '現在の予約状況は以下になります。(最新5件を表示)'
                     for i in range(len(rows)):
                         r = rows[i]
+                        print(r)
                         reply_message += '\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
 
                     line_bot_api.reply_message(
