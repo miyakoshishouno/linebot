@@ -328,6 +328,9 @@ def button_del_kakunin():
 @handler.add(PostbackEvent)
 def on_postback(event):
     # global select_user_id
+    profile = line_bot_api.get_profile(event.source.user_id)
+    test_id = profile.user_id[:5]
+    print(test_id)
     if isinstance(event, PostbackEvent):
         # if event.postback.params is not None:
         #     get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
