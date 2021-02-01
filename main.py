@@ -190,7 +190,7 @@ def column_insert(test_id):
 
 
 # 日付追加
-def add_yoyaku_ymd():
+def add_yoyaku_ymd(yoyaku_day,test_id):
      with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 2\
@@ -200,7 +200,7 @@ def add_yoyaku_ymd():
 
 
 # 日付取得
-def select_day():
+def select_day(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(test_id,))
