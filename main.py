@@ -98,16 +98,17 @@ def handle_message(event):
 
     # フェーズの確認
     rows = select_phase(user_id)
+    
+    if row[0] is not None:
+        if rows[0] == 4:
+            add_yoyaku_note(user_id,push_text)
+            label = '保存しました。\n予約状況は、以下で確認できます。'
+            msg = button_show(label)
 
-    if rows[0] == 4:
-        add_yoyaku_note(user_id,push_text)
-        label = '保存しました。\n予約状況は、以下で確認できます。'
-        msg = button_show(label)
-
-        line_bot_api.reply_message(
-            event.reply_token,
-            msg
-        )
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
 
 
     elif "予約" in push_text:
