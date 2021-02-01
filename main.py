@@ -509,7 +509,7 @@ def on_postback(event):
                 row = select_day(test_id)
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,test_id)
-                label = yoyaku_day.replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_show(label)
 
                 line_bot_api.reply_message(
