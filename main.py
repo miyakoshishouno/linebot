@@ -422,6 +422,7 @@ def on_postback(event):
         # 日付選択押下時
         if event.postback.data is not None:
             if event.postback.data == 'create_yoyaku':
+                column_insert(test_id)
                 print("予約選択処理")
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
