@@ -488,7 +488,7 @@ def on_postback(event):
                 # print(select_yoyaku_day)
                 # label = (select_yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
-                add_day = (get_day + " " + "00:00:00"
+                add_day = get_day + " " + "00:00:00"
                 print(add_day)
                 add_yoyaku_ymd(add_day,test_id)
 
