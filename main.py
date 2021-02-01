@@ -33,9 +33,9 @@ line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 # グローバル変数(会話のやりとりの保存)
-select_yoyaku_day = ""
-note = ""
-select_user_id = ""
+# select_yoyaku_day = ""
+# note = ""
+# select_user_id = ""
 
 
 
@@ -90,18 +90,29 @@ def handle_message(event):
     if len(row) == 0:
         print("ないよ")
         add_user_id(profile.user_id[:5])
-    #     row = get_user_id(profile.user_id[:5])
-    #     select_user_id = row[0][0]
-    # else:
-    #     print("あるよ")
-    #     select_user_id = row[0][0]
+        row = get_user_id(profile.user_id[:5])
+        user_id = row[0][0]
+    else:
+        print("あるよ")
+        user_id = row[0][0]
 
     # print("ユーザID",select_user_id)
 
 # 今のフェーズを見る
 # 備考なら文字列を登録
 
-    if "予約" in push_text:
+    if select_phase(user_id) == 4:
+        add_yoyaku_note(user_id)
+        label = '保存しました。\n予約状況は、以下で確認できます。'
+        msg = button_show(label)
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            msg
+        )
+
+
+    elif "予約" in push_text:
         question = "予約しますか？"
         msg = button_yoyaku(question)
         line_bot_api.reply_message(
@@ -216,21 +227,33 @@ def add_yoyaku_time(yoyaku_day,test_id):
             conn.commit()
 
 
-# フェーズ取得
-def select_phase():
+
+# フェーズ更新
+def update_yoyaku_phase(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT yoyaku_phase FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(select_user_id,))
+            cur.execute("UPDATE yoyaku_table SET yoyaku_phase = 4 WHERE id = \
+                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 3",(str(test_id),))
+            conn.commit()
+
+
+
+
+# フェーズ取得
+def select_phase(test_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT yoyaku_phase FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
 
 # 備考更新
-def add_yoyaku_note():
+def add_yoyaku_note(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = 'てすと' WHERE id = \
-                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 3",(select_user_id,))
+            cur.execute("UPDATE yoyaku_table SET note = 'てすと', yoyaku_phase = 3 WHERE id = \
+                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 4",(str(test_id),))
             conn.commit()
 
   
@@ -487,6 +510,16 @@ def on_postback(event):
                     TextSendMessage(text=label,quick_reply=msg)
                 )
 
+            elif event.postback.data = 'add_note':
+                print("備考追加処理")
+                update_yoyaku_phase(test_id)
+                label = "備考を入力してください。"
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label)
+                )
+                
 
             else:
                 print("予約追加処理")
