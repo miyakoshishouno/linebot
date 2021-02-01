@@ -104,7 +104,7 @@ def handle_message(event):
             add_yoyaku_note(push_text,user_id)
             print(push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
-            msg = button_show(label)
+            msg = button_menu(label)
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -317,6 +317,28 @@ def button_show(label):
                     label = "続けて備考を追加する",
                     data  = "add_note"
                 ),
+                PostbackAction(
+                    label = "予約一覧",
+                    data  = "show_yoyaku"
+                ),
+                PostbackAction(
+                    label = "予約削除",
+                    data  = "del_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
+
+
+# 各項目ボタン
+def button_menu(label):
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ButtonsTemplate(
+            text=label,
+            actions=[
                 PostbackAction(
                     label = "予約一覧",
                     data  = "show_yoyaku"
