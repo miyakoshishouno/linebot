@@ -204,7 +204,7 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
      with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 2\
-                where id = (select id from yoyaku_table where user_id = (%s)) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id))))
+                where id = (%s) AND yoyaku_phase = 1",(yoyaku_day,(str(test_id))))
             conn.commit()
 
 
@@ -212,7 +212,7 @@ def add_yoyaku_ymd(yoyaku_day,test_id):
 def select_day(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE id = (SELECT id FROM yoyaku_table WHERE user_id = (%s) AND yoyaku_phase = 2)",(str(test_id),))
+            cur.execute("SELECT yoyaku_date FROM yoyaku_table WHERE id = (%s) AND yoyaku_phase = 2",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
@@ -222,7 +222,7 @@ def add_yoyaku_time(yoyaku_day,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),yoyaku_phase = 3\
-                where id = (select id from yoyaku_table where user_id = (%s)) AND yoyaku_phase = 2"\
+                where id = %s AND yoyaku_phase = 2"\
                     ,(yoyaku_day,str(test_id)))
             conn.commit()
 
@@ -232,8 +232,8 @@ def add_yoyaku_time(yoyaku_day,test_id):
 def update_yoyaku_phase(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET yoyaku_phase = 4 WHERE id = \
-                (SELECT id FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 3",(str(test_id),))
+            cur.execute("UPDATE yoyaku_table SET yoyaku_phase = 4 WHERE id = (%s)\
+                AND yoyaku_phase = 3",(str(test_id),))
             conn.commit()
 
 
@@ -252,8 +252,8 @@ def select_phase(test_id):
 def add_yoyaku_note(push_text,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE id = \
-                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 4",(push_text,str(test_id)))
+            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE id = (%s)\
+                AND yoyaku_phase = 4",(push_text,str(test_id)))
             conn.commit()
 
   
