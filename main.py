@@ -96,13 +96,11 @@ def handle_message(event):
         print("あるよ")
         user_id = row[0][0]
 
-# 今のフェーズを見る
-# 備考なら文字列を登録
+    # フェーズの確認
+    rows = select_phase(user_id)
 
-    str_1 = select_phase(user_id)
-    print(str_1[0])
-    if str_1[0] == 4:
-        add_yoyaku_note(user_id)
+    if rows[0] == 4:
+        add_yoyaku_note(user_id,push_text)
         label = '保存しました。\n予約状況は、以下で確認できます。'
         msg = button_show(label)
 
@@ -243,17 +241,17 @@ def update_yoyaku_phase(test_id):
 def select_phase(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT yoyaku_phase FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(str(test_id),))
+            cur.execute("SELECT COALESCE(yoyaku_phase,0) FROM yoyaku_table WHERE id = (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s))",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
 
 # 備考更新
-def add_yoyaku_note(test_id):
+def add_yoyaku_note(push_text,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = 'てすと', yoyaku_phase = 3 WHERE id = \
-                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 4",(str(test_id),))
+            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE id = \
+                (SELECT MAX(id) FROM yoyaku_table WHERE user_id = (%s)) AND yoyaku_phase = 4",(push_text,str(test_id)))
             conn.commit()
 
   
