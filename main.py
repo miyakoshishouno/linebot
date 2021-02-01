@@ -437,7 +437,7 @@ def on_postback(event):
                 print("予約追加処理")
                 print("日",yoyaku_day)
                 yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
-                print(event.postback.text)
+                print(event.postback.daydata)
                 print("予約日",yoyaku_data)
                 print("予約追加処理.ユーザID",select_user_id)
                 add_response_message(select_user_id,yoyaku_data)
