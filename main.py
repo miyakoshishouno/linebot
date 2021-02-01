@@ -279,7 +279,7 @@ def make_button_template2(label):
 
 
 # 時刻選択ボタン
-def make_button_template3():
+def make_button_template3(getday):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
@@ -293,13 +293,14 @@ def make_button_template3():
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00", daydata= "ああ")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= getday \
+                        + " " + str(time_list[i]) + ":00")))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00", daydata= "ああ")))
-        print(item_list)
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= getday \
+                        + " " + str(time_list[i]) + ":00")))
 
     quick_reply=QuickReply(items = item_list)
     return quick_reply
@@ -351,7 +352,7 @@ def on_postback(event):
                 yoyaku_day = get_day
                 print(yoyaku_day)
                 label = (yoyaku_day + "ですね。\n希望する時間帯を選択してください。")
-                msg  = make_button_template3()
+                msg  = make_button_template3(get_day)
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text=label,quick_reply=msg)
@@ -436,9 +437,8 @@ def on_postback(event):
             else:
                 print("予約追加処理")
                 print("日",yoyaku_day)
-                yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
-                print(event)
-                print(event.postback)
+                # yoyaku_data = str(yoyaku_day) + " " + str(event.postback.data) + ":00"
+                yoyaku_data = str(event.postback.data)
                 print("予約日",yoyaku_data)
                 print("予約追加処理.ユーザID",select_user_id)
                 add_response_message(select_user_id,yoyaku_data)
