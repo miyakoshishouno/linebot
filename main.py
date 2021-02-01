@@ -99,7 +99,9 @@ def handle_message(event):
 # 今のフェーズを見る
 # 備考なら文字列を登録
 
-    if select_phase(user_id) == 4:
+    str_1 = select_phase(user_id)
+    print(str_1[0])
+    if str_1[0] == 4:
         add_yoyaku_note(user_id)
         label = '保存しました。\n予約状況は、以下で確認できます。'
         msg = button_show(label)
