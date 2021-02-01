@@ -343,7 +343,7 @@ def button_yoyaku_ymd(label):
 
 
 # 時刻選択ボタン
-def button_yoyaku_time(getday):
+def button_yoyaku_time(select_day):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
@@ -354,18 +354,16 @@ def button_yoyaku_time(getday):
 
     #当日の場合
     # if select_yoyaku_day == get_now:
-    if get_day == get_now:
+    if select_day == get_now:
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= getday \
-                        + " " + str(time_list[i]) + ":00")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= getday \
-                        + " " + str(time_list[i]) + ":00")))
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
 
     quick_reply=QuickReply(items = item_list)
     return quick_reply
@@ -503,13 +501,14 @@ def on_postback(event):
                 print("予約追加処理")
                 print("日",select_yoyaku_day)
                 # yoyaku_data = str(select_yoyaku_day) + " " + str(event.postback.data) + ":00"
-                yoyaku_data = str(event.postback.data)
+                yoyaku_data = str(event.postback.data) + ":00"
                 print("予約日",yoyaku_data)
                 print("予約追加処理.ユーザID",select_user_id)
                 # add_response_message(select_user_id,yoyaku_data)
                 # add_response_message(test_id,yoyaku_data)
                 row = select_day(test_id)
-                add_yoyaku_time(row[0],test_id)
+                add_yoyaku_time(row[0].("00:00:00",yoyaku_data),test_id)
+                print(row[0].("00:00:00",yoyaku_data))
                 label = yoyaku_data[:-3] + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_show(label)
 
