@@ -99,7 +99,7 @@ def handle_message(event):
     # フェーズの確認
     rows = select_phase(user_id)
 
-    if row[0] is not NoneType:
+    if rows:
         if rows[0] == 4:
             add_yoyaku_note(user_id,push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
