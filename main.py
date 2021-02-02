@@ -102,7 +102,7 @@ def handle_message(event):
 
     if rows and rows[0] == 3:
         if rows[0] == 3:
-            add_yoyaku_note(push_text,user_id,yoyaku_id)
+            add_yoyaku_note(push_text,user_id,yoyaku_id[0])
             print(push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
             msg = button_menu(label)
