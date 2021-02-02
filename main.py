@@ -347,7 +347,7 @@ def button_show(label,yoyaku_id):
             actions=[
                 PostbackAction(
                     label = "続けて備考を追加する",
-                    data  = "add_note" + yoyaku_id
+                    data  = "add_note_" + str(yoyaku_id)
                 ),
                 PostbackAction(
                     label = "予約一覧",
