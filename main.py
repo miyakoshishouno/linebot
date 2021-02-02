@@ -98,9 +98,10 @@ def handle_message(event):
 
     # フェーズの確認
     rows = select_phase(user_id)
+    print(rows)
 
     if rows:
-        if rows[0] == 4:
+        if rows[0] == 3:
             add_yoyaku_note(push_text,user_id)
             print(push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
@@ -264,7 +265,7 @@ def add_yoyaku_time(yoyaku_day,yoyaku_id,test_id):
 def update_yoyaku_phase(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE id = (%s)\
+            cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE yoyaku_id = (%s)\
                 AND yoyaku_phase = 2",(yoyaku_id,))
             conn.commit()
 
@@ -649,6 +650,7 @@ def on_postback(event):
 # 
 
             elif event.postback.data == 'create_note_yoyaku':
+                print(yoyaku_id[0])
                 update_yoyaku_phase(yoyaku_id[0])
                 label = "備考を入力してください。"
 
