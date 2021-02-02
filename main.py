@@ -636,20 +636,20 @@ def on_postback(event):
                     TextSendMessage(text=label,quick_reply=msg)
                 )
 # 削除予定
-            elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
-                print("備考追加処理")
-                print
-                update_yoyaku_phase(yoyaku_id)
-                label = "備考を入力してください。"
+            # elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
+            #     print("備考追加処理")
+            #     print
+            #     update_yoyaku_phase(yoyaku_id)
+            #     label = "備考を入力してください。"
 
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=label)
-                )
+            #     line_bot_api.reply_message(
+            #         event.reply_token,
+            #         TextSendMessage(text=label)
+            #     )
 # 
 
             elif event.postback.data == 'create_note_yoyaku':
-                update_yoyaku_phase(yoyaku_id)
+                update_yoyaku_phase(yoyaku_id[0])
                 label = "備考を入力してください。"
 
                 line_bot_api.reply_message(
