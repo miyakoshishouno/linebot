@@ -102,7 +102,7 @@ def handle_message(event):
 
     if rows and rows[0] == 3:
         if rows[0] == 3:
-            add_yoyaku_note(push_text,user_id)
+            add_yoyaku_note(push_text,user_id,yoyaku_id)
             print(push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
             msg = button_menu(label)
@@ -282,18 +282,15 @@ def select_phase(test_id):
 
 
 # 備考更新
-def add_yoyaku_note(push_text,test_id):
+def add_yoyaku_note(push_text,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s)",(push_text,str(test_id)))
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
+                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
             cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             conn.commit()
 
 
-
-
-
-  
 
 # ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
