@@ -167,6 +167,16 @@ def get_response_message(user_id):
             return rows
 
 
+def get_message(yoyaku_id):
+    get_day = datetime.datetime.now() 
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT yoyaku_date,note FROM yoyaku_table WHERE id = (%s)",(yoyaku_id,))
+            rows = cur.fetchone()
+            return rows
+
+
+
 
 # 新規登録処理
 # def add_response_message(user_id,yoyaku_data):
@@ -485,8 +495,7 @@ def button_change_kakunin(user_id):
         for i in range(len(rows)):
             r = rows[i]
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + \
-                    str(r[0]) + ',' + str(r[1]) + " \n備考：" + str(r[2]))))
+                action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + str(r[0])
 
         item_list.append(QuickReplyButton(\
             action=PostbackAction(label= "戻る", data= "cancel")))
@@ -705,14 +714,9 @@ def on_postback(event):
 
 
             elif event.postback.data.startswith('change_id_'):
+                row = get_message(event.postback.data[10:])
 
-                regdate = event.postback.data
-                pattern = "(.*),(.*)"
-                d = re.search(pattern, regdate)
-                print(d.group(1))
-                print(d.group(2))
-
-                label = '変更する項目を選択してください。\n現在の予約状況：\n' + (d.group(2)).replace('-','/')
+                label = '変更する項目を選択してください。\n現在の予約状況：\n' + row[0].replace('-','/') + '\n備考：' + row[1]
                 msg = button_change_yoyaku(label)
 
                 line_bot_api.reply_message(
