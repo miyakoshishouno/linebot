@@ -486,7 +486,7 @@ def button_change_kakunin(user_id):
             r = rows[i]
             item_list.append(QuickReplyButton(\
                 action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + \
-                    str(r[0]) + ',' + str(r[1]) + " 備考：" + str(r[2]))))
+                    str(r[0]) + ',' + str(r[1]) + " \n備考：" + str(r[2]))))
 
         item_list.append(QuickReplyButton(\
             action=PostbackAction(label= "戻る", data= "cancel")))
@@ -712,7 +712,7 @@ def on_postback(event):
                 print(d.group(1))
                 print(d.group(2))
 
-                label = '変更する項目を選択してください。\n現在の予約状況：' + (d.group(2)).replace('-','/')
+                label = '変更する項目を選択してください。\n現在の予約状況：\n' + (d.group(2)).replace('-','/')
                 msg = button_change_yoyaku(label)
 
                 line_bot_api.reply_message(
