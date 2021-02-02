@@ -605,7 +605,7 @@ def on_postback(event):
                     TextSendMessage(text=label,quick_reply=msg)
                 )
 
-            elif event.postback.data.startswith 'add_note' or event.postback.data == 'change_yoyaku_note':
+            elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
                 print("備考追加処理")
                 print
                 update_yoyaku_phase(test_id)
