@@ -207,7 +207,7 @@ def get_yoyaku_id(test_id):
 
 
 # user_idとidがいる
-def phase_table_insert(test_id):
+def phase_table_insert(test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("INSERT INTO phase_table (id,user_id,phase,yoyaku_id)\
@@ -529,8 +529,8 @@ def on_postback(event):
             if event.postback.data == 'create_yoyaku'or event.postback.data == 'change_yoyaku_date':
                 yoyaku_table_insert(test_id)
                 yoyaku_id = get_yoyaku_id(test_id)
-                del_phase_record(test_id,yoyaku_id)
-                phase_table_insert(test_id,)
+                del_phase_record(test_id)
+                phase_table_insert(test_id,yoyaku_id)
                 print("予約選択処理")
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
