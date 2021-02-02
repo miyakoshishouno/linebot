@@ -690,8 +690,8 @@ def on_postback(event):
 
             elif event.postback.data == 'change_yoyaku':
                 print("変更処理確認")
-                label = "変更する項目を選択してください。(最新5件を表示)"
-                msg = button_yoyaku_list(test_id)
+                label = "変更する予約を選択してください。(最新5件を表示)"
+                msg = button_change_kakunin(test_id)
                 if len(msg.items) != 0:
                     line_bot_api.reply_message(
                         event.reply_token,
@@ -716,7 +716,7 @@ def on_postback(event):
             elif event.postback.data.startswith('change_id_'):
                 label = '変更する項目を選択してください。\n現在の予約状況：' + event.postback.data[10:]
                 msg = button_change_yoyaku(label)
-                
+
                 line_bot_api.reply_message(
                     event.reply_token,
                     msg
