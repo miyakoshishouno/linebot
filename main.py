@@ -202,7 +202,7 @@ def yoyaku_table_insert(test_id):
 def get_yoyaku_id(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT MAX(id) FROM yoyaku_table WHERE user_id = %s",(str(test_id),))
+            cur.execute("SELECT setval('id_code_seq',MAX(id)) FROM yoyaku_table WHERE user_id = %s",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
