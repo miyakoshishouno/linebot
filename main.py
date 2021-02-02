@@ -268,7 +268,7 @@ def update_yoyaku_phase(test_id):
 def select_phase(test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("SELECT COALESCE(MAX(yoyaku_phase),0) FROM yoyaku_table WHERE user_id = (%s)",(str(test_id),))
+            cur.execute("SELECT (yoyaku_phase) FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             rows = cur.fetchone()
             return rows
 
