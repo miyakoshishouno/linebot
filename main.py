@@ -100,7 +100,7 @@ def handle_message(event):
     rows = select_phase(user_id)
     print(rows)
 
-    if rows:
+    if rows and rows[0] == 3:
         if rows[0] == 3:
             add_yoyaku_note(push_text,user_id)
             print(push_text)
@@ -111,22 +111,22 @@ def handle_message(event):
                 event.reply_token,
                 msg
             )
-
-
-    if "予約" in push_text:
-        question = "予約しますか？"
-        msg = button_yoyaku(question)
-        line_bot_api.reply_message(
-            event.reply_token,
-            msg
-        )
-
     else:
-        msg = talkapi(push_text)
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=msg))
+        if "予約" in push_text:
+            question = "予約しますか？"
+            msg = button_yoyaku(question)
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
+
+        else:
+            msg = talkapi(push_text)
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
 
 
 
