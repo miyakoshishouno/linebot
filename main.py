@@ -531,7 +531,7 @@ def on_postback(event):
                 yoyaku_id = get_yoyaku_id(test_id)
                 print(yoyaku_id)
                 del_phase_record(test_id)
-                phase_table_insert(test_id,yoyaku_id)
+                phase_table_insert(test_id,yoyaku_id[0])
                 print("予約選択処理")
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
