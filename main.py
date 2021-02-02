@@ -486,7 +486,7 @@ def button_change_kakunin(user_id):
             r = rows[i]
             item_list.append(QuickReplyButton(\
                 action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + \
-                    str(r[0]) + ',' + str(r[1]) + " 備考：" + str(r[2]))
+                    str(r[0]) + ',' + str(r[1]) + " 備考：" + str(r[2])))
 
         item_list.append(QuickReplyButton(\
             action=PostbackAction(label= "戻る", data= "cancel")))
