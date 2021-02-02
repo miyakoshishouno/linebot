@@ -528,8 +528,8 @@ def on_postback(event):
         if event.postback.data is not None:
             if event.postback.data == 'create_yoyaku'or event.postback.data == 'change_yoyaku_date':
                 yoyaku_table_insert(test_id)
-                get_yoyaku_id(test_id)
-                del_phase_record(test_id)
+                yoyaku_id = get_yoyaku_id(test_id)
+                del_phase_record(test_id,yoyaku_id)
                 phase_table_insert(test_id,)
                 print("予約選択処理")
                 label = "日付を選択してください。"
