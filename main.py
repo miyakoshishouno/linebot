@@ -210,7 +210,7 @@ def get_yoyaku_id(test_id):
 def phase_table_insert(test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("INSERT INTO phase_table (id,user_id,phase,yoyaku_id)\
+            cur.execute("INSERT INTO phase_table (id,user_id,yoyaku_phase,yoyaku_id)\
                  VALUES((SELECT COALESCE(max(id),0)+1 FROM phase_table),%s,0,%s)"\
                      ,(str(test_id),yoyaku_id))
             conn.commit()
