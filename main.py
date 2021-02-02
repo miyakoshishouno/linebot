@@ -233,7 +233,7 @@ def add_yoyaku_ymd(yoyaku_day,yoyaku_id,test_id):
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s)\
                 WHERE id = (%s)",(yoyaku_day,yoyaku_id)),
             cur.execute("UPDATE phase_table SET yoyaku_phase = 1 WHERE yoyaku_id = %s AND user_id = %s"\
-                ,(yoyaku_id,test_id))
+                ,(yoyaku_id,str(test_id)))
             conn.commit()
 
 
