@@ -261,11 +261,11 @@ def add_yoyaku_time(yoyaku_day,yoyaku_id,test_id):
 
 
 # フェーズ更新
-def update_yoyaku_phase(test_id):
+def update_yoyaku_phase(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET yoyaku_phase = 4 WHERE id = (%s)\
-                AND yoyaku_phase = 3",(yoyaku_id,))
+            cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE id = (%s)\
+                AND yoyaku_phase = 2",(yoyaku_id,))
             conn.commit()
 
 
@@ -639,7 +639,7 @@ def on_postback(event):
             elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
                 print("備考追加処理")
                 print
-                update_yoyaku_phase(test_id)
+                update_yoyaku_phase(yoyaku_id)
                 label = "備考を入力してください。"
 
                 line_bot_api.reply_message(
@@ -649,7 +649,7 @@ def on_postback(event):
 # 
 
             elif event.postback.data == 'create_note_yoyaku':
-                update_yoyaku_phase(test_id)
+                update_yoyaku_phase(yoyaku_id)
                 label = "備考を入力してください。"
 
                 line_bot_api.reply_message(
