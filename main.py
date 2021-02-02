@@ -227,11 +227,13 @@ def del_phase_record(test_id):
 
 
 # 日付追加
-def add_yoyaku_ymd(yoyaku_day,yoyaku_id):
+def add_yoyaku_ymd(yoyaku_day,yoyaku_id,test_id):
      with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s)\
-                WHERE id = (%s)",(yoyaku_day,yoyaku_id))
+                WHERE id = (%s)",(yoyaku_day,yoyaku_id)),
+            cur.execute("UPDATE phase_table SET yoyaku_phase = 1 WHERE yoyaku_id = %s AND user_id = %s"\
+                ,(yoyaku_id,test_id))
             conn.commit()
 
 
@@ -600,7 +602,7 @@ def on_postback(event):
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
                 add_day = get_day + " " + "00:00:00"
-                add_yoyaku_ymd(add_day,yoyaku_id[0])
+                add_yoyaku_ymd(add_day,yoyaku_id[0],test_id)
                 print(test_id)
 
                 msg  = button_yoyaku_time(get_day)
