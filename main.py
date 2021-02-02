@@ -527,6 +527,10 @@ def button_change_yoyaku(label):
                     data  = "change_yoyaku_date"
                 ),
                 PostbackAction(
+                    label = "時刻を変更する",
+                    data  = "change_yoyaku_date"
+                ),
+                PostbackAction(
                     label = "備考を修正する",
                     data  = "change_yoyaku_note"
                 ),
@@ -568,8 +572,8 @@ def on_postback(event):
 
             elif event.postback.data == 'menu_yoyaku':
                 print("menu処理")
-                label = "どちらか選択してください。"
-                msg = button_show_or_del(label)
+                label = "該当する項目を選択してください。"
+                msg = button_menu(label)
                 line_bot_api.reply_message(
                     event.reply_token,
                     msg
@@ -708,6 +712,15 @@ def on_postback(event):
                         TextSendMessage(text=msg)
                     )
 
+
+            elif event.postback.data.startswith('change_id_'):
+                label = '変更する項目を選択してください。\n現在の予約状況：' + event.postback.data[10:]
+                msg = button_change_yoyaku(label)
+                
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
 
 
             else:
