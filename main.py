@@ -529,6 +529,7 @@ def on_postback(event):
             if event.postback.data == 'create_yoyaku'or event.postback.data == 'change_yoyaku_date':
                 yoyaku_table_insert(test_id)
                 yoyaku_id = get_yoyaku_id(test_id)
+                print(yoyaku_id)
                 del_phase_record(test_id)
                 phase_table_insert(test_id,yoyaku_id)
                 print("予約選択処理")
