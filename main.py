@@ -196,10 +196,14 @@ def yoyaku_table_insert(test_id):
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("INSERT INTO yoyaku_table (id,user_id,fixed)\
                  VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,0)",(str(test_id),))
-            cur.execute("INSERT INTO phase_table (id,user_id,phase,yoyaku_id)\
-                 VALUES((SELECT COALESCE(max(id),0)+1 FROM phase_table),%s,0,%s)"\
-                     ,(str(test_id),str(test_id),yoyaku_id))
             conn.commit()
+
+def get_yoyaku_id(test_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT MAX(id) FROM yoyaku_table WHERE user_id = %s",(str(test_id),))
+            rows = cur.fetchone()
+            return rows
 
 
 # user_idとidがいる
@@ -210,7 +214,6 @@ def phase_table_insert(test_id):
                  VALUES((SELECT COALESCE(max(id),0)+1 FROM phase_table),%s,0,%s)"\
                      ,(str(test_id),str(test_id),yoyaku_id))
             conn.commit()
-
 
 
 # 新規登録時、中断されているphaseを削除
@@ -525,8 +528,9 @@ def on_postback(event):
         if event.postback.data is not None:
             if event.postback.data == 'create_yoyaku'or event.postback.data == 'change_yoyaku_date':
                 yoyaku_table_insert(test_id)
-                # del_phase_record(test_id)
-                # phase_table_insert(test_id,)
+                get_yoyaku_id(test_id)
+                del_phase_record(test_id)
+                phase_table_insert(test_id,)
                 print("予約選択処理")
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
