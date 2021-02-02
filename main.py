@@ -667,7 +667,7 @@ def on_postback(event):
             else:
                 print("予約追加処理")
                 yoyaku_data = str(event.postback.data) + ":00"
-                row = get_yoyaku_day(yoyaku_id)
+                row = get_yoyaku_day(yoyaku_id[0])
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,yoyaku_id[0])
                 label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
