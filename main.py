@@ -249,11 +249,13 @@ def get_yoyaku_day(yoyaku_id):
 
 
 # 時刻追加
-def add_yoyaku_time(yoyaku_day,yoyaku_id):
+def add_yoyaku_time(yoyaku_day,yoyaku_id,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s),fixed = 1\
                 WHERE id = %s",(yoyaku_day,yoyaku_id))
+            cur.execute("UPDATE phase_table SET yoyaku_phase = 2 WHERE yoyaku_id = %s AND user_id = %s"\
+                ,(yoyaku_id,str(test_id)))
             conn.commit()
 
 
@@ -492,6 +494,27 @@ def button_change_kakunin(user_id):
     return quick_reply
 
 
+# 備考入力確認ボタン
+def button_note_yoyaku(label):
+    message_template = TemplateSendMessage(
+        alt_text="a",
+        template=ButtonsTemplate(
+            text=label,
+            actions=[
+                PostbackAction(
+                    label = "続けて備考を入力する",
+                    data  = "create_note_yoyaku"
+                ),
+                PostbackAction(
+                    label = "備考を入力せず終了する",
+                    data  = "end_yoyaku"
+                )
+            ]
+        )
+    )
+    return message_template
+
+
 
 # 編集項目ボタン
 def button_change_yoyaku(label):
@@ -526,7 +549,7 @@ def on_postback(event):
     row = get_user_id(profile.user_id[:5])
     test_id = row[0][0]
     yoyaku_id = get_yoyaku_id(test_id)
-    print(yoyaku_id)    
+    print(yoyaku_id)
     print("ユーザId",test_id)
     if isinstance(event, PostbackEvent):
         if event.postback.data is not None:
@@ -612,7 +635,7 @@ def on_postback(event):
                     event.reply_token,
                     TextSendMessage(text=label,quick_reply=msg)
                 )
-
+# 削除予定
             elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
                 print("備考追加処理")
                 print
@@ -623,7 +646,26 @@ def on_postback(event):
                     event.reply_token,
                     TextSendMessage(text=label)
                 )
-                
+# 
+
+            elif event.postback.data == 'create_note_yoyaku':
+                update_yoyaku_phase(test_id)
+                label = "備考を入力してください。"
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label)
+                )
+            
+            elif event.postback.data == 'end_yoyaku':
+                del_phase_record(test_id)
+                label = "ご利用ありがとうございました。"
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label)
+                )
+
 
             elif event.postback.data == 'cancel':
                     label = "該当する項目を選択してください。"
@@ -673,9 +715,10 @@ def on_postback(event):
                 yoyaku_data = str(event.postback.data) + ":00"
                 row = get_yoyaku_day(yoyaku_id[0])
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
-                add_yoyaku_time(yoyaku_day,yoyaku_id[0])
+                add_yoyaku_time(yoyaku_day,yoyaku_id[0],test_id)
                 label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
-                msg = button_show(label,yoyaku_id[0])
+                # msg = button_show(label,yoyaku_id[0])
+                msg = button_note_yoyaku(label)
 
                 line_bot_api.reply_message(
                     event.reply_token,
