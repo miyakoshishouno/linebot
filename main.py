@@ -526,6 +526,7 @@ def on_postback(event):
     row = get_user_id(profile.user_id[:5])
     test_id = row[0][0]
     yoyaku_id = get_yoyaku_id(test_id)
+    print(yoyaku_id)    
     print("ユーザId",test_id)
     if isinstance(event, PostbackEvent):
         if event.postback.data is not None:
