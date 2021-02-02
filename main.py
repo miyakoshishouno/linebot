@@ -13,6 +13,7 @@ from linebot.models import (
 
 )
 
+import re
 import psycopg2
 from psycopg2.extras import DictCursor
 import os
@@ -484,7 +485,8 @@ def button_change_kakunin(user_id):
         for i in range(len(rows)):
             r = rows[i]
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + str(r[0]))))
+                action=PostbackAction(label= (str(r[1]).replace('-','/'))[:-3], data= "change_id_" + \
+                    str(r[0]) + ',' + str(r[1]) + " 備考：" + str(r[2]))
 
         item_list.append(QuickReplyButton(\
             action=PostbackAction(label= "戻る", data= "cancel")))
@@ -638,18 +640,7 @@ def on_postback(event):
                     event.reply_token,
                     TextSendMessage(text=label,quick_reply=msg)
                 )
-# 削除予定
-            # elif event.postback.data.startswith('add_note') or event.postback.data == 'change_yoyaku_note':
-            #     print("備考追加処理")
-            #     print
-            #     update_yoyaku_phase(yoyaku_id)
-            #     label = "備考を入力してください。"
 
-            #     line_bot_api.reply_message(
-            #         event.reply_token,
-            #         TextSendMessage(text=label)
-            #     )
-# 
 
             elif event.postback.data == 'create_note_yoyaku':
                 print(yoyaku_id[0])
@@ -714,7 +705,14 @@ def on_postback(event):
 
 
             elif event.postback.data.startswith('change_id_'):
-                label = '変更する項目を選択してください。\n現在の予約状況：' + event.postback.data[10:]
+
+                regdate = event.postback.data
+                pattern = "(.*),(.*)"
+                d = re.search(pattern, regdate)
+                print(d.group(1))
+                print(d.group(2))
+
+                label = '変更する項目を選択してください。\n現在の予約状況：' + (d.group(2)).replace('-','/')
                 msg = button_change_yoyaku(label)
 
                 line_bot_api.reply_message(
