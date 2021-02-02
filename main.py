@@ -285,8 +285,8 @@ def select_phase(test_id):
 def add_yoyaku_note(push_text,test_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s), yoyaku_phase = 3 WHERE user_id = (%s)\
-                AND yoyaku_phase = 4",(push_text,str(test_id)))
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s)",(push_text,str(test_id)))
+            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             conn.commit()
 
 
