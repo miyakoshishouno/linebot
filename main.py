@@ -91,10 +91,10 @@ def handle_message(event):
         print("ないよ")
         add_user_id(profile.user_id[:5])
         row = get_user_id(profile.user_id[:5])
-        user_id = row[0][0]
+        user_id = row[0]
     else:
         print("あるよ")
-        user_id = row[0][0]
+        user_id = row[0]
 
     # フェーズの確認
     rows = select_phase(user_id)
@@ -102,6 +102,7 @@ def handle_message(event):
 
     if rows and rows[0] == 3:
         if rows[0] == 3:
+            yoyaku_id = get_yoyaku_id(user_id)
             add_yoyaku_note(push_text,user_id,yoyaku_id[0])
             print(push_text)
             label = '保存しました。\n予約状況は、以下で確認できます。'
@@ -141,7 +142,7 @@ def get_user_id(user_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("SELECT id FROM user_table WHERE user_id = (%s)",(user_id,))
-            rows = cur.fetchall()
+            rows = cur.fetchone()
             return rows
 
 
