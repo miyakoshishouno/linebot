@@ -310,14 +310,14 @@ def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
                 (yoyaku_day,str(test_id),yoyaku_id))
             conn.commit()
 
-# # 時刻処理(編集)
-# def change_yoyaku_time(push_text,test_id,yoyaku_id):
-#     with get_connection() as conn:
-#         with conn.cursor(cursor_factory=DictCursor) as cur:
-#             cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = %s",\
-#                 (push_text,str(test_id),yoyaku_id))
-#             conn.commit()
-   
+def get_yoyaku_note(yoyaku_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT note FROM yoyaku_table WHERE id = (%s)",(yoyaku_id,))
+            rows = cur.fetchone()
+            return rows
+
+
 # 備考処理(編集)
 def change_yoyaku_note(push_text,test_id,yoyaku_id):
     with get_connection() as conn:
@@ -575,7 +575,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
                 ),
                 PostbackAction(
                     label = "備考を修正する",
-                    data  = "change_yoyaku_note" + str(yoyaku_id)
+                    data  = "change_yoyaku_note_" + str(yoyaku_id)
                 ),
                 PostbackAction(
                     label = "予約状況一覧に戻る",
@@ -792,13 +792,19 @@ def on_postback(event):
                 print("編集処理:日付")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 yoyaku_id = event.postback.data[18:]
-                print(yoyaku_id)
                 before_day = get_yoyaku_day(yoyaku_id)
                 get_time = str((before_day[0]).hour).zfill(2) +  ":" + str((before_day[0]).minute).zfill(2) + ":00"
-                print(get_time)
                 cahange_date = get_day + " " + get_time
-                print(cahange_date)
                 change_yoyaku_day(cahange_date,test_id,yoyaku_id)
+
+                label = cahange_date + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                msg = button_menu(label)
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
+
 
             elif event.postback.data.startswith('change_yoyaku_time_'):
                 print("編集処理:時刻")
@@ -818,9 +824,11 @@ def on_postback(event):
 
             elif event.postback.data == 'change_yoyaku_note':
                 print("編集処理:備考")
-                # phase_table_insert()
-                # update_yoyaku_phase(yoyaku_id[0])
-                label = "備考を入力してください。"
+                yoyaku_id = event.postback.data[19:]
+                phase_table_insert(test_id,yoyaku_id)
+                update_yoyaku_phase(yoyaku_id)
+                before_note = get_yoyaku_note(yoyaku_id)
+                label = "備考を入力してください。\n変更前：" + before_note[0]
 
                 line_bot_api.reply_message(
                     event.reply_token,
@@ -837,14 +845,16 @@ def on_postback(event):
                 print(yoyaku_id)
 
                 day = get_yoyaku_day(yoyaku_id)
-                print(day[0])
-                print(day[0].hour)
                 new_day = str(day[0].replace(hour = int(event.postback.data[12:14])))
-                print(new_day)
                 change_yoyaku_day(new_day,test_id,yoyaku_id)
 
+                label = new_day + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                msg = button_menu(label)
 
-
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
 
 
             else:
