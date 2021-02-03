@@ -310,13 +310,13 @@ def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
                 (yoyaku_day,str(test_id),yoyaku_id))
             conn.commit()
 
-# 時刻処理(編集)
-def change_yoyaku_time(push_text,test_id,yoyaku_id):
-    with get_connection() as conn:
-        with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = %s",\
-                (push_text,str(test_id),yoyaku_id))
-            conn.commit()
+# # 時刻処理(編集)
+# def change_yoyaku_time(push_text,test_id,yoyaku_id):
+#     with get_connection() as conn:
+#         with conn.cursor(cursor_factory=DictCursor) as cur:
+#             cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = %s",\
+#                 (push_text,str(test_id),yoyaku_id))
+#             conn.commit()
    
 # 備考処理(編集)
 def change_yoyaku_note(push_text,test_id,yoyaku_id):
@@ -807,7 +807,7 @@ def on_postback(event):
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
-                label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour) + str(before_day[0].minute)
+                label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
                 msg = change_button_yoyaku_time(before_day[0],yoyaku_id)
 
                 line_bot_api.reply_message(
@@ -833,11 +833,12 @@ def on_postback(event):
             elif event.postback.data.startswith('change_time_'):
                 # 時刻変更処理
                 print(event.postback.data[12:14])
-                day = get_yoyaku_day(yoyaku_id)
-                day[0].replace(hour = event.postback.data[12:14])
                 yoyaku_id = event.postback.data[15:]
                 print(yoyaku_id)
-                # change_yoyaku_time(day,test_id,yoyaku_id)
+
+                day = get_yoyaku_day(yoyaku_id)
+                day[0].replace(hour = event.postback.data[12:14])
+                change_yoyaku_day(day,test_id,yoyaku_id)
 
 
 
