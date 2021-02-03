@@ -787,7 +787,7 @@ def on_postback(event):
                 # change_yoyaku_time()
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
-                a = (before_day[0]).year + "/" + (before_day[0]).month + "/" + (before_day[0]).day
+                a = str((before_day[0]).year) + "/" + str((before_day[0]).month) + "/" + str((before_day[0]).day)
                 print(a)
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
