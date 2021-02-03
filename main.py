@@ -543,6 +543,7 @@ def button_note_yoyaku(label):
 # 編集項目ボタン
 def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
+    print(day)
     print("時刻",get_day.hour + 9)
     
     if (get_day.hour + 9 ) > 14:
@@ -550,8 +551,8 @@ def button_change_yoyaku(label,yoyaku_id,day):
         print("比較",get_date)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
-        print("比較2",get_date)
 
+    if day < get_day
 
     message_template = TemplateSendMessage(
         alt_text="a",
