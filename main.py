@@ -220,7 +220,7 @@ def get_yoyaku_id(test_id):
             return rows
 
 
-# user_idとidがいる
+# phaseレコード作成
 def phase_table_insert(test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -277,8 +277,7 @@ def add_yoyaku_time(yoyaku_day,yoyaku_id,test_id):
 def update_yoyaku_phase(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE yoyaku_id = (%s)\
-                AND yoyaku_phase = 2",(yoyaku_id,))
+            cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE yoyaku_id = (%s)",(yoyaku_id,))
             conn.commit()
 
 
@@ -302,6 +301,33 @@ def add_yoyaku_note(push_text,test_id,yoyaku_id):
             cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             conn.commit()
 
+
+# 日時処理(編集)
+def change_yoyaku_day(push_text,test_id,yoyaku_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
+                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
+            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
+            conn.commit()
+
+# 時刻処理(編集)
+ def change_yoyaku_time(push_text,test_id,yoyaku_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
+                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
+            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
+            conn.commit()
+   
+# 備考処理(編集)
+def change_yoyaku_note(push_text,test_id,yoyaku_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
+                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
+            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
+            conn.commit()
 
 
 # ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
@@ -527,35 +553,74 @@ def button_note_yoyaku(label):
 
 
 # 編集項目ボタン
-def button_change_yoyaku(label):
+def button_change_yoyaku(label,id):
+    get_day = datetime.datetime.now()
+    get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+
     message_template = TemplateSendMessage(
         alt_text="a",
         template=ButtonsTemplate(
             text=label,
             actions=[
-                PostbackAction(
+                DatetimePickerAction(
+                    type = "datetimepicker",
                     label = "日付を変更する",
-                    data  = "change_yoyaku_date"
+                    data = "change_yoyaku_day_" + str(id),
+                    mode = "date",
+                    initial = get_date,
+                    max = "2088-01-24",
+                    min = get_date
                 ),
                 PostbackAction(
                     label = "時刻を変更する",
-                    data  = "change_yoyaku_date"
+                    data  = "change_yoyaku_time"
                 ),
                 PostbackAction(
                     label = "備考を修正する",
                     data  = "change_yoyaku_note"
                 ),
                 PostbackAction(
-                    label = "戻る",
+                    label = "予約状況一覧に戻る",
                     data  = "cancel"
+                ),
+                PostbackAction(
+                    label = "終了する",
+                    data  = "end_yoyaku"
                 )
-
             ]
         )
     )
     return message_template
 
-    
+
+
+# 時刻ボタン(編集)
+def change_button_yoyaku_time(select_day):
+    # 現在日時の取得
+    get_day = datetime.datetime.now()
+    get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
+    get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
+    # 時間によってボタンの数を変更
+    item_list = []
+    time_list = [10,11,12,13,14,15,16,17,18,19]
+
+    #当日の場合
+    # if select_yoyaku_day == get_now:
+    if select_day == get_now:
+        for i in range(len(time_list)):
+            if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
+                item_list.append(QuickReplyButton(\
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + ":00")))
+
+    else:
+        for i in range(len(time_list)):
+            item_list.append(QuickReplyButton(\
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + ":00")))
+
+    quick_reply=QuickReply(items = item_list)
+    return quick_reply
+
+
 
 @handler.add(PostbackEvent)
 def on_postback(event):
@@ -715,6 +780,7 @@ def on_postback(event):
 
             elif event.postback.data.startswith('change_id_'):
                 row = get_message(event.postback.data[10:])
+                print(row)
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
                 msg = button_change_yoyaku(label)
@@ -723,6 +789,32 @@ def on_postback(event):
                     event.reply_token,
                     msg
                 )
+
+
+            elif event.postback.data == 'change_yoyaku_day':
+                print("編集処理:日付")
+                # change_yoyaku_day()
+                # 日付取得
+
+            elif event.postback.data == 'change_yoyaku_time':
+                print("編集処理:時刻")
+                # 時刻ボタンへ
+                # change_yoyaku_time()
+    
+
+            elif event.postback.data == 'change_yoyaku_note':
+                print("編集処理:備考")
+                # phase_table_insert()
+                # update_yoyaku_phase(yoyaku_id[0])
+                label = "備考を入力してください。"
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label)
+                )
+
+                # change_yoyaku_note()
+
 
 
             else:
