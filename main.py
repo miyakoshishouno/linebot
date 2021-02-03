@@ -670,14 +670,15 @@ def on_postback(event):
                         TextSendMessage(text='現在予約はありません。'))
             
 
-            elif event.postback.data.startswith('del_id_'):
-                    yoyaku_id = event.postback.data[3:]
-                    del_response_message(yoyaku_id,test_id)
-                    msg = "削除が完了しました。"
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text=msg)
-                    )
+            # elif event.postback.data.startswith('del_id_'):
+            #         yoyaku_id = event.postback.data[3:]
+            #         print(yoyaku_id)
+            #         del_response_message(yoyaku_id,test_id)
+            #         msg = "削除が完了しました。"
+            #         line_bot_api.reply_message(
+            #             event.reply_token,
+            #             TextSendMessage(text=msg)
+            #         )
             
 
             elif event.postback.data == 'select_day_yoyaku':
@@ -748,7 +749,7 @@ def on_postback(event):
             
 
             elif event.postback.data.startswith('del_id_'):
-                    yoyaku_id = event.postback.data[3:]
+                    yoyaku_id = event.postback.data[7:]
                     del_response_message(yoyaku_id,test_id)
                     msg = "削除が完了しました。"
                     line_bot_api.reply_message(
