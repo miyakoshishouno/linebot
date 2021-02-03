@@ -787,10 +787,10 @@ def on_postback(event):
                 # change_yoyaku_time()
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
-                print(before_day[0])
+                print((before_day[0])[:10])
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
-                msg = change_button_yoyaku_time(before_day[0],yoyaku_id)
+                msg = change_button_yoyaku_time((before_day[0])[:10],yoyaku_id)
 
                 line_bot_api.reply_message(
                     event.reply_token,
