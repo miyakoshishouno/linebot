@@ -553,7 +553,7 @@ def button_note_yoyaku(label):
 
 
 # 編集項目ボタン
-def button_change_yoyaku(label,id):
+def button_change_yoyaku(label):
     get_day = datetime.datetime.now()
     get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
 
@@ -565,7 +565,7 @@ def button_change_yoyaku(label,id):
                 DatetimePickerAction(
                     type = "datetimepicker",
                     label = "日付を変更する",
-                    data = "change_yoyaku_day_" + str(id),
+                    data = "change_yoyaku_day_",
                     mode = "date",
                     initial = get_date,
                     max = "2088-01-24",
