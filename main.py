@@ -425,7 +425,7 @@ def button_yoyaku_ymd(label):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     
-    if get_day.hour > 18:
+    if get_day.hour > 13:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
@@ -545,7 +545,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
     print("時刻",get_day.hour)
     
-    if get_day.hour > 14:
+    if (get_day.hour +9 ) > 14:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
         print("比較",get_date)
     else:
