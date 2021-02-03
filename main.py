@@ -582,10 +582,6 @@ def button_change_yoyaku(label):
                 PostbackAction(
                     label = "予約状況一覧に戻る",
                     data  = "cancel"
-                ),
-                PostbackAction(
-                    label = "終了する",
-                    data  = "end_yoyaku"
                 )
             ]
         )
