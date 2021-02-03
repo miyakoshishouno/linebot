@@ -306,18 +306,16 @@ def add_yoyaku_note(push_text,test_id,yoyaku_id):
 def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET yoyaku_day = (%s) WHERE user_id = (%s) AND id = %s)",\
+            cur.execute("UPDATE yoyaku_table SET yoyaku_day = (%s) WHERE user_id = (%s) AND id = %s",\
                 (yoyaku_day,str(test_id),yoyaku_id))
-            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             conn.commit()
 
 # 時刻処理(編集)
 def change_yoyaku_time(push_text,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
-                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
-            cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
+            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = %s",\
+                (push_text,str(test_id),yoyaku_id))
             conn.commit()
    
 # 備考処理(編集)
@@ -591,7 +589,7 @@ def button_change_yoyaku(label,yoyaku_id):
 
 
 # 時刻ボタン(編集)
-def change_button_yoyaku_time(select_day):
+def change_button_yoyaku_time(select_day,yoyaku_id):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
@@ -606,12 +604,12 @@ def change_button_yoyaku_time(select_day):
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + ":00")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + "," +  yoyaku_id)))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + ":00")))
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + "," +  yoyaku_id)))
 
     quick_reply=QuickReply(items = item_list)
     return quick_reply
@@ -797,13 +795,22 @@ def on_postback(event):
                 print(get_time)
                 cahange_date = get_day + " " + get_time
                 print(cahange_date)
-                # change_yoyaku_day(yoyaku_day,test_id,yoyaku_id)
+                change_yoyaku_day(cahange_date,test_id,yoyaku_id)
 
-            elif event.postback.data == 'change_yoyaku_time':
+            elif event.postback.data.startswith('change_yoyaku_time'):
                 print("編集処理:時刻")
                 # 時刻ボタンへ
                 # change_yoyaku_time()
-    
+                before_day = get_yoyaku_day(yoyaku_id)
+                # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
+                label = "変更後の時刻を選択してください。"
+                msg = change_button_yoyaku_time(before_day)
+
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=label,quick_reply=msg)
+                )
+   
 
             elif event.postback.data == 'change_yoyaku_note':
                 print("編集処理:備考")
@@ -817,6 +824,18 @@ def on_postback(event):
                 )
 
                 # change_yoyaku_note()
+
+
+            elif event.postback.data.startswith('change_time_'):
+                # 時刻変更処理
+                print(event.postback.data[12:14])
+                day = get_yoyaku_day(yoyaku_id)
+                day[0].replace(hour = event.postback.data[12:14])
+                yoyaku_id = event.postback.data[15:]
+                print(yoyaku_id)
+                # change_yoyaku_time(day,test_id,yoyaku_id)
+
+
 
 
 
