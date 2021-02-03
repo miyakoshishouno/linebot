@@ -771,7 +771,7 @@ def on_postback(event):
 
             elif event.postback.data.startswith('change_yoyaku_day_'):
                 get_now = datetime.datetime.now()
-                get_today = str(get_now.year) + "/" + str(get_now.month) + "/" + str(get_now.day) + " " + str(get_now.hour + 9) + ":00:00"
+                get_today = str(get_now.year) + "/" + str(get_now.month).zfill(2) + "/" + str(get_now.day).zfill(2) + " " + str(get_now.hour + 9).zfill(2) + ":00:00"
                 print(get_today)
                 print("編集処理:日付")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
@@ -783,7 +783,7 @@ def on_postback(event):
                 print("get_today",get_today)
                 print("cahange_date",cahange_date)
 
-                if get_today > cahange_date:
+                if datetime.datetime.strptime(get_today, "%Y/%m/%d %H:%M:%S") > datetime.datetime.strptime(cahange_date, "%Y/%m/%d %H:%M:%S"):
                     label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
                     msg = change_button_yoyaku_time(cahange_date[:-3],yoyaku_id)
 
