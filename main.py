@@ -544,7 +544,7 @@ def button_note_yoyaku(label):
 def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
     
-    if get_day.hour > 15:
+    if get_day.hour > 14:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
@@ -589,7 +589,6 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
     get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
-    print(select_day)
     # 時間によってボタンの数を変更
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
