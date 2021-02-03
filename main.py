@@ -754,10 +754,10 @@ def on_postback(event):
                     label = "削除が完了しました。"
                     msg = button_menu(label)
 
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    msg
-                )
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        msg
+                    )
 
 
             elif event.postback.data.startswith('change_id_'):
