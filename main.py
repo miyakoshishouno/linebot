@@ -103,10 +103,11 @@ def handle_message(event):
 
     if rows and rows[0] == 3:
         if rows[0] == 3:
-            yoyaku_id = get_yoyaku_id(user_id)
+            # yoyaku_id = get_yoyaku_id(user_id)
+            yoyaku_id = get_yoyaku_id_in_phase(user_id)
             add_yoyaku_note(push_text,user_id,yoyaku_id[0])
             print(push_text)
-            label = '保存しました。\n予約状況は、以下で確認できます。'
+            label = '備考：' + push_text + '\nで保存しました。\n予約状況は、以下で確認できます。'
             msg = button_menu(label)
 
             line_bot_api.reply_message(
@@ -291,6 +292,13 @@ def select_phase(test_id):
             rows = cur.fetchone()
             return rows
 
+# フェーズでyoyaku_id取得
+def get_yoyaku_id_in_phase(test_id):
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("SELECT yoyaku_id FROM phase_table WHERE user_id = (%s) AND yoyaku_phase = 3",(str(test_id),))
+            rows = cur.fetchone()
+            return rows
 
 # 備考更新
 def add_yoyaku_note(push_text,test_id,yoyaku_id):
@@ -310,6 +318,7 @@ def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
                 (yoyaku_day,str(test_id),yoyaku_id))
             conn.commit()
 
+# 備考取得
 def get_yoyaku_note(yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
@@ -421,7 +430,6 @@ def button_menu(label):
                     label = "予約削除",
                     data  = "del_yoyaku"
                 )
-
             ]
         )
     )
@@ -797,7 +805,7 @@ def on_postback(event):
                 cahange_date = get_day + " " + get_time
                 change_yoyaku_day(cahange_date,test_id,yoyaku_id)
 
-                label = cahange_date + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = cahange_date[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_menu(label)
 
                 line_bot_api.reply_message(
@@ -848,7 +856,7 @@ def on_postback(event):
                 new_day = str(day[0].replace(hour = int(event.postback.data[12:14])))
                 change_yoyaku_day(new_day,test_id,yoyaku_id)
 
-                label = new_day + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = new_day[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_menu(label)
 
                 line_bot_api.reply_message(
