@@ -822,7 +822,7 @@ def on_postback(event):
                 )
    
 
-            elif event.postback.data == 'change_yoyaku_note':
+            elif event.postback.data.startswith('change_yoyaku_note_'):
                 print("編集処理:備考")
                 yoyaku_id = event.postback.data[19:]
                 phase_table_insert(test_id,yoyaku_id)
