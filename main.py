@@ -793,7 +793,10 @@ def on_postback(event):
                 yoyaku_id = event.postback.data[18:]
                 print(yoyaku_id)
                 before_day = get_yoyaku_day(yoyaku_id)
-                print((before_day[0]).hour)
+                get_time = ((before_day[0]).hour).zfill(2) +  ":" + (before_day[0]).minute).zfill(2)
+                print(get_time)
+                cahange_date = get_day + " " + get_time
+                print(cahange_date)
                 # change_yoyaku_day(yoyaku_day,test_id,yoyaku_id)
 
             elif event.postback.data == 'change_yoyaku_time':
