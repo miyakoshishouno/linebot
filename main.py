@@ -550,6 +550,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
         print("比較",get_date)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+        print("比較2",get_date)
 
 
     message_template = TemplateSendMessage(
@@ -564,7 +565,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
                     mode = "date",
                     initial = day,
                     max = "2088-01-24",
-                    min = get_date
+                    min = "2021-02-04"
                 ),
                 PostbackAction(
                     label = "時刻を変更する",
