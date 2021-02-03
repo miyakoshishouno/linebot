@@ -595,6 +595,7 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
     print(before_ymd)
+    print(get_now)
 
     #当日の場合
     if before_ymd == get_now:
@@ -784,10 +785,11 @@ def on_postback(event):
                 change_yoyaku_day(cahange_date,user_id,yoyaku_id)
                 print("get_today",get_today)
                 print("cahange_date",cahange_date)
+                before_ymd = str(cahange_date[:-3]) + ":00"
 
                 if datetime.datetime.strptime(get_today, "%Y/%m/%d %H:%M:%S") > datetime.datetime.strptime(cahange_date, "%Y/%m/%d %H:%M:%S"):
                     label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
-                    msg = change_button_yoyaku_time(cahange_date[:-3],yoyaku_id)
+                    msg = change_button_yoyaku_time(before_ymd,yoyaku_id)
 
                     line_bot_api.reply_message(
                         event.reply_token,
