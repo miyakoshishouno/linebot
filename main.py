@@ -594,9 +594,11 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     # 時間によってボタンの数を変更
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
+    print(before_ymd)
 
     #当日の場合
     if before_ymd == get_now:
+        print("ok")
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
