@@ -834,8 +834,6 @@ def on_postback(event):
                     TextSendMessage(text=label)
                 )
 
-                # change_yoyaku_note()
-
 
             elif event.postback.data.startswith('change_time_'):
                 # 時刻変更処理
@@ -847,7 +845,7 @@ def on_postback(event):
                 new_day = str(day[0].replace(hour = int(event.postback.data[12:14])))
                 change_yoyaku_day(new_day,user_id,yoyaku_id)
 
-                label = new_day[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = (new_day[:-3]).replace('-','/') + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_menu(label)
 
                 line_bot_api.reply_message(
