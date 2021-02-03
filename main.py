@@ -791,7 +791,7 @@ def on_postback(event):
                 yoyaku_id = event.postback.data[18:]
                 print(yoyaku_id)
                 before_day = get_yoyaku_day(yoyaku_id)
-                get_time = str((before_day[0]).hour).zfill(2) +  ":" + str((before_day[0]).minute).zfill(2)
+                get_time = str((before_day[0]).hour).zfill(2) +  ":" + str((before_day[0]).minute).zfill(2) + ":00"
                 print(get_time)
                 cahange_date = get_day + " " + get_time
                 print(cahange_date)
