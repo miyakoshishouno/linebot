@@ -551,7 +551,7 @@ def button_note_yoyaku(label):
 
 
 # 編集項目ボタン
-def button_change_yoyaku(label,yoyaku_id):
+def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
     get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
 
@@ -780,6 +780,7 @@ def on_postback(event):
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
                 day = str(row[0])[:10]
                 print(day)
+                print(str(row[0])[:9])
                 msg = button_change_yoyaku(label,yoyaku_id,day)
 
                 line_bot_api.reply_message(
