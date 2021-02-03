@@ -303,11 +303,11 @@ def add_yoyaku_note(push_text,test_id,yoyaku_id):
 
 
 # 日時処理(編集)
-def change_yoyaku_day(push_text,test_id,yoyaku_id):
+def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
-                (SELECT yoyaku_id FROM phase_table WHERE yoyaku_id = %s)",(push_text,str(test_id),yoyaku_id))
+            cur.execute("UPDATE yoyaku_table SET yoyaku_day = (%s) WHERE user_id = (%s) AND id = %s)",\
+                (yoyaku_day,str(test_id),yoyaku_id))
             cur.execute("DELETE FROM phase_table WHERE user_id = (%s)",(str(test_id),))
             conn.commit()
 
@@ -553,7 +553,7 @@ def button_note_yoyaku(label):
 
 
 # 編集項目ボタン
-def button_change_yoyaku(label):
+def button_change_yoyaku(label,yoyaku_id):
     get_day = datetime.datetime.now()
     get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
 
@@ -565,7 +565,7 @@ def button_change_yoyaku(label):
                 DatetimePickerAction(
                     type = "datetimepicker",
                     label = "日付を変更する",
-                    data = "change_yoyaku_day_",
+                    data = "change_yoyaku_day_" + str(yoyaku_id),
                     mode = "date",
                     initial = get_date,
                     max = "2088-01-24",
@@ -573,11 +573,11 @@ def button_change_yoyaku(label):
                 ),
                 PostbackAction(
                     label = "時刻を変更する",
-                    data  = "change_yoyaku_time"
+                    data  = "change_yoyaku_time" + str(yoyaku_id)
                 ),
                 PostbackAction(
                     label = "備考を修正する",
-                    data  = "change_yoyaku_note"
+                    data  = "change_yoyaku_note" + str(yoyaku_id)
                 ),
                 PostbackAction(
                     label = "予約状況一覧に戻る",
@@ -776,10 +776,10 @@ def on_postback(event):
 
             elif event.postback.data.startswith('change_id_'):
                 row = get_message(event.postback.data[10:])
-                print(event.postback.data[10:])
+                yoyaku_id = event.postback.data[10:]
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
-                msg = button_change_yoyaku(label)
+                msg = button_change_yoyaku(label,yoyaku_id)
 
                 line_bot_api.reply_message(
                     event.reply_token,
@@ -789,8 +789,12 @@ def on_postback(event):
 
             elif event.postback.data == 'change_yoyaku_day':
                 print("編集処理:日付")
-                # change_yoyaku_day()
-                # 日付取得
+                get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+                yoyaku_id = event.postback.data[10:]
+                print(yoyaku_id)
+                before_day = get_yoyaku_day(yoyaku_id)
+                print(before_day)
+                # change_yoyaku_day(yoyaku_day,test_id,yoyaku_id)
 
             elif event.postback.data == 'change_yoyaku_time':
                 print("編集処理:時刻")
