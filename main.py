@@ -749,15 +749,15 @@ def on_postback(event):
             
 
             elif event.postback.data.startswith('del_id_'):
-                    yoyaku_id = event.postback.data[7:]
-                    del_response_message(yoyaku_id,test_id)
-                    label = "削除が完了しました。"
-                    msg = button_menu(label)
+                yoyaku_id = event.postback.data[7:]
+                del_response_message(yoyaku_id,test_id)
+                label = "削除が完了しました。"
+                msg = button_menu(label)
 
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        msg
-                    )
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
 
 
             elif event.postback.data.startswith('change_id_'):
