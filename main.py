@@ -778,7 +778,9 @@ def on_postback(event):
                 print(str(row[0]))
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
-                msg = button_change_yoyaku(label,yoyaku_id)
+                day = str(row[0])[:10]
+                print(day)
+                msg = button_change_yoyaku(label,yoyaku_id,day)
 
                 line_bot_api.reply_message(
                     event.reply_token,
