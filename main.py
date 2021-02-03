@@ -312,7 +312,7 @@ def change_yoyaku_day(push_text,test_id,yoyaku_id):
             conn.commit()
 
 # 時刻処理(編集)
- def change_yoyaku_time(push_text,test_id,yoyaku_id):
+def change_yoyaku_time(push_text,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE yoyaku_table SET note = (%s) WHERE user_id = (%s) AND id = \
