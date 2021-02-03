@@ -544,7 +544,7 @@ def button_note_yoyaku(label):
 def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
     
-    if (get_day.hour + 9 ) > 14:
+    if (get_day.hour + 9 ) > 18:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
@@ -597,7 +597,6 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
 
     #当日の場合
     if before_ymd == get_now:
-        print("ok")
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
@@ -771,6 +770,9 @@ def on_postback(event):
 
 
             elif event.postback.data.startswith('change_yoyaku_day_'):
+                get_now = datetime.datetime.now()
+                get_today = str(get_now.year) + "/" + str(get_now.month) + "/" + str(get_now.day) + " " + str(get_now.hour + 9) + ":00:00"
+                print(get_today)
                 print("編集処理:日付")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 yoyaku_id = event.postback.data[18:]
@@ -779,13 +781,23 @@ def on_postback(event):
                 cahange_date = get_day + " " + get_time
                 change_yoyaku_day(cahange_date,user_id,yoyaku_id)
 
-                label = cahange_date[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
-                msg = button_menu(label)
+                if get_today > cahange_date:
+                    label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
+                    msg = change_button_yoyaku_time(before_ymd,yoyaku_id)
 
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    msg
-                )
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=label,quick_reply=msg)
+                    )
+
+                else:
+                    label = cahange_date[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                    msg = button_menu(label)
+
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        msg
+                    )
 
 
             elif event.postback.data.startswith('change_yoyaku_time_'):
