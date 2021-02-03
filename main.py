@@ -776,7 +776,7 @@ def on_postback(event):
 
             elif event.postback.data.startswith('change_id_'):
                 row = get_message(event.postback.data[10:])
-                print(row)
+                print(event.postback.data[10:])
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
                 msg = button_change_yoyaku(label)
