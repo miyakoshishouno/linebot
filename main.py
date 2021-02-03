@@ -543,7 +543,12 @@ def button_note_yoyaku(label):
 # 編集項目ボタン
 def button_change_yoyaku(label,yoyaku_id,day):
     get_day = datetime.datetime.now()
-    get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+    
+    if get_day.hour > 15:
+        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
+    else:
+        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+
 
     message_template = TemplateSendMessage(
         alt_text="a",
@@ -579,7 +584,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
 
 
 # 時刻ボタン(編集)
-def change_button_yoyaku_time(select_day,yoyaku_id):
+def change_button_yoyaku_time(before_ymd,yoyaku_id):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
@@ -590,7 +595,7 @@ def change_button_yoyaku_time(select_day,yoyaku_id):
     time_list = [10,11,12,13,14,15,16,17,18,19]
 
     #当日の場合
-    if select_day == get_now:
+    if before_ymd == get_now:
         print("ok")
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
@@ -785,14 +790,12 @@ def on_postback(event):
             elif event.postback.data.startswith('change_yoyaku_time_'):
                 print("編集処理:時刻")
                 # 時刻ボタンへ
-                # change_yoyaku_time()
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
-                a = str((before_day[0]).year) + "/" + str((before_day[0]).month).zfill(2) + "/" + str((before_day[0]).day).zfill(2)
-                print(a)
+                before_ymd = str((before_day[0]).year) + "/" + str((before_day[0]).month).zfill(2) + "/" + str((before_day[0]).day).zfill(2)
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
-                msg = change_button_yoyaku_time(a,yoyaku_id)
+                msg = change_button_yoyaku_time(before_ymd,yoyaku_id)
 
                 line_bot_api.reply_message(
                     event.reply_token,
