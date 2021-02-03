@@ -591,6 +591,7 @@ def change_button_yoyaku_time(select_day,yoyaku_id):
 
     #当日の場合
     if select_day == get_now:
+        print("ok")
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
@@ -787,7 +788,7 @@ def on_postback(event):
                 # change_yoyaku_time()
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
-                a = str((before_day[0]).year) + "/" + str((before_day[0]).month) + "/" + str((before_day[0]).day)
+                a = str((before_day[0]).year) + "/" + str((before_day[0]).month).zfill(2) + "/" + str((before_day[0]).day).zfill(2)
                 print(a)
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
