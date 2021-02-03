@@ -783,7 +783,7 @@ def on_postback(event):
 
                 if get_today > cahange_date:
                     label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
-                    msg = change_button_yoyaku_time(before_ymd,yoyaku_id)
+                    msg = change_button_yoyaku_time(cahange_date[:-3],yoyaku_id)
 
                     line_bot_api.reply_message(
                         event.reply_token,
