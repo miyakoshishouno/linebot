@@ -552,7 +552,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
 
-    if day < get_day
+    # if day < get_day
 
     message_template = TemplateSendMessage(
         alt_text="a",
