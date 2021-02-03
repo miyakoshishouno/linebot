@@ -787,10 +787,10 @@ def on_postback(event):
                 )
 
 
-            elif event.postback.data == 'change_yoyaku_day':
+            elif event.postback.data.startswith('change_yoyaku_day_'):
                 print("編集処理:日付")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
-                yoyaku_id = event.postback.data[10:]
+                yoyaku_id = event.postback.data[18:]
                 print(yoyaku_id)
                 before_day = get_yoyaku_day(yoyaku_id)
                 print(before_day)
