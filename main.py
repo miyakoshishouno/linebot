@@ -837,7 +837,9 @@ def on_postback(event):
                 print(yoyaku_id)
 
                 day = get_yoyaku_day(yoyaku_id)
-                str(day[0]).replace(hour = event.postback.data[12:14])
+                print(day[0])
+                print(day[0].)
+                day[0].replace(hour = int(event.postback.data[12:14]))
                 change_yoyaku_day(str(day),test_id,yoyaku_id)
 
 
