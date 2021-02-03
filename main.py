@@ -306,7 +306,7 @@ def add_yoyaku_note(push_text,test_id,yoyaku_id):
 def change_yoyaku_day(yoyaku_day,test_id,yoyaku_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute("UPDATE yoyaku_table SET yoyaku_day = (%s) WHERE user_id = (%s) AND id = %s",\
+            cur.execute("UPDATE yoyaku_table SET yoyaku_date = (%s) WHERE user_id = (%s) AND id = %s",\
                 (yoyaku_day,str(test_id),yoyaku_id))
             conn.commit()
 
