@@ -571,7 +571,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
                 ),
                 PostbackAction(
                     label = "時刻を変更する",
-                    data  = "change_yoyaku_time" + str(yoyaku_id)
+                    data  = "change_yoyaku_time_" + str(yoyaku_id)
                 ),
                 PostbackAction(
                     label = "備考を修正する",
@@ -780,7 +780,6 @@ def on_postback(event):
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0]).replace('-','/') + '\n備考：' + row[1]
                 day = str(row[0])[:10]
                 print(day)
-                print(str(row[0])[:9])
                 msg = button_change_yoyaku(label,yoyaku_id,day)
 
                 line_bot_api.reply_message(
@@ -801,10 +800,11 @@ def on_postback(event):
                 print(cahange_date)
                 change_yoyaku_day(cahange_date,test_id,yoyaku_id)
 
-            elif event.postback.data.startswith('change_yoyaku_time'):
+            elif event.postback.data.startswith('change_yoyaku_time_'):
                 print("編集処理:時刻")
                 # 時刻ボタンへ
                 # change_yoyaku_time()
+                yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
                 # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour) + str(before_day[0].minute)
