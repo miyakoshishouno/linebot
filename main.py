@@ -33,12 +33,6 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-# グローバル変数(会話のやりとりの保存)
-# select_yoyaku_day = ""
-# note = ""
-# select_user_id = ""
-
-
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -178,21 +172,6 @@ def get_message(yoyaku_id):
 
 
 
-
-# 新規登録処理
-# def add_response_message(user_id,yoyaku_data):
-#     # row = max_uer_id()
-#     # global select_user_id
-#     print("ユーザID",user_id)
-#     print(yoyaku_data)
-#     note = "ok"
-#     with get_connection() as conn:
-#         with conn.cursor(cursor_factory=DictCursor) as cur:
-#             cur.execute("INSERT INTO yoyaku_table VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,%s,%s)",(yoyaku_data, note, str(user_id)))
-#             conn.commit()
-
-
-
 # 削除処理
 def del_response_message(yoyaku_id,test_id):
     with get_connection() as conn:
@@ -280,8 +259,6 @@ def update_yoyaku_phase(yoyaku_id):
         with conn.cursor(cursor_factory=DictCursor) as cur:
             cur.execute("UPDATE phase_table SET yoyaku_phase = 3 WHERE yoyaku_id = (%s)",(yoyaku_id,))
             conn.commit()
-
-
 
 
 # フェーズ取得
@@ -671,7 +648,7 @@ def on_postback(event):
                     for i in range(len(rows)):
                         r = rows[i]
                         print(r)
-                        reply_message += '\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
+                        reply_message += '\n\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
 
                     line_bot_api.reply_message(
                         event.reply_token,
