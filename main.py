@@ -17,7 +17,7 @@ import psycopg2
 from psycopg2.extras import DictCursor
 import os
 import requests
-import chart
+# import chart
 import datetime
 from datetime import time
 
