@@ -823,3 +823,13 @@ def on_postback(event):
                     event.reply_token,
                     msg
                 )
+
+
+def truncate(string, length, ellipsis='...'):
+    '''文字列を切り詰める
+
+    string: 対象の文字列
+    length: 切り詰め後の長さ
+    ellipsis: 省略記号
+    '''
+    return string[:length] + (ellipsis if string[length:] else '')
