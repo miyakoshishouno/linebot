@@ -346,54 +346,6 @@ def button_yoyaku(question):
 
 
 
-# 予約確認/予約削除ボタン
-def button_show_or_del(label):
-    message_template = TemplateSendMessage(
-        alt_text="a",
-        template=ConfirmTemplate(
-            text=label,
-            actions=[
-                PostbackAction(
-                    label = "予約一覧",
-                    data  = "show_yoyaku"
-                ),
-                PostbackAction(
-                    label = "予約削除",
-                    data  = "del_yoyaku"
-                )
-            ]
-        )
-    )
-    return message_template
-
-
-
-# 各項目ボタン
-def button_show(label,yoyaku_id):
-    message_template = TemplateSendMessage(
-        alt_text="a",
-        template=ButtonsTemplate(
-            text=label,
-            actions=[
-                PostbackAction(
-                    label = "続けて備考を追加する",
-                    data  = "add_note_" + str(yoyaku_id)
-                ),
-                PostbackAction(
-                    label = "予約一覧",
-                    data  = "show_yoyaku"
-                ),
-                PostbackAction(
-                    label = "予約削除",
-                    data  = "del_yoyaku"
-                )
-            ]
-        )
-    )
-    return message_template
-
-
-
 # 各項目ボタン
 def button_menu(label):
     message_template = TemplateSendMessage(
@@ -427,8 +379,10 @@ def button_yoyaku_ymd(label):
     
     if get_day.hour + 9 > 18:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
+        max_date = str(get_day.year) + "-" + str(get_day.month + 1 ).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
     else:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+        max_date = str(get_day.year) + "-" + str(get_day.month + 1 ).zfill(2) + "-" + str(get_day.day).zfill(2)
 
 
     message_template = TemplateSendMessage(
@@ -442,7 +396,7 @@ def button_yoyaku_ymd(label):
                     data = "select_day_yoyaku",
                     mode = "date",
                     initial = get_date,
-                    max = "2088-01-24",
+                    max = max_date,
                     min = get_date
                 ),
                 PostbackAction(
@@ -471,12 +425,12 @@ def button_yoyaku_time(select_day):
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
-                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+                    action=PostbackAction(label= str(time_list[i]) + ":00~", data= "add_time_" + str(time_list[i]) + ":00")))
 
     else:
         for i in range(len(time_list)):
             item_list.append(QuickReplyButton(\
-                action=PostbackAction(label= str(time_list[i]) + ":00~", data= str(time_list[i]) + ":00")))
+                action=PostbackAction(label= str(time_list[i]) + ":00~", data= "add_time_" + str(time_list[i]) + ":00")))
 
     quick_reply=QuickReply(items = item_list)
     return quick_reply
@@ -546,8 +500,10 @@ def button_change_yoyaku(label,yoyaku_id,day):
     
     if (get_day.hour + 9 ) > 18:
         get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
+        max_date = str(get_day.year) + "-" + str(get_day.month + 1).zfill(2) + "-" + str(get_day.day + 1).zfill(2)
     else:
-        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)
+        get_date = str(get_day.year) + "-" + str(get_day.month).zfill(2) + "-" + str(get_day.day).zfill(2)        
+        max_date = str(get_day.year) + "-" + str(get_day.month + 1).zfill(2) + "-" + str(get_day.day).zfill(2)
 
     if day <= get_date:
         day = get_date
@@ -563,7 +519,7 @@ def button_change_yoyaku(label,yoyaku_id,day):
                     data = "change_yoyaku_day_" + str(yoyaku_id),
                     mode = "date",
                     initial = day,
-                    max = "2088-01-24",
+                    max = max_date,
                     min = get_date
                 ),
                 PostbackAction(
@@ -594,12 +550,9 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     # 時間によってボタンの数を変更
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
-    print(before_ymd)
-    print(get_now)
 
     #当日の場合
     if before_ymd == get_now:
-        print("ok")
         for i in range(len(time_list)):
             if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
@@ -615,22 +568,24 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
 
 # ―――――――――――――――――――――――
 
+# ボタン押下時イベント
 @handler.add(PostbackEvent)
 def on_postback(event):
+    # ユーザId取得
     profile = line_bot_api.get_profile(event.source.user_id)
     row = get_user_id(profile.user_id[:5])
     user_id = row[0]
     yoyaku_id = get_yoyaku_id(user_id)
-    print(yoyaku_id)
-    print("ユーザId",user_id)
+
     if isinstance(event, PostbackEvent):
         if event.postback.data is not None:
+            # 「予約する」押下時
             if event.postback.data == 'create_yoyaku':
                 yoyaku_table_insert(user_id)
                 del_phase_record(user_id)
                 yoyaku_id = get_yoyaku_id(user_id)
                 phase_table_insert(user_id,yoyaku_id[0])
-                print("予約選択処理")
+
                 label = "日付を選択してください。"
                 msg  = button_yoyaku_ymd(label)
                 line_bot_api.reply_message(
@@ -638,9 +593,9 @@ def on_postback(event):
                     msg
                 )
 
-
+            # 「予約状況確認」押下時
             elif event.postback.data == 'menu_yoyaku':
-                print("menu処理")
+
                 label = "該当する項目を選択してください。"
                 msg = button_menu(label)
                 line_bot_api.reply_message(
@@ -649,8 +604,8 @@ def on_postback(event):
                 )
 
 
+            # 「予約一覧」押下時
             elif event.postback.data == 'show_yoyaku':
-                print("一覧表示処理")
                 rows = get_response_message(user_id)
 
                 if len(rows)==0:
@@ -661,7 +616,6 @@ def on_postback(event):
                     reply_message = '現在の予約状況は以下になります。(最新5件を表示)'
                     for i in range(len(rows)):
                         r = rows[i]
-                        print(r)
                         reply_message += '\n\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
 
                     line_bot_api.reply_message(
@@ -669,8 +623,8 @@ def on_postback(event):
                         TextSendMessage(text=reply_message))
 
 
+            # 「予約削除」押下時
             elif event.postback.data == 'del_yoyaku':
-                print("削除処理確認")
                 label = "削除する項目を選択してください。(最新5件を表示)"
                 msg = button_del_kakunin(user_id)
                 if len(msg.items) != 0:
@@ -684,13 +638,12 @@ def on_postback(event):
                         TextSendMessage(text='現在予約はありません。'))
                         
 
+            # 「日付選択」押下時(新規)
             elif event.postback.data == 'select_day_yoyaku':
-                print("日付取得処理")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
                 label = (get_day + "ですね。\n希望する時間帯を選択してください。")
                 add_day = get_day + " " + "00:00:00"
                 add_yoyaku_ymd(add_day,yoyaku_id[0],user_id)
-                print(user_id)
 
                 msg  = button_yoyaku_time(get_day)
                 line_bot_api.reply_message(
@@ -699,28 +652,47 @@ def on_postback(event):
                 )
 
 
-            elif event.postback.data == 'create_note_yoyaku':
-                print(yoyaku_id[0])
-                update_yoyaku_phase(yoyaku_id[0])
-                label = "備考を入力してください。"
+            # 時刻選択時(新規)
+            elif event.postback.data.startswith('add_time_'):
+                yoyaku_data = str(event.postback.data)[9:] + ":00"
+                row = get_yoyaku_day(yoyaku_id[0])
+                yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
+                add_yoyaku_time(yoyaku_day,yoyaku_id[0],user_id)
+                
+                label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+                msg = button_note_yoyaku(label)
 
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    msg
+                )
+            
+
+            #「続けて備考を入力する」押下時
+            elif event.postback.data == 'create_note_yoyaku':
+                update_yoyaku_phase(yoyaku_id[0])
+
+                label = "備考を入力してください。"
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text=label)
                 )
             
 
+            # 「備考を入力せず終了する」押下時
             elif event.postback.data == 'end_yoyaku':
                 del_phase_record(user_id)
-                label = "ご利用ありがとうございました。"
 
+                label = "ご利用ありがとうございました。"
                 line_bot_api.reply_message(
                     event.reply_token,
                     TextSendMessage(text=label)
                 )
 
 
+            # 「予約状況一覧に戻る」押下時
             elif event.postback.data == 'cancel':
+
                     label = "該当する項目を選択してください。"
                     msg = button_menu(label)
                     line_bot_api.reply_message(
@@ -729,24 +701,28 @@ def on_postback(event):
                     )
 
 
+            # 「予約変更」押下時
             elif event.postback.data == 'change_yoyaku':
-                print("変更処理確認")
                 label = "変更する予約を選択してください。(最新5件を表示)"
                 msg = button_change_kakunin(user_id)
+
                 if len(msg.items) != 0:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=label,quick_reply=msg)
                     )
+
                 else:
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text='現在予約はありません。'))
             
 
+            # 日付選択時(削除)
             elif event.postback.data.startswith('del_id_'):
                 yoyaku_id = event.postback.data[7:]
                 del_response_message(yoyaku_id,user_id)
+
                 label = "削除が完了しました。"
                 msg = button_menu(label)
 
@@ -756,14 +732,13 @@ def on_postback(event):
                 )
 
 
+            # 日付選択時(編集)
             elif event.postback.data.startswith('change_id_'):
                 row = get_message(event.postback.data[10:])
                 yoyaku_id = event.postback.data[10:]
-                print(str(row[0]))
+                day = str(row[0])[:10]
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0])[:-3].replace('-','/') + '\n備考：' + row[1]
-                day = str(row[0])[:10]
-                print(day)
                 msg = button_change_yoyaku(label,yoyaku_id,day)
 
                 line_bot_api.reply_message(
@@ -772,19 +747,18 @@ def on_postback(event):
                 )
 
 
+            # 日付を変更する(編集)
             elif event.postback.data.startswith('change_yoyaku_day_'):
+                # 現在の日付取得
                 get_now = datetime.datetime.now()
                 get_today = str(get_now.year) + "/" + str(get_now.month).zfill(2) + "/" + str(get_now.day).zfill(2) + " " + str(get_now.hour + 9).zfill(2) + ":00:00"
-                print(get_today)
-                print("編集処理:日付")
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
+
                 yoyaku_id = event.postback.data[18:]
                 before_day = get_yoyaku_day(yoyaku_id)
                 get_time = str((before_day[0]).hour).zfill(2) +  ":" + str((before_day[0]).minute).zfill(2) + ":00"
                 cahange_date = get_day + " " + get_time
                 change_yoyaku_day(cahange_date,user_id,yoyaku_id)
-                print("get_today",get_today)
-                print("get_day",get_day)
 
                 if datetime.datetime.strptime(get_today, "%Y/%m/%d %H:%M:%S") > datetime.datetime.strptime(cahange_date, "%Y/%m/%d %H:%M:%S"):
                     label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
@@ -805,13 +779,11 @@ def on_postback(event):
                     )
 
 
+            # 「時刻を変更する」押下時
             elif event.postback.data.startswith('change_yoyaku_time_'):
-                print("編集処理:時刻")
-                # 時刻ボタンへ
                 yoyaku_id = event.postback.data[19:]
                 before_day = get_yoyaku_day(yoyaku_id)
                 before_ymd = str((before_day[0]).year) + "/" + str((before_day[0]).month).zfill(2) + "/" + str((before_day[0]).day).zfill(2)
-                # get_time = str((before_day[0]).year) +  "-" + str((before_day[0]).month) +  "-" + str((before_day[0]).day)
                 label = "変更後の時刻を選択してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":" + str(before_day[0].minute).zfill(2) + "~"
                 msg = change_button_yoyaku_time(before_ymd,yoyaku_id)
 
@@ -819,10 +791,10 @@ def on_postback(event):
                     event.reply_token,
                     TextSendMessage(text=label,quick_reply=msg)
                 )
-   
 
+
+            # 「備考を修正する」押下時
             elif event.postback.data.startswith('change_yoyaku_note_'):
-                print("編集処理:備考")
                 yoyaku_id = event.postback.data[19:]
                 phase_table_insert(user_id,yoyaku_id)
                 update_yoyaku_phase(yoyaku_id)
@@ -835,34 +807,15 @@ def on_postback(event):
                 )
 
 
+            # 変更後時刻選択時(編集)
             elif event.postback.data.startswith('change_time_'):
-                # 時刻変更処理
-                print(event.postback.data[12:14])
                 yoyaku_id = event.postback.data[15:]
-                print(yoyaku_id)
-
                 day = get_yoyaku_day(yoyaku_id)
                 new_day = str(day[0].replace(hour = int(event.postback.data[12:14])))
                 change_yoyaku_day(new_day,user_id,yoyaku_id)
 
                 label = (new_day[:-3]).replace('-','/') + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
                 msg = button_menu(label)
-
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    msg
-                )
-
-
-            else:
-                print("予約追加処理")
-                yoyaku_data = str(event.postback.data) + ":00"
-                row = get_yoyaku_day(yoyaku_id[0])
-                yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
-                add_yoyaku_time(yoyaku_day,yoyaku_id[0],user_id)
-                label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
-                # msg = button_show(label,yoyaku_id[0])
-                msg = button_note_yoyaku(label)
 
                 line_bot_api.reply_message(
                     event.reply_token,
