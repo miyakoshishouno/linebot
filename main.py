@@ -423,7 +423,7 @@ def button_yoyaku_time(select_day):
     #当日の場合
     if select_day == get_now:
         for i in range(len(time_list)):
-            if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
+            if time(int(str(get_day.hour + 9 + 1).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
                     action=PostbackAction(label= str(time_list[i]) + ":00~", data= "add_time_" + str(time_list[i]) + ":00")))
 
@@ -546,7 +546,7 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
-    get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
+    get_date = str(get_day.hour + 9 + 1).zfill(2) + ":00:00"
     # 時間によってボタンの数を変更
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
