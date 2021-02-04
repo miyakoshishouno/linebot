@@ -641,7 +641,7 @@ def on_postback(event):
             # 「日付選択」押下時(新規)
             elif event.postback.data == 'select_day_yoyaku':
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
-                label = (get_day + "ですね。\n希望する時間帯を選択してください。")
+                label = (get_day + "ですね。\n希望する時間帯を選択して下さい。")
                 add_day = get_day + " " + "00:00:00"
                 add_yoyaku_ymd(add_day,yoyaku_id[0],user_id)
 
@@ -659,7 +659,7 @@ def on_postback(event):
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,yoyaku_id[0],user_id)
                 
-                label = yoyaku_day[:-3].replace('-','/') + "で予約を完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = yoyaku_day[:-3].replace('-','/') + "で予約を\n完了しました。\n予約状況は、予約一覧から\n確認できます。"
                 msg = button_note_yoyaku(label)
 
                 line_bot_api.reply_message(
@@ -772,7 +772,7 @@ def on_postback(event):
                     )
 
                 else:
-                    label = cahange_date[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                    label = cahange_date[:-3] + "で予約の変更が完了しました。\n予約状況は、予約一覧から\n確認できます。"
                     msg = button_menu(label)
 
                     line_bot_api.reply_message(
@@ -816,7 +816,7 @@ def on_postback(event):
                 new_day = str(day[0].replace(hour = int(event.postback.data[12:14])))
                 change_yoyaku_day(new_day,user_id,yoyaku_id)
 
-                label = (new_day[:-3]).replace('-','/') + "で予約の変更が完了しました。\n予約状況は、予約一覧から確認できます。"
+                label = (new_day[:-3]).replace('-','/') + "で予約の変更が完了しました。\n予約状況は、予約一覧から\n確認できます。"
                 msg = button_menu(label)
 
                 line_bot_api.reply_message(
