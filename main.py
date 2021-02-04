@@ -96,7 +96,7 @@ def handle_message(event):
         # if rows[0] == 3:
         yoyaku_id = get_yoyaku_id_in_phase(user_id)
         add_yoyaku_note(push_text,user_id,yoyaku_id[0])
-        label = '備考：' + push_text + '\nで保存しました。\n予約状況は、以下で確認できます。'
+        label = '備考：' + truncate(push_text,20) + '\nで保存しました。\n予約状況は、以下で確認できます。'
         msg = button_menu(label)
 
         line_bot_api.reply_message(
@@ -618,7 +618,7 @@ def on_postback(event):
                     reply_message = '現在の予約状況は以下になります。(最新5件を表示)'
                     for i in range(len(rows)):
                         r = rows[i]
-                        reply_message += '\n\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + r[2]
+                        reply_message += '\n\n予約状況 :' + (str(r[1]).replace('-','/'))[:-3] + '\n備考 :' + truncate((r[2]),20)
 
                     line_bot_api.reply_message(
                         event.reply_token,
@@ -740,7 +740,7 @@ def on_postback(event):
                 yoyaku_id = event.postback.data[10:]
                 day = str(row[0])[:10]
 
-                label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0])[:-3].replace('-','/') + '\n備考：' + row[1]
+                label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0])[:-3].replace('-','/') + '\n備考：' + truncate(row[1],20)
                 msg = button_change_yoyaku(label,yoyaku_id,day)
 
                 line_bot_api.reply_message(
@@ -801,7 +801,7 @@ def on_postback(event):
                 phase_table_insert(user_id,yoyaku_id)
                 update_yoyaku_phase(yoyaku_id)
                 before_note = get_yoyaku_note(yoyaku_id)
-                label = "備考を入力してください。\n変更前：" + before_note[0]
+                label = "備考を入力してください。\n変更前：" + truncate(before_note[0],20)
 
                 line_bot_api.reply_message(
                     event.reply_token,
