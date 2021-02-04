@@ -89,6 +89,7 @@ def handle_message(event):
 
     # フェーズの確認
     rows = select_phase(user_id)
+    print(rows[0])
 
     # フェーズが(備考段階)かどうか
     if rows[0] == 3:
@@ -103,7 +104,7 @@ def handle_message(event):
             msg
         )
 
-    elif rows == 1 or rows == 2:
+    elif rows[0] == 1 or rows[0] == 2:
         del_phase_record(user_id)
         msg = "予約処理を中断しました。"
 
