@@ -104,7 +104,7 @@ def handle_message(event):
             msg
         )
 
-    elif rows[0] == 1 or rows[0] == 2:
+    elif rows[0] < 3:
         del_phase_record(user_id)
         msg = "予約処理を中断しました。"
 
