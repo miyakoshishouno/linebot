@@ -92,18 +92,18 @@ def handle_message(event):
 
     # フェーズが(備考段階)かどうか
     if rows and rows[0] == 3:
-        if rows[0] == 3:
-            yoyaku_id = get_yoyaku_id_in_phase(user_id)
-            add_yoyaku_note(push_text,user_id,yoyaku_id[0])
-            label = '備考：' + push_text + '\nで保存しました。\n予約状況は、以下で確認できます。'
-            msg = button_menu(label)
+        # if rows[0] == 3:
+        yoyaku_id = get_yoyaku_id_in_phase(user_id)
+        add_yoyaku_note(push_text,user_id,yoyaku_id[0])
+        label = '備考：' + push_text + '\nで保存しました。\n予約状況は、以下で確認できます。'
+        msg = button_menu(label)
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                msg
-            )
+        line_bot_api.reply_message(
+            event.reply_token,
+            msg
+        )
 
-    elif rows:
+    elif rows != 3:
         del_phase_record(user_id)
         msg = "予約処理を中断しました。"
 
