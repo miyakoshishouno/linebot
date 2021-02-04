@@ -103,6 +103,14 @@ def handle_message(event):
                 msg
             )
 
+    elif rows:
+        del_phase_record(user_id)
+        msg = "予約処理を中断しました。"
+
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=msg))
+
     else:
         if "予約" in push_text:
             question = "予約しますか？"
