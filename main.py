@@ -17,7 +17,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 import os
 import requests
-# import chart
 import datetime
 from datetime import time
 
@@ -49,6 +48,7 @@ def callback():
         abort(400)
 
     return 'OK'
+
 
 if __name__ == "__main__":
     app.run()
@@ -157,7 +157,7 @@ def get_response_message(user_id):
             return rows
 
 
-
+# 日付&備考取得
 def get_message(yoyaku_id):
     get_day = datetime.datetime.now() 
     with get_connection() as conn:
@@ -181,6 +181,7 @@ def del_response_message(yoyaku_id,user_id):
 def yoyaku_table_insert(user_id):
     with get_connection() as conn:
         with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute("DELETE FROM yoyaku_table WHERE fixed = 0 AND user_id = (%s)",(str(user_id),))            
             cur.execute("INSERT INTO yoyaku_table (id,user_id,fixed)\
                  VALUES((SELECT COALESCE(max(id),0)+1 FROM yoyaku_table),%s,0)",(str(user_id),))
             conn.commit()
@@ -759,8 +760,6 @@ def on_postback(event):
                 get_time = str((before_day[0]).hour).zfill(2) +  ":" + str((before_day[0]).minute).zfill(2) + ":00"
                 cahange_date = get_day + " " + get_time
                 change_yoyaku_day(cahange_date,user_id,yoyaku_id)
-                print(get_today)
-                print(cahange_date)
 
                 if datetime.datetime.strptime(get_today, "%Y/%m/%d %H:%M:%S") >= datetime.datetime.strptime(cahange_date, "%Y/%m/%d %H:%M:%S"):
                     label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00~"
