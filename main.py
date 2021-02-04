@@ -91,7 +91,7 @@ def handle_message(event):
     rows = select_phase(user_id)
 
     # フェーズが(備考段階)かどうか
-    if rows and rows[0] == 3:
+    if rows[0] == 3:
         # if rows[0] == 3:
         yoyaku_id = get_yoyaku_id_in_phase(user_id)
         add_yoyaku_note(push_text,user_id,yoyaku_id[0])
@@ -103,7 +103,7 @@ def handle_message(event):
             msg
         )
 
-    elif rows != 3:
+    elif rows == 1 or rows == 2:
         del_phase_record(user_id)
         msg = "予約処理を中断しました。"
 
