@@ -333,7 +333,7 @@ def button_yoyaku(question):
             text=question,
             actions=[
                 PostbackAction(
-                    label = "予約する",
+                    label = "新規予約",
                     data  = "create_yoyaku"
                 ),
                 PostbackAction(
@@ -580,7 +580,7 @@ def on_postback(event):
 
     if isinstance(event, PostbackEvent):
         if event.postback.data is not None:
-            # 「予約する」押下時
+            # 「新規予約」押下時
             if event.postback.data == 'create_yoyaku':
                 yoyaku_table_insert(user_id)
                 del_phase_record(user_id)
@@ -660,7 +660,7 @@ def on_postback(event):
                 yoyaku_day = str(row[0]).replace('00:00:00',yoyaku_data)
                 add_yoyaku_time(yoyaku_day,yoyaku_id[0],user_id)
                 
-                label = yoyaku_day[:-3].replace('-','/') + "で予約を\n完了しました。\n予約状況は、予約一覧から\n確認できます。"
+                label = yoyaku_day[:-3].replace('-','/') + "で\n予約を完了しました。\n予約状況は、予約一覧から\n確認できます。"
                 msg = button_note_yoyaku(label)
 
                 line_bot_api.reply_message(
