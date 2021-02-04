@@ -90,7 +90,7 @@ def handle_message(event):
     # フェーズの確認
     rows = select_phase(user_id)
 
-    # フェーズが(備考)かどうか
+    # フェーズが(備考段階)かどうか
     if rows and rows[0] == 3:
         if rows[0] == 3:
             yoyaku_id = get_yoyaku_id_in_phase(user_id)
@@ -546,7 +546,7 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     # 現在日時の取得
     get_day = datetime.datetime.now()
     get_now = str(get_day.year) +'/' +  str(get_day.month).zfill(2) + '/' + str(get_day.day).zfill(2)
-    get_date = str(get_day.hour + 9 + 1).zfill(2) + ":00:00"
+    get_date = str(get_day.hour + 9).zfill(2) + ":00:00"
     # 時間によってボタンの数を変更
     item_list = []
     time_list = [10,11,12,13,14,15,16,17,18,19]
@@ -554,7 +554,7 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     #当日の場合
     if before_ymd == get_now:
         for i in range(len(time_list)):
-            if time(int(str(get_day.hour + 9).zfill(2)),00,00) < time(time_list[i],00,00):
+            if time(int(str(get_day.hour + 9 + 1).zfill(2)),00,00) < time(time_list[i],00,00):
                 item_list.append(QuickReplyButton(\
                     action=PostbackAction(label= str(time_list[i]) + ":00~", data= "change_time_" + str(time_list[i]) + "," +  yoyaku_id)))
 
@@ -751,7 +751,7 @@ def on_postback(event):
             elif event.postback.data.startswith('change_yoyaku_day_'):
                 # 現在の日付取得
                 get_now = datetime.datetime.now()
-                get_today = str(get_now.year) + "/" + str(get_now.month).zfill(2) + "/" + str(get_now.day).zfill(2) + " " + str(get_now.hour + 9).zfill(2) + ":00:00"
+                get_today = str(get_now.year) + "/" + str(get_now.month).zfill(2) + "/" + str(get_now.day).zfill(2) + " " + str(get_now.hour + 9 + 1).zfill(2) + ":00:00"
                 get_day = (event.postback.params['date'])[:4] + "/" + (event.postback.params['date'])[5:7] + "/" + (event.postback.params['date'])[8:]
 
                 yoyaku_id = event.postback.data[18:]
@@ -761,7 +761,7 @@ def on_postback(event):
                 change_yoyaku_day(cahange_date,user_id,yoyaku_id)
 
                 if datetime.datetime.strptime(get_today, "%Y/%m/%d %H:%M:%S") > datetime.datetime.strptime(cahange_date, "%Y/%m/%d %H:%M:%S"):
-                    label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00:00~"
+                    label = "過去の時刻に設定されているため、時刻を変更してください。\n変更前予約時刻：" + str(before_day[0].hour).zfill(2) + ":00~"
                     msg = change_button_yoyaku_time(get_day,yoyaku_id)
 
                     line_bot_api.reply_message(
