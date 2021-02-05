@@ -89,12 +89,8 @@ def handle_message(event):
 
     # 予約フェーズの確認
     rows = select_phase(user_id)
-    print(rows[0])
-    print(type(rows[0]))
-
+    # 編集フェーズの確認
     edit_rows = select_edit_phase(user_id)
-    print(edit_rows[0])
-    print(type(edit_rows[0]))
 
 
 
@@ -113,10 +109,9 @@ def handle_message(event):
             )
 
         elif rows[0] < 2:
-            print("中断処理")
             del_phase_record(user_id)
 
-            msg = "処理を中断しました。"
+            msg = "新規登録処理を中断しました。"
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -133,10 +128,9 @@ def handle_message(event):
 
     elif edit_rows[0] is not None:
         if edit_rows[0] < 3:
-            print("中断")
             del_phase_record(user_id)
 
-            msg = "処理を中断しました。"
+            msg = "編集処理を中断しました。"
 
             line_bot_api.reply_message(
                 event.reply_token,
@@ -195,6 +189,7 @@ def get_response_message(user_id):
             cur.execute("SELECT * FROM yoyaku_table WHERE user_id = (%s) AND fixed = 1 ORDER BY yoyaku_date DESC LIMIT 5",(str(user_id),))
             rows = cur.fetchall()
             return rows
+
 
 
 # 日付&備考取得
@@ -373,6 +368,7 @@ def edit_phase_insert(user_id,yoyaku_id):
             conn.commit()
 
 
+
 # 編集フェーズ取得
 def select_edit_phase(user_id):
     with get_connection() as conn:
@@ -380,6 +376,7 @@ def select_edit_phase(user_id):
             cur.execute("SELECT max(edit_phase) FROM phase_table WHERE user_id = (%s)",(str(user_id),))
             rows = cur.fetchone()
             return rows
+
 
 
 # 編集フェーズ更新
@@ -390,7 +387,9 @@ def update_edit_phase(edit_phase,yoyaku_id):
             conn.commit()
 
 
+
 # ――――――――――――――――――――――――――――
+
 
 # ――――――――　ボタン処理　――――――――
 
@@ -636,7 +635,10 @@ def change_button_yoyaku_time(before_ymd,yoyaku_id):
     quick_reply=QuickReply(items = item_list)
     return quick_reply
 
+
+
 # ―――――――――――――――――――――――
+
 
 # ボタン押下時イベント
 @handler.add(PostbackEvent)
