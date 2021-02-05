@@ -107,7 +107,7 @@ def handle_message(event):
                 msg
             )
 
-        if rows[0] < 3:
+        elif rows[0] < 2:
             print("中断処理")
             del_phase_record(user_id)
 
@@ -116,6 +116,16 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=msg))
+
+        elif rows[0] == 2:
+            label = "備考を入力する場合は、下記の「入力する」を選択してください。"
+            msg = button_note_yoyaku(label)
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
+
 
     else:
         if "予約" in push_text:
