@@ -92,6 +92,11 @@ def handle_message(event):
     print(rows[0])
     print(type(rows[0]))
 
+    edit_rows = select_edit_phase(user_id)
+    print(edit_rows[0])
+    print(type(edit_rows[0]))
+
+
 
     # 予約フェーズが(備考段階)かどうか
     if rows[0] is not None:
@@ -126,6 +131,9 @@ def handle_message(event):
                 msg
             )
 
+    elif edit_rows[0] is not None:
+        if edit_rows[0] < 3:
+            print("中断")
 
     else:
         if "予約" in push_text:
@@ -788,10 +796,10 @@ def on_postback(event):
 
             # 日付選択時(編集)
             elif event.postback.data.startswith('change_id_'):
-                edit_phase_insert(user_id,yoyaku_id) #0
 
                 row = get_message(event.postback.data[10:])
                 yoyaku_id = event.postback.data[10:]
+                edit_phase_insert(user_id,yoyaku_id) #0
                 day = str(row[0])[:10]
 
                 label = '変更する項目を選択してください。\n現在の予約状況：\n' + str(row[0])[:-3].replace('-','/') + '\n備考：' + truncate(row[1],20)
