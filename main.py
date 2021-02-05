@@ -90,6 +90,8 @@ def handle_message(event):
     # フェーズの確認
     rows = select_phase(user_id)
     print(rows[0])
+    print(type(rows[0]))
+
 
     # フェーズが(備考段階)かどうか
     if rows[0] == 3:
