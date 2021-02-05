@@ -134,6 +134,14 @@ def handle_message(event):
     elif edit_rows[0] is not None:
         if edit_rows[0] < 3:
             print("中断")
+            del_phase_record(user_id)
+
+            msg = "処理を中断しました。"
+
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=msg))
+
 
     else:
         if "予約" in push_text:
