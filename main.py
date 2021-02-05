@@ -94,7 +94,7 @@ def handle_message(event):
 
 
     # フェーズが(備考段階)かどうか
-    if rows:
+    if is not None:
         if rows[0] == 3:
             # if rows[0] == 3:
             yoyaku_id = get_yoyaku_id_in_phase(user_id)
