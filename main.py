@@ -94,17 +94,21 @@ def handle_message(event):
 
 
     # フェーズが(備考段階)かどうか
-    if rows[0] == 3:
-        # if rows[0] == 3:
-        yoyaku_id = get_yoyaku_id_in_phase(user_id)
-        add_yoyaku_note(push_text,user_id,yoyaku_id[0])
-        label = '備考：' + truncate(push_text,20) + '\nで保存しました。\n予約状況は、以下で確認できます。'
-        msg = button_menu(label)
+    if rows:
+        if rows[0] == 3:
+            # if rows[0] == 3:
+            yoyaku_id = get_yoyaku_id_in_phase(user_id)
+            add_yoyaku_note(push_text,user_id,yoyaku_id[0])
+            label = '備考：' + truncate(push_text,20) + '\nで保存しました。\n予約状況は、以下で確認できます。'
+            msg = button_menu(label)
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            msg
-        )
+            line_bot_api.reply_message(
+                event.reply_token,
+                msg
+            )
+
+        if rows[0] < 3:
+            print("中断処理")
 
     else:
         if "予約" in push_text:
